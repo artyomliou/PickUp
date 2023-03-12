@@ -1,0 +1,780 @@
+---
+openapi: 3.0.2
+info:
+  title: The video project
+  version: 0.0.1
+servers:
+- url: https://api.server.test/v1
+components:
+  schemas:
+    video-basic:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 唯一編號
+          example: 1584093427933380608
+        title:
+          type: string
+          description: 影片標題
+          example: ぷにぷに電機×80KIDZ『Night Session』officialMV
+        thumbnail:
+          type: string
+          description: 影片縮圖的URL
+          example: https://i.ytimg.com/vi/3eKGhb7rCjI/hqdefault.jpg
+        view-count:
+          type: integer
+          description: 觀看數
+        published-at:
+          type: string
+          description: 發布時間(ISO8601，時區是 UTC)
+          example: 2022-06-30T00:00:00+0000
+    video-listing:
+      allOf:
+        - "$ref": "#/components/schemas/video-basic"
+        - type: object
+          properties:
+            channel:
+              "$ref": "#/components/schemas/channel-basic"
+    video-detail:
+      allOf:
+        - "$ref": "#/components/schemas/video-basic"
+        - type: object
+          properties:
+            introduction:
+              type: string
+              description: 影片介紹
+            like-count:
+              type: integer
+              description: 喜歡數
+            comment-count:
+              type: integer
+              description: 留言數
+            tags:
+              type: array
+              items:
+                type: string
+              example:
+              - 音樂
+            status:
+              type: string
+              enum:
+                - draft
+                - uploaded
+              description: 狀態
+            access:
+              type: string
+              enum:
+                - private
+                - public
+                - protected
+              description: 瀏覽權限
+    channel-basic:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 唯一編號
+          example: UCiypeVEfK4jO9LgGmVSVmEg
+        title:
+          type: string
+          description: 頻道標題
+          example: punipunidenki
+        profile-pic-thumbnail:
+          type: string
+          description: 頻道大頭貼的縮圖
+          example: https://yt3.ggpht.com/ytc/AL5GRJWJ_eaNYNPmu7DNS57ZhTupcr6AWCdhR746OGwWGQ=s48-c-k-c0x00ffffff-no-rj-mo
+    channel-detail:
+      allOf:
+        - "$ref": "#/components/schemas/channel-basic"
+        - type: object
+          properties:
+            introduction:
+              type: string
+              description: 頻道介紹
+              example: punipunidenki's channel as example
+            profile-pic:
+              type: string
+              description: 頻道大頭貼
+              example: https://yt3.googleusercontent.com/ytc/AL5GRJWJ_eaNYNPmu7DNS57ZhTupcr6AWCdhR746OGwWGQ=s88-c-k-c0x00ffffff-no-rj
+    comment:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 唯一編號
+          example: 1584093427933380608
+        content:
+          type: string
+          example: Nice song!
+        author:
+          type: object
+          "$ref": "#/components/schemas/channel-basic"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    success:
+      description: 執行成功的回應格式
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - status
+            - data
+            properties:
+              status:
+                type: string
+                default: success
+              data:
+                type: object
+    fail:
+      description: 執行失敗的回應格式
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - status
+            - data
+            properties:
+              status:
+                type: string
+                default: fail
+              data:
+                type: object
+    error:
+      description: 伺服器錯誤的回應格式
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - status
+            - message
+            properties:
+              status:
+                type: string
+                default: error
+              message:
+                type: string
+              code:
+                type: integer
+              data:
+                type: object
+tags:
+  - name: 註冊
+  - name: 登入
+  - name: 忘記密碼
+  - name: 首頁
+  - name: 影片播放頁
+  - name: 頻道主頁
+paths:
+  "/api/registration":
+    post:
+      tags:
+        - "註冊"
+      description: '註冊'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            example:
+              email: foobar@not-exist.com
+              password: P@sSw0Rd
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/success"
+              example:
+                status: success
+                data:
+        '400':
+          description: 無法註冊
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/error"
+              examples:
+                invalid-format:
+                  value:
+                    status: error
+                    message: 資料格式驗證發現有誤
+                    data:
+                    - email
+                wrong-email:
+                  value:
+                    status: error
+                    message: 此 Email 沒註冊過
+                    data: []
+  "/api/registration/email-verification":
+    post:
+      tags:
+        - "註冊"
+      description: '註冊第二步驟：填入信箱驗證碼'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              - code
+              properties:
+                email:
+                  type: string
+                code:
+                  type: string
+                  description: 驗證碼
+            example:
+              email: foobar@not-exist.com
+              code: a9s7sd
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/success"
+              example:
+                status: success
+                data:
+        '400':
+          description: 驗證信箱時發生錯誤
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/error"
+              examples:
+                wrong-email: 
+                  value:
+                    status: error
+                    message: 還沒有人用這個 email 註冊過
+                wrong-code: 
+                  value:
+                    status: error
+                    message: 驗證碼不對
+  /api/login:
+    post:
+      tags:
+        - "登入"
+      description: '登入'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            example:
+              email: foobar@not-exist.com
+              password: P@sSw0Rd
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/success"
+              example:
+                status: success
+                data:
+        '400':
+          description: 帳號或密碼錯誤
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/error"
+              example:
+                status: error
+                message: 帳號或密碼錯誤
+  /api/logout:
+    get:
+      tags:
+        - "登入"
+      description: '登出'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/success"
+              example:
+                status: success
+                data:
+        '401':
+          description: 沒有登入
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/error"
+              example:
+                status: error
+                message: 沒有登入，所以不能登出
+  /api/forget-password:
+    post:
+      tags:
+        - "忘記密碼"
+      description: '忘記密碼'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              properties:
+                email:
+                  type: string
+            example:
+              email: foobar@not-exist.com
+      responses:
+        '200':
+          description: OK (會寄一封驗證信到信箱，信中帶有連結，連結中有一組 code 會在下一支 API 用到)
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/success"
+              example:
+                status: success
+                data:
+        '400':
+          description: 此 Email 沒註冊過
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/error"
+              example:
+                status: error
+                message: 此 Email 沒註冊過
+  /api/forget-password/reset-password:
+    post:
+      tags:
+        - "忘記密碼"
+      description: '設定新密碼'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - code
+              - new-password
+              properties:
+                code:
+                  type: string
+                new-password:
+                  type: string
+            example:
+              code: 1ksS92
+              new-password: P@sSw0Rd
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/success"
+              example:
+                status: success
+                data:
+        '400':
+          description: 無法重設密碼
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/error"
+              examples:
+                wrong-code:
+                  value:
+                    status: error
+                    message: 驗證碼錯誤
+                invalid-password-format:
+                  value:
+                    status: error
+                    message: 密碼不符合指定格式
+  /api/videos:
+    get:
+      tags:
+        - "首頁"
+      description: '取得影片清單'
+      parameters: 
+      - in: query
+        name: tag
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          videos:
+                            type: array
+                            items:
+                              "$ref": "#/components/schemas/video-listing"
+  /api/videos/{videoId}:
+    get:
+      tags:
+        - "影片播放頁"
+      description: '取得指定影片的資訊'
+      parameters: 
+      - in: path
+        name: videoId
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        "$ref": "#/components/schemas/video-detail"
+        '404':
+          description: 指定影片不存在
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/responses/error"
+              example:
+                status: error
+                message: 指定影片不存在
+  /api/videos/{videoId}/recommends:
+    get:
+      tags:
+        - "影片播放頁"
+      description: '取得與指定影片類似、推薦的影片清單'
+      parameters: 
+      - in: path
+        name: videoId
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          videos:
+                            type: array
+                            items:
+                              "$ref": "#/components/schemas/video-listing"
+  /api/videos/{videoId}/comments:
+    get:
+      tags:
+        - "影片播放頁"
+      description: '取得指定影片的留言，有分頁機制，每次最多抓10筆'
+      parameters: 
+      - in: path
+        name: videoId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: next_page_start_at
+        description: 要抓11～20筆的時候，要把第10筆留言的id填在這。用意是告訴系統請從第10筆開始（不包含第10筆本身）、往下抓10筆
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comments:
+                            type: array
+                            items:
+                              "$ref": "#/components/schemas/comment"
+    post:
+      tags:
+        - "影片播放頁"
+      description: '新增一筆留言'
+      security:
+        - bearerAuth: []
+      parameters: 
+      - in: path
+        name: videoId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - content
+              properties:
+                content:
+                  type: string
+            example:
+              content: 這首歌真好聽
+      responses:
+        '204':
+          description: OK
+  /api/videos/{videoId}/like:
+    get:
+      tags:
+        - "影片播放頁"
+      description: '取得是否有對這影片點「喜歡」過。如果沒登入，一律回傳 false；如果有登入，才回傳真的資料'
+      parameters: 
+      - in: path
+        name: videoId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          liked:
+                            type: boolean
+                            example: false
+    post:
+      tags:
+        - "影片播放頁"
+      description: '對影片點「喜歡」'
+      security:
+        - bearerAuth: []
+      parameters: 
+      - in: path
+        name: videoId
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: OK
+  /api/channel/{channelId}/subscribe:
+    get:
+      tags:
+        - "影片播放頁"
+        - "頻道主頁"
+      description: '取得是否有「訂閱」頻道過。如果沒登入，一律回傳 false；如果有登入，才回傳真的資料'
+      parameters: 
+      - in: path
+        name: channelId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          subscribed:
+                            type: boolean
+                            example: false
+    post:
+      tags:
+        - "影片播放頁"
+        - "頻道主頁"
+      description: '訂閱頻道'
+      security:
+        - bearerAuth: []
+      parameters: 
+      - in: path
+        name: channelId
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: OK
+  /api/channel/{channelId}:
+    get:
+      tags:
+        - "頻道主頁"
+      description: '取得頻道主頁的大部分資訊'
+      parameters: 
+      - in: path
+        name: channelId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        "$ref": "#/components/schemas/channel-detail"
+  /api/channel/{channelId}/videos:
+    get:
+      tags:
+        - "頻道主頁"
+      description: '取得指定頻道上傳的影片，有分頁機制'
+      parameters: 
+      - in: path
+        name: channelId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: next_page_start_at
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          videos:
+                            type: array
+                            items:
+                              "$ref": "#/components/schemas/video-basic"
+  /admin-api/channel/{channelId}/profile:
+    patch:
+      tags:
+        - "頻道編輯"
+      description: ''
+      parameters: 
+      - in: path
+        name: channelId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+  /admin-api/videos:
+    get:
+      tags:
+        - "影片管理後台"
+      description: '列出自己上傳的影片，有分頁機制'
+      responses:
+        '200':
+          description: OK
+    post:
+      tags:
+        - "影片管理後台"
+      description: '建立新影片草稿（後續使用patch編輯）'
+      parameters: 
+      - in: path
+        name: videoId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+  /admin-api/videos/{videoId}:
+    patch:
+      tags:
+        - "影片建立頁/編輯頁"
+      description: '更新影片資訊'
+      parameters: 
+      - in: path
+        name: videoId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
