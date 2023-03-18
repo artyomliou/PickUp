@@ -52,23 +52,24 @@ components:
               description: 留言數
             tags:
               type: array
-              items:
-                type: string
-              example:
-              - 音樂
+              "$ref": "#/components/schemas/tags"
             status:
-              type: string
-              enum:
-                - draft
-                - uploaded
-              description: 狀態
+              "$ref": "#/components/schemas/video-status"
             access:
-              type: string
-              enum:
-                - private
-                - public
-                - protected
-              description: 瀏覽權限
+              "$ref": "#/components/schemas/video-access"
+    video-status:
+      type: string
+      enum:
+        - draft
+        - uploaded
+      description: 狀態
+    video-access:
+      type: string
+      enum:
+        - private
+        - public
+        - protected
+      description: 瀏覽權限
     channel-basic:
       type: object
       properties:
@@ -80,7 +81,7 @@ components:
           type: string
           description: 頻道標題
           example: punipunidenki
-        profile-pic-thumbnail:
+        avatar-thumbnail:
           type: string
           description: 頻道大頭貼的縮圖
           example: https://yt3.ggpht.com/ytc/AL5GRJWJ_eaNYNPmu7DNS57ZhTupcr6AWCdhR746OGwWGQ=s48-c-k-c0x00ffffff-no-rj-mo
@@ -93,7 +94,7 @@ components:
               type: string
               description: 頻道介紹
               example: punipunidenki's channel as example
-            profile-pic:
+            avatar:
               type: string
               description: 頻道大頭貼
               example: https://yt3.googleusercontent.com/ytc/AL5GRJWJ_eaNYNPmu7DNS57ZhTupcr6AWCdhR746OGwWGQ=s88-c-k-c0x00ffffff-no-rj
@@ -110,6 +111,12 @@ components:
         author:
           type: object
           "$ref": "#/components/schemas/channel-basic"
+    tags:
+      type: array
+      items:
+        type: string
+        example:
+        - 音樂
   securitySchemes:
     bearerAuth:
       type: http
@@ -165,13 +172,6 @@ components:
                 type: integer
               data:
                 type: object
-tags:
-  - name: 註冊
-  - name: 登入
-  - name: 忘記密碼
-  - name: 首頁
-  - name: 影片播放頁
-  - name: 頻道主頁
 paths:
   "/api/registration":
     post:
@@ -196,16 +196,8 @@ paths:
               email: foobar@not-exist.com
               password: P@sSw0Rd
       responses:
-        '200':
+        '204':
           description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                "$ref": "#/components/responses/success"
-              example:
-                status: success
-                data:
         '400':
           description: 無法註冊
           content:
@@ -249,16 +241,8 @@ paths:
               email: foobar@not-exist.com
               code: a9s7sd
       responses:
-        '200':
+        '204':
           description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                "$ref": "#/components/responses/success"
-              example:
-                status: success
-                data:
         '400':
           description: 驗證信箱時發生錯誤
           content:
@@ -308,6 +292,7 @@ paths:
               example:
                 status: success
                 data:
+                  token: "JWTJWTJWT*10000"
         '400':
           description: 帳號或密碼錯誤
           content:
@@ -326,16 +311,8 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        '204':
           description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                "$ref": "#/components/responses/success"
-              example:
-                status: success
-                data:
         '401':
           description: 沒有登入
           content:
@@ -365,16 +342,8 @@ paths:
             example:
               email: foobar@not-exist.com
       responses:
-        '200':
+        '204':
           description: OK (會寄一封驗證信到信箱，信中帶有連結，連結中有一組 code 會在下一支 API 用到)
-          content:
-            application/json:
-              schema:
-                type: object
-                "$ref": "#/components/responses/success"
-              example:
-                status: success
-                data:
         '400':
           description: 此 Email 沒註冊過
           content:
@@ -408,16 +377,8 @@ paths:
               code: 1ksS92
               new-password: P@sSw0Rd
       responses:
-        '200':
+        '204':
           description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                "$ref": "#/components/responses/success"
-              example:
-                status: success
-                data:
         '400':
           description: 無法重設密碼
           content:
@@ -586,7 +547,7 @@ paths:
       responses:
         '204':
           description: OK
-  /api/videos/{videoId}/like:
+  /api/videos/{videoId}/is-liked:
     get:
       tags:
         - "影片播放頁"
@@ -612,11 +573,15 @@ paths:
                         properties:
                           liked:
                             type: boolean
+                            example: true
+                          disliked:
+                            type: boolean
                             example: false
+  /api/videos/{videoId}/like:
     post:
       tags:
         - "影片播放頁"
-      description: '對影片點「喜歡」'
+      description: '喜歡/取消喜歡影片'
       security:
         - bearerAuth: []
       parameters: 
@@ -628,7 +593,23 @@ paths:
       responses:
         '204':
           description: OK
-  /api/channel/{channelId}/subscribe:
+  /api/videos/{videoId}/dislike:
+    post:
+      tags:
+        - "影片播放頁"
+      description: '不喜歡/取消不喜歡影片'
+      security:
+        - bearerAuth: []
+      parameters: 
+      - in: path
+        name: videoId
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: OK
+  /api/channel/{channelId}/is-subscribed:
     get:
       tags:
         - "影片播放頁"
@@ -656,11 +637,12 @@ paths:
                           subscribed:
                             type: boolean
                             example: false
+  /api/channel/{channelId}/subscribe:
     post:
       tags:
         - "影片播放頁"
         - "頻道主頁"
-      description: '訂閱頻道'
+      description: '訂閱/取消訂閱頻道'
       security:
         - bearerAuth: []
       parameters: 
@@ -729,45 +711,81 @@ paths:
                             type: array
                             items:
                               "$ref": "#/components/schemas/video-basic"
-  /admin-api/channel/{channelId}/profile:
-    patch:
+  /api/admin/channel/profile:
+    put:
       tags:
-        - "頻道編輯"
-      description: ''
-      parameters: 
-      - in: path
-        name: channelId
+        - "頻道編輯（後台）"
+      description: '更新頻道資訊'
+      requestBody:
         required: true
-        schema:
-          type: string
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                introduction:
+                  type: string
+                avatar:
+                  type: string
+                  format: binary
       responses:
-        '200':
+        '204':
           description: OK
-  /admin-api/videos:
+  /api/admin/videos:
     get:
       tags:
-        - "影片管理後台"
+        - "影片管理（後台）"
       description: '列出自己上傳的影片，有分頁機制'
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          videos:
+                            type: array
+                            items:
+                              "$ref": "#/components/schemas/video-listing"
+                          page-size:
+                            type: number
+                            example: 20
+                          last-evaluated-key:
+                            type: number
+                            nullable: true
+                            example: null
     post:
       tags:
-        - "影片管理後台"
-      description: '建立新影片草稿（後續使用patch編輯）'
-      parameters: 
-      - in: path
-        name: videoId
-        required: true
-        schema:
-          type: string
+        - "影片管理（後台）"
+      description: '建立新影片草稿（後續使用put編輯）'
       responses:
         '200':
           description: OK
-  /admin-api/videos/{videoId}:
-    patch:
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          videos:
+                            type: object
+                            "$ref": "#/components/schemas/video-basic"
+  /api/admin/videos/{videoId}/status:
+    get:
       tags:
-        - "影片建立頁/編輯頁"
+        - "影片建立頁/編輯頁（後台）"
       description: '更新影片資訊'
       parameters: 
       - in: path
@@ -777,4 +795,49 @@ paths:
           type: string
       responses:
         '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/responses/success"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          status:
+                            "$ref": "#/components/schemas/video-status"
+  /api/admin/videos/{videoId}:
+    put:
+      tags:
+        - "影片建立頁/編輯頁（後台）"
+      description: '更新影片資訊'
+      parameters: 
+      - in: path
+        name: videoId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: 影片標題
+                introduction:
+                  type: string
+                  example: 影片介紹
+                tags:
+                  type: array
+                  "$ref": "#/components/schemas/tags"
+                video-file:
+                  type: string
+                  format: binary
+      responses:
+        '204':
           description: OK
