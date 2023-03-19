@@ -290,66 +290,6 @@ paths:
                   value:
                     status: error
                     message: 驗證碼不對
-  /api/is-logged-in:
-    get:
-      tags:
-        - "登入"
-      description: '是否已經登入'
-      security:
-        - ApiKeyAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                "$ref": "#/components/schemas/success"
-              example:
-                status: success
-                data:
-                  is-logged-in: false
-  /api/login:
-    post:
-      tags:
-        - "登入"
-      description: '登入'
-      requestBody:
-        "$ref": "#/components/requestBodies/UserSignup"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                "$ref": "#/components/schemas/success"
-              example:
-                status: success
-                data:
-                  token: "JWTJWTJWT*10000"
-        '400':
-          description: 帳號或密碼錯誤
-          content:
-            application/json:
-              schema:
-                type: object
-                "$ref": "#/components/schemas/error"
-              example:
-                status: error
-                message: 帳號或密碼錯誤
-  /api/logout:
-    get:
-      tags:
-        - "登入"
-      description: '登出'
-      security:
-        - ApiKeyAuth: []
-      responses:
-        '204':
-          "$ref": "#/components/responses/204NoContent"
-        '401':
-          "$ref": "#/components/responses/401UnAuthorized"
   /api/forget-password:
     post:
       tags:
@@ -424,6 +364,66 @@ paths:
                   value:
                     status: error
                     message: 密碼不符合指定格式
+  /api/is-logged-in:
+    get:
+      tags:
+        - "登入"
+      description: '是否已經登入'
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/success"
+              example:
+                status: success
+                data:
+                  is-logged-in: false
+  /api/login:
+    post:
+      tags:
+        - "登入"
+      description: '登入'
+      requestBody:
+        "$ref": "#/components/requestBodies/UserSignup"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/success"
+              example:
+                status: success
+                data:
+                  token: "JWTJWTJWT*10000"
+        '400':
+          description: 帳號或密碼錯誤
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/error"
+              example:
+                status: error
+                message: 帳號或密碼錯誤
+  /api/logout:
+    get:
+      tags:
+        - "登入"
+      description: '登出'
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '204':
+          "$ref": "#/components/responses/204NoContent"
+        '401':
+          "$ref": "#/components/responses/401UnAuthorized"
   /api/videos:
     get:
       tags:
