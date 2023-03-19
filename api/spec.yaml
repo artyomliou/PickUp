@@ -290,6 +290,25 @@ paths:
                   value:
                     status: error
                     message: 驗證碼不對
+  /api/is-logged-in:
+    get:
+      tags:
+        - "登入"
+      description: '是否已經登入'
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/success"
+              example:
+                status: success
+                data:
+                  is-logged-in: false
   /api/login:
     post:
       tags:
