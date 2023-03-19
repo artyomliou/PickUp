@@ -109,7 +109,6 @@ components:
           type: string
           example: Nice song!
         author:
-          type: object
           $ref: "#/components/schemas/channel"
     tags:
       type: array
@@ -117,18 +116,20 @@ components:
         type: string
         example:
         - 音樂
-    success:
-      description: 執行成功的回應格式
+    pagination:
+      description: 分頁機制會額外傳的欄位
       type: object
       required:
-      - status
-      - data
+        - per-page
+        - last-item-key
       properties:
-        status:
-          type: string
-          default: success
-        data:
-          type: object
+        per-page:
+          type: number
+          example: 20
+        last-item-key:
+          type: number
+          nullable: true
+          example: null
     error:
       description: 伺服器錯誤的回應格式
       type: object
@@ -141,10 +142,6 @@ components:
           default: error
         message:
           type: string
-        code:
-          type: integer
-        data:
-          type: object
   parameters:
     videoId:
       in: path
@@ -207,7 +204,6 @@ components:
       content:
         application/json:
           schema:
-            type: object
             $ref: "#/components/schemas/error"
           example:
             status: error
@@ -234,19 +230,27 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/error"
+                properties:
+                  status:
+                    default: error
+                  message:
+                    type: string
+                  invalid-input-names:
+                    type: array
+                    items:
+                      type: string
               examples:
                 invalid-format:
                   value:
                     status: error
                     message: 資料格式驗證發現有誤
-                    data:
-                    - email
+                    invalid-input-names:
+                      - email
                 wrong-email:
                   value:
                     status: error
                     message: 此 Email 沒註冊過
-                    data: []
+                    invalid-input-names: []
   "/api/registration/email-verification":
     post:
       tags:
@@ -279,7 +283,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: "#/components/schemas/error"
               examples:
                 wrong-email: 
@@ -317,7 +320,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: "#/components/schemas/error"
               example:
                 status: error
@@ -353,7 +355,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: "#/components/schemas/error"
               examples:
                 wrong-code:
@@ -378,11 +379,12 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/success"
-              example:
-                status: success
-                data:
-                  is-logged-in: false
+                properties:
+                  status:
+                    default: success
+                  is-logged-in:
+                    type: boolean
+                    example: false
   /api/login:
     post:
       tags:
@@ -393,21 +395,27 @@ paths:
       responses:
         200:
           description: OK
+          headers:
+            Set-Cookie:
+              description: 設定可以用七天的 Cookie
+              schema:
+                type: string
+                example: "vp=JWTJWTJWT; Max-Age=604800; SameSite=Lax; HttpOnly"
           content:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/success"
-              example:
-                status: success
-                data:
-                  token: "JWTJWTJWT*10000"
+                properties:
+                  status:
+                    default: success
+                  token:
+                    type: string
+                    example: "JWTJWTJWT"
         400:
           description: 帳號或密碼錯誤
           content:
             application/json:
               schema:
-                type: object
                 $ref: "#/components/schemas/error"
               example:
                 status: error
@@ -421,7 +429,13 @@ paths:
         - ApiKeyAuth: []
       responses:
         204:
-          $ref: "#/components/responses/204NoContent"
+          description: OK
+          headers:
+            Set-Cookie:
+              description: 讓 Cookie 立即過期
+              schema:
+                type: string
+                example: "vp=; Max-Age=0; SameSite=Lax; HttpOnly"
         401:
           $ref: "#/components/responses/401UnAuthorized"
   /api/videos:
@@ -430,50 +444,47 @@ paths:
         - 首頁
       description: 取得影片清單
       parameters: 
-      - $ref: "#/components/parameters/tag"
+        - $ref: "#/components/parameters/tag"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          videos:
-                            type: array
-                            items:
-                              $ref: "#/components/schemas/video-listing"
+                type: object
+                properties:
+                  status:
+                    default: success
+                  videos: 
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/video-listing"
   /api/videos/{videoId}:
     get:
       tags:
         - 影片播放頁
       description: 取得指定影片的資訊
       parameters: 
-      - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/videoId"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        $ref: "#/components/schemas/video-detail"
+                type: object
+                properties:
+                  status:
+                    default: success
+                  video: 
+                    $ref: "#/components/schemas/video"
+                  channel:
+                    $ref: "#/components/schemas/channel"
         404:
           description: 指定影片不存在
           content:
             application/json:
               schema:
-                type: object
                 $ref: "#/components/schemas/error"
               example:
                 status: error
@@ -484,49 +495,45 @@ paths:
         - 影片播放頁
       description: 取得與指定影片類似、推薦的影片清單
       parameters: 
-      - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/videoId"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          videos:
-                            type: array
-                            items:
-                              $ref: "#/components/schemas/video-listing"
+                type: object
+                properties:
+                  status:
+                    default: success
+                  videos: 
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/video-listing"
   /api/videos/{videoId}/comments:
     get:
       tags:
         - 影片播放頁
       description: 取得指定影片的留言，有分頁機制，每次最多抓10筆
       parameters: 
-      - $ref: "#/components/parameters/videoId"
-      - $ref: "#/components/parameters/nextPageStartAt"
+        - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/nextPageStartAt"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          comments:
-                            type: array
-                            items:
-                              $ref: "#/components/schemas/comment"
+                type: object
+                properties:
+                  status:
+                    default: success
+                  comments: 
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/comment"
+                  pagination:
+                    $ref: "#/components/schemas/pagination"
     post:
       tags:
         - 影片播放頁
@@ -534,7 +541,7 @@ paths:
       security:
         - ApiKeyAuth: []
       parameters: 
-      - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/videoId"
       requestBody:
         required: true
         content:
@@ -559,26 +566,23 @@ paths:
         - 影片播放頁
       description: 取得是否有對這影片點「喜歡」過。如果沒登入，一律回傳 false；如果有登入，才回傳真的資料
       parameters: 
-      - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/videoId"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          liked:
-                            type: boolean
-                            example: true
-                          disliked:
-                            type: boolean
-                            example: false
+                type: object
+                properties:
+                  status:
+                    default: success
+                  liked:
+                    type: boolean
+                    example: true
+                  disliked:
+                    type: boolean
+                    example: false
   /api/videos/{videoId}/like:
     post:
       tags:
@@ -587,7 +591,7 @@ paths:
       security:
         - ApiKeyAuth: []
       parameters: 
-      - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/videoId"
       responses:
         204:
           $ref: "#/components/responses/204NoContent"
@@ -601,7 +605,7 @@ paths:
       security:
         - ApiKeyAuth: []
       parameters: 
-      - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/videoId"
       responses:
         204:
           $ref: "#/components/responses/204NoContent"
@@ -614,23 +618,20 @@ paths:
         - 頻道主頁
       description: 取得是否有「訂閱」頻道過。如果沒登入，一律回傳 false；如果有登入，才回傳真的資料
       parameters: 
-      - $ref: "#/components/parameters/channelId"
+        - $ref: "#/components/parameters/channelId"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          subscribed:
-                            type: boolean
-                            example: false
+                type: object
+                properties:
+                  status:
+                    default: success
+                  subscribed:
+                    type: boolean
+                    example: true
   /api/channel/{channelId}/subscribe:
     post:
       tags:
@@ -640,7 +641,7 @@ paths:
       security:
         - ApiKeyAuth: []
       parameters: 
-      - $ref: "#/components/parameters/channelId"
+        - $ref: "#/components/parameters/channelId"
       responses:
         204:
           $ref: "#/components/responses/204NoContent"
@@ -652,45 +653,43 @@ paths:
         - 頻道主頁
       description: 取得頻道主頁的大部分資訊
       parameters: 
-      - $ref: "#/components/parameters/channelId"
+        - $ref: "#/components/parameters/channelId"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        $ref: "#/components/schemas/channel-detail"
+                type: object
+                properties:
+                  status:
+                    default: success
+                  channel:
+                    $ref: "#/components/schemas/channel-detail"
   /api/channel/{channelId}/videos:
     get:
       tags:
         - 頻道主頁
       description: 取得指定頻道上傳的影片，有分頁機制
       parameters: 
-      - $ref: "#/components/parameters/channelId"
-      - $ref: "#/components/parameters/nextPageStartAt"
+        - $ref: "#/components/parameters/channelId"
+        - $ref: "#/components/parameters/nextPageStartAt"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          videos:
-                            type: array
-                            items:
-                              $ref: "#/components/schemas/video"
+                type: object
+                properties:
+                  status:
+                    default: success
+                  videos: 
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/video"
+                  pagination:
+                    $ref: "#/components/schemas/pagination"
   /api/admin/channel/profile:
     put:
       tags:
@@ -712,6 +711,7 @@ paths:
                 avatar:
                   type: string
                   format: binary
+                  description: 頻道大頭貼(最多2MB)
       responses:
         204:
           $ref: "#/components/responses/204NoContent"
@@ -728,24 +728,16 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          videos:
-                            type: array
-                            items:
-                              $ref: "#/components/schemas/video-listing"
-                          page-size:
-                            type: number
-                            example: 20
-                          last-evaluated-key:
-                            type: number
-                            nullable: true
-                            example: null
+                type: object
+                properties:
+                  status:
+                    default: success
+                  videos:
+                    type: array
+                    items: 
+                      $ref: "#/components/schemas/video"
+                  pagination:
+                    $ref: "#/components/schemas/pagination"
     post:
       tags:
         - 影片管理（後台）
@@ -758,16 +750,12 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          videos:
-                            type: object
-                            $ref: "#/components/schemas/video"
+                type: object
+                properties:
+                  status:
+                    default: success
+                  video:
+                    $ref: "#/components/schemas/video"
   /api/admin/videos/{videoId}/status:
     get:
       tags:
@@ -776,22 +764,19 @@ paths:
       security:
         - ApiKeyAuth: []
       parameters: 
-      - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/videoId"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/success"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          status:
-                            $ref: "#/components/schemas/video-status"
+                type: object
+                properties:
+                  status:
+                    default: success
+                  video-status:
+                    $ref: "#/components/schemas/video-status"
   /api/admin/videos/{videoId}:
     put:
       tags:
@@ -800,7 +785,7 @@ paths:
       security:
         - ApiKeyAuth: []
       parameters: 
-      - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/videoId"
       requestBody:
         required: true
         content:
