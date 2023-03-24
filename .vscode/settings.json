@@ -1,0 +1,13 @@
+{
+  "editor.tabSize": 4,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[go]": {
+    "editor.insertSpaces": false,
+    "editor.defaultFormatter": "golang.go"
+  }
+}
