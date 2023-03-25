@@ -9,5 +9,8 @@
   "[go]": {
     "editor.insertSpaces": false,
     "editor.defaultFormatter": "golang.go"
+  },
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
   }
 }

@@ -4,6 +4,7 @@
     "Vue.vscode-typescript-vue-plugin",
     "golang.go",
     "42crunch.vscode-openapi",
-    "arjun.swagger-viewer"
+    "arjun.swagger-viewer",
+    "foxundermoon.shell-format"
   ]
 }
