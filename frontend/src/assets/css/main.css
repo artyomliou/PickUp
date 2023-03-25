@@ -1,0 +1,268 @@
+@import './base.css';
+
+.main-nav {
+  position: relative;
+  background-color: var(--bg_md);
+  color: var(--txt);
+  display: -ms-flexbox;
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  /* padding: 0 15px; */
+}
+
+.brand-link {
+  padding: 8px 16px;
+}
+.brand-link:focus,
+.brand-link:hover {
+  opacity: 0.9;
+}
+.brand-img {
+  width: 100%;
+  max-width: 90px;
+}
+
+.input-search {
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0;
+  max-width: 300px;
+  margin-right: auto;
+}
+.input-search-label {
+  width: 70%;
+  flex: 0 0 70%;
+}
+.input-search-label .form-control {
+  width: 100%;
+  height: 35px;
+  padding: 15px;
+  border-radius: var(--radius_md) 0 0 var(--radius_md);
+  border: 0px;
+  outline: 0px;
+}
+.input-search-label .form-control::placeholder {
+  opacity: 0.3;
+}
+.input-search-btn {
+  width: 30%;
+  flex: 0 0 30%;
+  background-color: var(--theme_md);
+  color: var(--bg_theme_dark);
+  border-radius: 0 var(--radius_md) var(--radius_md) 0;
+  border-left: 2px solid var(--theme_md_dk);
+}
+@media only screen and (min-width: 992px) {
+  .input-search {
+  }
+}
+
+.nav-log {
+  justify-content: flex-end;
+}
+/* <!-- 登出中 --> */
+.nav-logouting {
+}
+.nav-logouting .btn-login {
+  width: 100%;
+}
+
+/* <!-- 登入中 --> */
+.nav-logining {
+  position: relative;
+  flex-wrap: wrap;
+  min-width: 160px;
+}
+.nav-logining-list {
+  left: -50%;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+.nav-logining-list li {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #aaa;
+  padding: 5px 10px;
+}
+.nav-logining-list last-child li {
+  border-bottom-width: 0px;
+}
+.nav-logining-list li a {
+  display: block;
+  background-color: #fff;
+}
+.nav-logining-list li a svg {
+}
+.nav-logining .btn-logout {
+  width: 100%;
+}
+@media screen and (min-width: 992px) {
+  .nav-logining {
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .nav-logining-list {
+  }
+  .nav-logining-list li {
+  }
+}
+
+/* 頭像按鈕 */
+.btn-avatar {
+  background-color: transparent;
+  margin: auto;
+  display: block;
+  position: relative;
+}
+.btn-avatar:hover,
+.btn-avatar:focus {
+  opacity: 0.9;
+}
+.btn-avatar .avatar-img {
+  width: 100%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid #ddd;
+}
+.btn-avatar:hover .avatar-img,
+.btn-avatar:focus .avatar-img {
+  border-color: #eee;
+}
+
+.navbar-collapse.show .dropdown-menu {
+  display: block;
+  position: relative;
+  border-width: 0px;
+}
+.dropdown-toggle::after {
+  content: none;
+}
+
+/********* 
+ 共用
+**********/
+.sec-titlebox {
+  text-align: center;
+  padding: 2% 2% 1%;
+}
+.sec-title {
+}
+.sec-sub {
+}
+.form .form-group {
+  background-color: unset;
+  color: unset;
+  border: unset;
+}
+label {
+}
+.label-txt {
+}
+.form-control {
+}
+section {
+  padding: 4% 2% 6%;
+}
+.btn-md {
+  max-width: 200px;
+  width: 100%;
+  display: block;
+  margin: 2%;
+}
+
+/********* 
+ Login 
+**********/
+.sec-login {
+  background-color: var(--bg_theme_dark);
+  color: #fff;
+}
+.sec-login a {
+  color: #fff;
+}
+
+.sec-login .form .form-group {
+  padding: 1rem 3rem 0.5rem;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+}
+.sec-login .form .form-group .label {
+}
+.sec-login .form .input-head {
+  padding-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+.sec-login .form-control {
+  margin-bottom: 0.5rem;
+}
+.sec-login .form .btn-submit {
+  margin: 1.5rem;
+}
+.sec-login .btn-inline {
+  margin: 0.5rem 1rem;
+  background-color: transparent;
+  padding: unset;
+  text-decoration: underline;
+}
+.sec-login .btn-inline:focus,
+.sec-login .btn-inline:hover,
+.sec-login .btn-inline:active {
+  background-color: transparent;
+}
+
+/********* 
+ Password 
+**********/
+.sec-password {
+  background-color: var(--bg_theme_dark);
+  color: #fff;
+}
+.sec-password a {
+  color: #fff;
+}
+
+.sec-password .form .form-group {
+  padding: 1rem 3rem 0.5rem;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+}
+.sec-password .form .form-group .label {
+}
+.sec-password .form .input-head {
+  padding-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+.sec-password .form-control {
+  margin-bottom: 0.5rem;
+}
+.sec-password .form .btn-submit {
+  margin: 1.5rem;
+}
+.sec-password .btn-inline {
+  margin: 0.5rem 1rem;
+  background-color: transparent;
+  padding: unset;
+  text-decoration: underline;
+}
+.sec-password .btn-inline:focus,
+.sec-password .btn-inline:hover,
+.sec-password .btn-inline:active {
+  background-color: transparent;
+}
+
+/********* 
+ Footer
+**********/
+footer {
+  background-color: var(--txt);
+  color: #fff;
+  text-align: center;
+  font-size: 1rem;
+  padding: 5%;
+}

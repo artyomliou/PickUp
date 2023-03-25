@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&family=Noto+Sans:wght@300;400;500;600;700;800;900&display=swap');
+
+/******
+  共用
+*******/
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+}
+:root {
+  --theme_md: #ffc329;
+  --theme_md_dk: #da9e07;
+  --bg_theme_dark: #185256;
+  --bg_md: #fff1a8;
+  --txt: #393939;
+  --radius_md: 20px;
+  --fontMain: 'Noto Sans TC', 'Noto Sans', 'Microsoft JhengHei', '微軟正黑體', 'Open Sans',
+    Helvetica, system-ui, -apple-system, sans-serif;
+  --fontNumber: 'Noto Sans', Helvetica, system-ui, -apple-system, sans-serif;
+}
+
+::selection {
+  background-color: var(--theme_md);
+  color: var(--theme_md_dk);
+}
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  --theme_md: #ffc329;
+  --theme_md_dk: #da9e07;
+  --bg_theme_dark: #185256;
+  --bg_md: #fff1a8;
+  --txt: #393939;
+  --radius_md: 20px;
+  --fontMain: 'Noto Sans TC', 'Noto Sans', 'Microsoft JhengHei', '微軟正黑體', 'Open Sans',
+    Helvetica, system-ui, -apple-system, sans-serif;
+  --fontNumber: 'Noto Sans', Helvetica, system-ui, -apple-system, sans-serif;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  font-family: var(--fontMain);
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--txt);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: var(--txt);
+  /* overflow-y: hidden; 影響 sticky */
+}
+@media (max-width: 768px) {
+  body {
+  }
+}
+
+a {
+  text-decoration: none;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+a:focus,
+a:hover,
+a:active {
+}
+
+ul {
+  list-style: none;
+  line-height: 1.9;
+  padding-left: 0;
+}
+
+.ol {
+  padding-left: 1.5em;
+}
+
+.ul {
+  padding-left: 2rem;
+  position: relative;
+}
+
+.ul li {
+  position: relative;
+}
+
+.ul li:before {
+  content: '•';
+  position: absolute;
+  font-size: 20px;
+  left: -1rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+button,
+.btn {
+  outline: 0px;
+  border: 0px;
+}
+.btn {
+  background-color: var(--theme_md);
+  box-shadow: 1px 1px 1px #00000026;
+}
+button:focus,
+button:hover,
+button:active {
+  transition: all 0.3s ease;
+}
+.btn:focus,
+.btn:hover,
+.btn:active {
+  background-color: var(--theme_md_dk);
+}
+
+.sec-h {
+  min-height: 75vh;
+}
