@@ -75,6 +75,9 @@ fill_val $ENVFILE MYSQL_PORT "$(get_val $ENVROOT MYSQL_PORT)"
 fill_val $ENVFILE MYSQL_DATABASE "$(get_val $ENVROOT MYSQL_DATABASE)"
 fill_val $ENVFILE MYSQL_USER "$(get_val $ENVROOT MYSQL_USER)"
 fill_val $ENVFILE MYSQL_PASSWORD "$(get_val $ENVROOT MYSQL_PASSWORD)"
+if ! filled $ENVFILE DB_DRIVER; then
+    fill_val $ENVFILE DB_DRIVER "sqlite"
+fi
 if ! filled $ENVFILE APP_KEY; then
     fill_val $ENVFILE APP_KEY "$(gen_app_key)"
 fi

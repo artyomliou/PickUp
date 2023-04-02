@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 	"the-video-project/backend/http/middlewares"
 	"the-video-project/backend/models"
@@ -21,6 +22,7 @@ func init() {
 		log.Panic("Error loading .env file")
 	}
 
+	os.Setenv("DB_DRIVER", "sqlite")
 	models.DB().AutoMigrate(&models.User{})
 }
 

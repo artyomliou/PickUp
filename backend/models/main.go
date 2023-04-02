@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -16,11 +18,21 @@ func DB() *gorm.DB {
 		return conn
 	}
 	var err error
-	conn, err = gorm.Open(mysql.Open(mysqlDsn()), &gorm.Config{})
+	driver := os.Getenv("DB_DRIVER")
+	if driver == "sqlite" {
+		conn, err = gorm.Open(sqlite.Open(sqliteDsn()), &gorm.Config{})
+	} else {
+		conn, err = gorm.Open(mysql.Open(mysqlDsn()), &gorm.Config{})
+	}
 	if err != nil {
 		log.Panic(err)
 	}
 	return conn
+}
+
+func sqliteDsn() string {
+	path, _ := filepath.Abs("gorm.db")
+	return path
 }
 
 func mysqlDsn() string {
