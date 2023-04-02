@@ -37,50 +37,38 @@ gen_app_key() {
     openssl rand -base64 32
 }
 
-####################################
-# .env.root (single source of truth)
-####################################
-ENVROOT=".env.root"
-if [ ! -e $ENVROOT ]; then
-    cp .env.example $ENVROOT
-fi
-
-# Generate secret variable for local use
-if ! filled $ENVROOT MYSQL_PASSWORD; then
-    fill_val $ENVROOT MYSQL_PASSWORD "$(gen_pwd)"
-fi
-
 ##################
 # .env.docker
 ##################
-ENVFILE=".env.docker"
-if [ ! -e $ENVFILE ]; then
-    touch $ENVFILE
+DOCKER=".env.docker"
+if [ ! -e $DOCKER ]; then
+    cp .env.example $DOCKER
 fi
 
-fill_val $ENVFILE MYSQL_DATABASE "$(get_val $ENVROOT MYSQL_DATABASE)"
-fill_val $ENVFILE MYSQL_USER "$(get_val $ENVROOT MYSQL_USER)"
-fill_val $ENVFILE MYSQL_PASSWORD "$(get_val $ENVROOT MYSQL_PASSWORD)"
+# Generate secret variable for local use
+if ! filled $DOCKER MYSQL_PASSWORD; then
+    fill_val $DOCKER MYSQL_PASSWORD "$(gen_pwd)"
+fi
 
 ##################
 # backend/.env
 ##################
-ENVFILE="backend/.env"
-if [ ! -e $ENVFILE ]; then
-    touch $ENVFILE
+BACKEND="backend/.env"
+if [ ! -e $BACKEND ]; then
+    touch $BACKEND
 fi
 
-fill_val $ENVFILE MYSQL_HOST "$(get_val $ENVROOT MYSQL_HOST)"
-fill_val $ENVFILE MYSQL_PORT "$(get_val $ENVROOT MYSQL_PORT)"
-fill_val $ENVFILE MYSQL_DATABASE "$(get_val $ENVROOT MYSQL_DATABASE)"
-fill_val $ENVFILE MYSQL_USER "$(get_val $ENVROOT MYSQL_USER)"
-fill_val $ENVFILE MYSQL_PASSWORD "$(get_val $ENVROOT MYSQL_PASSWORD)"
-if ! filled $ENVFILE DB_DRIVER; then
-    fill_val $ENVFILE DB_DRIVER "sqlite"
+fill_val $BACKEND MYSQL_HOST "$(get_val $DOCKER MYSQL_HOST)"
+fill_val $BACKEND MYSQL_PORT "$(get_val $DOCKER MYSQL_PORT)"
+fill_val $BACKEND MYSQL_DATABASE "$(get_val $DOCKER MYSQL_DATABASE)"
+fill_val $BACKEND MYSQL_USER "$(get_val $DOCKER MYSQL_USER)"
+fill_val $BACKEND MYSQL_PASSWORD "$(get_val $DOCKER MYSQL_PASSWORD)"
+if ! filled $BACKEND DB_DRIVER; then
+    fill_val $BACKEND DB_DRIVER "sqlite"
 fi
-if ! filled $ENVFILE APP_KEY; then
-    fill_val $ENVFILE APP_KEY "$(gen_app_key)"
+if ! filled $BACKEND APP_KEY; then
+    fill_val $BACKEND APP_KEY "$(gen_app_key)"
 fi
-if ! filled $ENVFILE APP_DEBUG; then
-    fill_val $ENVFILE APP_DEBUG "1"
+if ! filled $BACKEND APP_DEBUG; then
+    fill_val $BACKEND APP_DEBUG "1"
 fi
