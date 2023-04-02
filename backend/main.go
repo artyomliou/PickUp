@@ -16,6 +16,7 @@ func main() {
 
 	if os.Getenv("APP_DEBUG") == "1" {
 		models.DB().AutoMigrate(&models.User{})
+		(&models.Seeder{}).Users()
 	}
 
 	router := http.SetupRouter()
