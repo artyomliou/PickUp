@@ -1,7 +1,5 @@
 #!/bin/sh
 
-if [ ! -e .env.docker ]; then
-    sh ./setup.sh
-fi
+sh ./setup.sh
 
-docker compose up -d
+cd backend && go run .

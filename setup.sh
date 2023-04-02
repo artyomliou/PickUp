@@ -20,7 +20,7 @@ fill_val() {
     key=$2
     val=$3
     if is_key_set $file $key; then
-        sed -i -E "s/($key=).*/\1$val/" $file
+        sed -i -E "s/($key=).*/\1\"$val\"/" $file
     else
         echo "$key=$val" | tee -a $file >/dev/null
     fi
@@ -32,6 +32,9 @@ is_key_set() {
 }
 gen_pwd() {
     head /dev/urandom | tr -dc A-Za-z0-9 | head -c10
+}
+gen_app_key() {
+    openssl rand -base64 32
 }
 
 ####################################
@@ -72,3 +75,9 @@ fill_val $ENVFILE MYSQL_PORT "$(get_val $ENVROOT MYSQL_PORT)"
 fill_val $ENVFILE MYSQL_DATABASE "$(get_val $ENVROOT MYSQL_DATABASE)"
 fill_val $ENVFILE MYSQL_USER "$(get_val $ENVROOT MYSQL_USER)"
 fill_val $ENVFILE MYSQL_PASSWORD "$(get_val $ENVROOT MYSQL_PASSWORD)"
+if ! filled $ENVFILE APP_KEY; then
+    fill_val $ENVFILE APP_KEY "$(gen_app_key)"
+fi
+if ! filled $ENVFILE APP_DEBUG; then
+    fill_val $ENVFILE APP_DEBUG "1"
+fi

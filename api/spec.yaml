@@ -4,7 +4,7 @@ info:
   title: The video project
   version: 0.0.1
 servers:
-- url: https://api.server.test/v1
+  - url: https://api.server.test/v1
 components:
   schemas:
     video:
@@ -115,7 +115,7 @@ components:
       items:
         type: string
         example:
-        - 音樂
+          - 音樂
     pagination:
       description: 分頁機制會額外傳的欄位
       type: object
@@ -134,8 +134,8 @@ components:
       description: 伺服器錯誤的回應格式
       type: object
       required:
-      - status
-      - message
+        - status
+        - message
       properties:
         status:
           type: string
@@ -184,8 +184,8 @@ components:
           schema:
             type: object
             required:
-            - email
-            - password
+              - email
+              - password
             properties:
               email:
                 type: string
@@ -263,8 +263,8 @@ paths:
             schema:
               type: object
               required:
-              - email
-              - code
+                - email
+                - code
               properties:
                 email:
                   type: string
@@ -285,11 +285,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/error"
               examples:
-                wrong-email: 
+                wrong-email:
                   value:
                     status: error
                     message: 還沒有人用這個 email 註冊過
-                wrong-code: 
+                wrong-code:
                   value:
                     status: error
                     message: 驗證碼不對
@@ -305,7 +305,7 @@ paths:
             schema:
               type: object
               required:
-              - email
+                - email
               properties:
                 email:
                   type: string
@@ -336,8 +336,8 @@ paths:
             schema:
               type: object
               required:
-              - code
-              - new-password
+                - code
+                - new-password
               properties:
                 code:
                   type: string
@@ -393,7 +393,7 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/UserSignup"
       responses:
-        200:
+        204:
           description: OK
           headers:
             Set-Cookie:
@@ -401,16 +401,6 @@ paths:
               schema:
                 type: string
                 example: "vp=JWTJWTJWT; Max-Age=604800; SameSite=Lax; HttpOnly"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    default: success
-                  token:
-                    type: string
-                    example: "JWTJWTJWT"
         400:
           description: 帳號或密碼錯誤
           content:
@@ -443,7 +433,7 @@ paths:
       tags:
         - 首頁
       description: 取得影片清單
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/tag"
       responses:
         200:
@@ -455,7 +445,7 @@ paths:
                 properties:
                   status:
                     default: success
-                  videos: 
+                  videos:
                     type: array
                     items:
                       $ref: "#/components/schemas/video-listing"
@@ -464,7 +454,7 @@ paths:
       tags:
         - 影片播放頁
       description: 取得指定影片的資訊
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/videoId"
       responses:
         200:
@@ -476,7 +466,7 @@ paths:
                 properties:
                   status:
                     default: success
-                  video: 
+                  video:
                     $ref: "#/components/schemas/video"
                   channel:
                     $ref: "#/components/schemas/channel"
@@ -494,7 +484,7 @@ paths:
       tags:
         - 影片播放頁
       description: 取得與指定影片類似、推薦的影片清單
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/videoId"
       responses:
         200:
@@ -506,7 +496,7 @@ paths:
                 properties:
                   status:
                     default: success
-                  videos: 
+                  videos:
                     type: array
                     items:
                       $ref: "#/components/schemas/video-listing"
@@ -515,7 +505,7 @@ paths:
       tags:
         - 影片播放頁
       description: 取得指定影片的留言，有分頁機制，每次最多抓10筆
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/videoId"
         - $ref: "#/components/parameters/nextPageStartAt"
       responses:
@@ -528,7 +518,7 @@ paths:
                 properties:
                   status:
                     default: success
-                  comments: 
+                  comments:
                     type: array
                     items:
                       $ref: "#/components/schemas/comment"
@@ -540,7 +530,7 @@ paths:
       description: 新增一筆留言
       security:
         - ApiKeyAuth: []
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/videoId"
       requestBody:
         required: true
@@ -549,7 +539,7 @@ paths:
             schema:
               type: object
               required:
-              - content
+                - content
               properties:
                 content:
                   type: string
@@ -565,7 +555,7 @@ paths:
       tags:
         - 影片播放頁
       description: 取得是否有對這影片點「喜歡」過。如果沒登入，一律回傳 false；如果有登入，才回傳真的資料
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/videoId"
       responses:
         200:
@@ -590,7 +580,7 @@ paths:
       description: 喜歡/取消喜歡影片
       security:
         - ApiKeyAuth: []
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/videoId"
       responses:
         204:
@@ -604,7 +594,7 @@ paths:
       description: 不喜歡/取消不喜歡影片
       security:
         - ApiKeyAuth: []
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/videoId"
       responses:
         204:
@@ -617,7 +607,7 @@ paths:
         - 影片播放頁
         - 頻道主頁
       description: 取得是否有「訂閱」頻道過。如果沒登入，一律回傳 false；如果有登入，才回傳真的資料
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/channelId"
       responses:
         200:
@@ -640,7 +630,7 @@ paths:
       description: 訂閱/取消訂閱頻道
       security:
         - ApiKeyAuth: []
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/channelId"
       responses:
         204:
@@ -652,7 +642,7 @@ paths:
       tags:
         - 頻道主頁
       description: 取得頻道主頁的大部分資訊
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/channelId"
       responses:
         200:
@@ -671,7 +661,7 @@ paths:
       tags:
         - 頻道主頁
       description: 取得指定頻道上傳的影片，有分頁機制
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/channelId"
         - $ref: "#/components/parameters/nextPageStartAt"
       responses:
@@ -684,7 +674,7 @@ paths:
                 properties:
                   status:
                     default: success
-                  videos: 
+                  videos:
                     type: array
                     items:
                       $ref: "#/components/schemas/video"
@@ -734,7 +724,7 @@ paths:
                     default: success
                   videos:
                     type: array
-                    items: 
+                    items:
                       $ref: "#/components/schemas/video"
                   pagination:
                     $ref: "#/components/schemas/pagination"
@@ -763,7 +753,7 @@ paths:
       description: 更新影片資訊
       security:
         - ApiKeyAuth: []
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/videoId"
       responses:
         200:
@@ -784,7 +774,7 @@ paths:
       description: 更新影片資訊
       security:
         - ApiKeyAuth: []
-      parameters: 
+      parameters:
         - $ref: "#/components/parameters/videoId"
       requestBody:
         required: true
