@@ -40,7 +40,7 @@ func (l LoginController) Login(c *gin.Context) {
 		})
 		return
 	}
-	if user.IsPasswordMatched(body.Password) {
+	if !user.IsPasswordMatched(body.Password) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": "帳號或密碼錯誤",

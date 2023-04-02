@@ -36,7 +36,7 @@ func (u *User) IsPasswordMatched(password string) bool {
 	return CheckPasswordHash(u.Password, password)
 }
 
-func CheckPasswordHash(password, hash string) bool {
+func CheckPasswordHash(hash, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
