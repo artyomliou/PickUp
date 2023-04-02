@@ -20,7 +20,7 @@ fill_val() {
     key=$2
     val=$3
     if is_key_set $file $key; then
-        sed -i -E "s/($key=).*/\1\"$val\"/" $file
+        sed -i -E "s/($key=).*/\1$val/" $file
     else
         echo "$key=$val" | tee -a $file >/dev/null
     fi
