@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <base href="http://localhost:5000">
     <ol>
         <li>
             <form action="/api/is-logged-in" method="get">
@@ -47,7 +48,8 @@
                     credentials: "same-origin",
                     body: this.form.method.toUpperCase() !== "GET"
                         ? JSON.stringify(Object.fromEntries(new FormData(this.form)))
-                        : null
+                        : null,
+                    mode: "cors"
                 })
 
                 // response digest
