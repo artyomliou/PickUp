@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug page</title>
+</head>
+
+<body>
+    <ol>
+        <li>
+            <form action="/api/is-logged-in" method="get">
+                <label>is-logged-in</label>
+                <button is="json-submit-button" type="submit">Submit</button>
+            </form>
+        </li>
+        <li>
+            <form action="/api/login" method="post">
+                <label>login</label>
+                <input type="text" name="email" value="artyomliou@gmail.com">
+                <input type="password" name="password" placeholder="password">
+                <button is="json-submit-button" type="submit">Submit</button>
+            </form>
+        </li>
+        <li>
+            <form action="/api/logout" method="get">
+                <label>logout</label>
+                <button is="json-submit-button" type="submit">Submit</button>
+            </form>
+        </li>
+    </ol>
+</body>
+<script>
+    class JsonSubmitButton extends HTMLButtonElement {
+        constructor() {
+            super()
+            this.onclick = this.clickCallback
+        }
+
+        async clickCallback(event) {
+            if (this.form) {
+                event.preventDefault()
+                const res = await fetch(this.form.action, {
+                    method: this.form.method,
+                    credentials: "same-origin",
+                    body: this.form.method.toUpperCase() !== "GET"
+                        ? JSON.stringify(Object.fromEntries(new FormData(this.form)))
+                        : null
+                })
+
+                // response digest
+                const text = await res.text()
+                const lines = []
+                lines.push(`Code: ${res.status}`)
+                lines.push(`Headers: `)
+                for (const [k, v] of res.headers.entries()) {
+                    lines.push(`\t${k}: ${v}`)
+                }
+                lines.push(`Body:`)
+                lines.push(`\t${text}`)
+                alert(lines.join("\n"))
+            }
+        }
+    }
+    customElements.define('json-submit-button', JsonSubmitButton, { extends: 'button' })
+</script>
+
+</html>
