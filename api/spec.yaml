@@ -393,7 +393,7 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/UserSignup"
       responses:
-        200:
+        204:
           description: OK
           headers:
             Set-Cookie:
@@ -401,16 +401,6 @@ paths:
               schema:
                 type: string
                 example: "vp=JWTJWTJWT; Max-Age=604800; SameSite=Lax; HttpOnly"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    default: success
-                  token:
-                    type: string
-                    example: "JWTJWTJWT"
         400:
           description: 帳號或密碼錯誤
           content:

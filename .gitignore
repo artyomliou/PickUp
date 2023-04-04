@@ -1,0 +1,7 @@
+# OpenAPI Generator
+out/*
+
+# .env
+.env
+.env.docker
+.env.root

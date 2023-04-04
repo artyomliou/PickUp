@@ -1,3 +1,5 @@
 #!/bin/sh
 
-docker compose up -d
+sh ./setup.sh
+
+cd backend && go run .
