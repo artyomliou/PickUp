@@ -12,30 +12,16 @@
                         <div class="form-group">
                             <label class="label">
                                 <span class="input-head">帳號 (E-mail)</span>
-                                <input
-                                    type="email"
-                                    class="form-control"
-                                    v-model="userLogin.email"
-                                    required
-                                />
+                                <input type="email" class="form-control" v-model="userLogin.email" required />
                             </label>
                         </div>
                         <div class="form-group">
                             <label class="label">
                                 <span class="input-head">密碼</span>
-                                <input
-                                    type="password"
-                                    class="form-control"
-                                    v-model="userLogin.password"
-                                    requored
-                                />
+                                <input type="password" class="form-control" v-model="userLogin.password" requored />
                             </label>
                         </div>
-                        <button
-                            @click="loginSubmit()"
-                            type="submit"
-                            class="btn btn-md mx-auto btn-sumit"
-                        >
+                        <button @click="loginSubmit()" type="submit" class="btn btn-md mx-auto btn-sumit">
                             送出
                         </button>
                     </form>
@@ -50,58 +36,21 @@
     <FooterComponent />
 
     <!--  -->
-    <div ref="modalAlert" class="modal" tabindex="-1">
+    <div ref="modalAlert" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">modal Alert</h5>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <p>Modal body text goes here.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div ref="modalAlert2" class="modal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">modalAlert2</h5>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <p>Modal body text goes here.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <!-- <h5 class="modal-title">{{ alertTxt }}</h5> -->
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import 'bootstrap/dist/css/bootstrap.min.css'
+// bootstrap modal
+// https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
 import Modal from 'bootstrap/js/dist/modal'
 import { mapActions, mapState } from 'pinia'
 import { useLoginCheckStore } from '../stores/useLoginCheck.js'
@@ -112,7 +61,8 @@ export default {
             userLogin: {
                 email: '',
                 password: ''
-            }
+            },
+            // alertTxt: ''
         }
     },
     computed: {
@@ -138,18 +88,15 @@ export default {
                 const modalAlert = new Modal(this.$refs.modalAlert)
                 if (response.ok) {
                     this.fetchLoginApi()
-                    console.log('ok:' + response.status)
-                    console.log("ok's action: " + this.isLogined)
-                    console.log(this.$refs.modalAlert)
+                    this.$refs.modalAlert.querySelector('h5').innerText = "你已成功登入";
+                    // this.alertTxt = '你已成功登入'
                     modalAlert.show()
-                    // this.$refs.modalWarning.show()
                     this.$router.push('/')
                 } else {
                     const resData = await response.json()
-                    console.log(resData, response.status)
-                    // this.$refs.modalAlert2.show()
+                    // this.alertTxt = '登入錯誤，請重新確認！'
+                    this.$refs.modalAlert.querySelector('h5').innerText = "登入錯誤，請重新確認！";
                     modalAlert.show()
-                    console.log(this.$refs.modalAlert2)
                 }
             } catch (error) {
                 console.log(error)
