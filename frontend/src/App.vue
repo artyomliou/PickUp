@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router';
 // import HelloWorld from './components/HelloWorld.vue'
 </script>
 
@@ -11,13 +11,29 @@ import { RouterLink, RouterView } from 'vue-router'
       <HelloWorld msg="You did it!" />
 
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header> -->
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/about">About</RouterLink>
+        </nav>
+      </div>
+    </header> -->
 
   <RouterView />
 </template>
 
 <style scoped></style>
+
+<script>
+// every pages
+import { mapActions } from 'pinia';
+import { useLoginCheckStore } from './stores/useLoginCheck.js';
+
+export default {
+  methods: {
+    ...mapActions(useLoginCheckStore, ['fetchLoginApi'])
+  },
+  created() {
+    this.fetchLoginApi()
+  }
+}
+
+</script>
