@@ -69,7 +69,7 @@ export default {
         ...mapState(useLoginCheckStore, ['isLogined'])
     },
     methods: {
-        ...mapActions(useLoginCheckStore, ['fetchLoginApi']),
+        ...mapActions(useLoginCheckStore, ['checkLoginStatus']),
         async loginSubmit() {
             try {
                 const response = await fetch('http://localhost:5000/api/login', {
@@ -87,7 +87,7 @@ export default {
 
                 const modalAlert = new Modal(this.$refs.modalAlert)
                 if (response.ok) {
-                    this.fetchLoginApi()
+                    this.checkLoginStatus()
                     this.$refs.modalAlert.querySelector('h5').innerText = "你已成功登入";
                     // this.alertTxt = '你已成功登入'
                     modalAlert.show()
@@ -104,7 +104,7 @@ export default {
         }
     },
     created() {
-        // this.fetchLoginApi()
+        // this.checkLoginStatus()
     }
 }
 </script>

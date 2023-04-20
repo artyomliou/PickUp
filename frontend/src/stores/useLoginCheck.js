@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { isLoggedIn } from '../api'
 
 // example https://pinia.vuejs.org/core-concepts/#option-stores
 
@@ -14,19 +15,9 @@ export const useLoginCheckStore = defineStore(
             // as the computed
         },
         actions: {
-            // as the methods
-            async fetchLoginApi() {
+            async checkLoginStatus() {
                 try {
-                    const response = await fetch('http://localhost:5000/api/is-logged-in', {
-                        method: 'GET',
-                        credentials: 'include'
-                    })
-                    const apiData = await response.json()
-                    ;(this.isLogined = apiData['is-logged-in']),
-                        console.log(
-                            'action: ' + this.isLogined,
-                            'apiData is-loggend-in: ' + apiData['is-logged-in']
-                        )
+                    this.isLogined = await isLoggedIn()
                 } catch (error) {
                     console.error(error)
                 }
