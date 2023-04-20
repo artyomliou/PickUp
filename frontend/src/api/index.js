@@ -11,3 +11,14 @@ export async function isLoggedIn() {
     const apiData = await response.json()
     return !!apiData['is-logged-in']
 }
+
+export async function login(email, password) {
+    return await fetch(withBaseurl('/api/login'), {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+    })
+}

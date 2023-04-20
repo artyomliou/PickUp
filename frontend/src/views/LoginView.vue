@@ -53,6 +53,7 @@
 // https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
 import Modal from 'bootstrap/js/dist/modal'
 import { mapActions, mapState } from 'pinia'
+import { login } from '../api'
 import { useLoginCheckStore } from '../stores/useLoginCheck.js'
 
 export default {
@@ -72,39 +73,23 @@ export default {
         ...mapActions(useLoginCheckStore, ['checkLoginStatus']),
         async loginSubmit() {
             try {
-                const response = await fetch('http://localhost:5000/api/login', {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: this.userLogin.email,
-                        password: this.userLogin.password
-                    })
-                })
-                // 拿到狀態 console.log(response, response.status)
-
-                const modalAlert = new Modal(this.$refs.modalAlert)
+                const response = await login(this.userLogin.email, this.userLogin.password);
                 if (response.ok) {
-                    this.checkLoginStatus()
-                    this.$refs.modalAlert.querySelector('h5').innerText = "你已成功登入";
-                    // this.alertTxt = '你已成功登入'
-                    modalAlert.show()
+                    this.showModal("你已成功登入");
                     this.$router.push('/')
                 } else {
-                    const resData = await response.json()
-                    // this.alertTxt = '登入錯誤，請重新確認！'
-                    this.$refs.modalAlert.querySelector('h5').innerText = "登入錯誤，請重新確認！";
-                    modalAlert.show()
+                    this.showModal("登入錯誤，請重新確認！")
                 }
             } catch (error) {
-                console.log(error)
+                console.error(error)
             }
+        },
+        showModal(msg) {
+            this.$refs.modalAlert.querySelector('h5').innerText = msg;
+
+            const modalAlert = new Modal(this.$refs.modalAlert)
+            modalAlert.show()
         }
     },
-    created() {
-        // this.checkLoginStatus()
-    }
 }
 </script>
