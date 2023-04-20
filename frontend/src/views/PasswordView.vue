@@ -1,10 +1,5 @@
-<script setup>
-import Navbar from '../components/Navbar.vue'
-import FooterComponent from '../components/Footer.vue'
-</script>
-
 <template>
-  <Navbar />
+  <NavBar />
   <section class="sec-h sec-password">
     <div class="container">
       <div class="row justify-content-center">
@@ -24,19 +19,11 @@ import FooterComponent from '../components/Footer.vue'
           </form>
           <div class="text-center">
             還是有問題？
-            <a href="mailto:service@theproject.com.tw" target="_blank" class=""
-              >請來信聯絡
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-envelope-fill"
-                viewBox="0 0 16 16"
-              >
+            <a href="mailto:service@theproject.com.tw" target="_blank" class="">請來信聯絡
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-envelope-fill" viewBox="0 0 16 16">
                 <path
-                  d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"
-                />
+                  d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z" />
               </svg>
             </a>
           </div>
