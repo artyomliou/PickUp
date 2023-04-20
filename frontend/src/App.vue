@@ -11,10 +11,10 @@ import { RouterView } from 'vue-router';
 
       <nav>
             <RouterLink to="/">Home</RouterLink>
-              <RouterLink to="/about">About</RouterLink>
-            </nav>
-          </div>
-        </header> -->
+                  <RouterLink to="/about">About</RouterLink>
+                </nav>
+              </div>
+            </header> -->
 
   <RouterView />
 </template>
@@ -23,12 +23,12 @@ import { RouterView } from 'vue-router';
 
 
 <script>
-import { useLoginCheckStore } from '@/stores/useLoginCheck.js';
+import { useLoginStatusStore } from '@/stores/LoginStatus.js';
 import { mapActions, } from 'pinia';
 
 export default {
   methods: {
-    ...mapActions(useLoginCheckStore, ['checkLoginStatus'])
+    ...mapActions(useLoginStatusStore, ['checkLoginStatus'])
   },
   created() {
     this.checkLoginStatus()

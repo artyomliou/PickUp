@@ -4,7 +4,7 @@ import { isLoggedIn } from '../api'
 // example https://pinia.vuejs.org/core-concepts/#option-stores
 
 // pinia store
-export const useLoginCheckStore = defineStore(
+export const useLoginStatusStore = defineStore(
     'Login',
     {
         state: () => ({

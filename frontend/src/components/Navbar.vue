@@ -69,11 +69,11 @@
 
 <script>
 import { mapState } from 'pinia';
-import { useLoginCheckStore } from '../stores/useLoginCheck.js';
+import { useLoginStatusStore } from '../stores/LoginStatus.js';
 
 export default {
     computed: {
-        ...mapState(useLoginCheckStore, ['isLogined'])
+        ...mapState(useLoginStatusStore, ['isLogined'])
     },
 }
 </script>
