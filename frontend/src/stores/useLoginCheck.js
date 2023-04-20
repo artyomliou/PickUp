@@ -8,12 +8,8 @@ export const useLoginCheckStore = defineStore(
     'Login',
     {
         state: () => ({
-            // as a data store
             isLogined: false
         }),
-        getters: {
-            // as the computed
-        },
         actions: {
             async checkLoginStatus() {
                 try {

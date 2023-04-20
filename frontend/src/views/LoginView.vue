@@ -51,10 +51,8 @@
 <script>
 // bootstrap modal
 // https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
-import Modal from 'bootstrap/js/dist/modal'
-import { mapActions, mapState } from 'pinia'
-import { login } from '../api'
-import { useLoginCheckStore } from '../stores/useLoginCheck.js'
+import Modal from 'bootstrap/js/dist/modal';
+import { login } from '../api';
 
 export default {
     data() {
@@ -63,14 +61,9 @@ export default {
                 email: '',
                 password: ''
             },
-            // alertTxt: ''
         }
     },
-    computed: {
-        ...mapState(useLoginCheckStore, ['isLogined'])
-    },
     methods: {
-        ...mapActions(useLoginCheckStore, ['checkLoginStatus']),
         async loginSubmit() {
             try {
                 const response = await login(this.userLogin.email, this.userLogin.password);
