@@ -75,7 +75,7 @@
                                 </a>
                             </li>
 
-                            <button type="button" role="button" class="btn btn-light btn-logout">
+                            <button @click="isLogoutAction()" type="button" role="button" class="btn btn-light btn-logout">
                                 登出
                             </button>
                         </ul>
@@ -87,17 +87,16 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
-import { useLoginCheckStore } from '../stores/useLoginCheck.js'
-
 export default {
     data() {
-        return {}
+        return {
+        }
     },
-    computed: {
-        ...mapState(useLoginCheckStore, ['isLogined'])
+    methods: {
+      isLogoutAction() {
+            this.isLogined.value = false
+        }
     },
-    methods: {},
     created() {}
 }
 </script>

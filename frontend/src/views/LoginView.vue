@@ -1,5 +1,5 @@
 <template>
-    <Navbar />
+    <NavbarComponent />
     <section class="sec-h sec-login">
         <div class="container">
             <div class="row justify-content-center">
@@ -52,24 +52,18 @@
 // bootstrap modal
 // https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
 import Modal from 'bootstrap/js/dist/modal'
-import { mapActions, mapState } from 'pinia'
-import { useLoginCheckStore } from '../stores/useLoginCheck.js'
 
 export default {
+    inject: ['isLogined'],
     data() {
         return {
             userLogin: {
                 email: '',
                 password: ''
             },
-            // alertTxt: ''
         }
     },
-    computed: {
-        ...mapState(useLoginCheckStore, ['isLogined'])
-    },
     methods: {
-        ...mapActions(useLoginCheckStore, ['fetchLoginApi']),
         async loginSubmit() {
             try {
                 const response = await fetch('http://localhost:5000/api/login', {
@@ -93,7 +87,7 @@ export default {
                     modalAlert.show()
                     this.$router.push('/')
                 } else {
-                    const resData = await response.json()
+                    // const resData = await response.json()
                     // this.alertTxt = '登入錯誤，請重新確認！'
                     this.$refs.modalAlert.querySelector('h5').innerText = "登入錯誤，請重新確認！";
                     modalAlert.show()
@@ -102,9 +96,6 @@ export default {
                 console.log(error)
             }
         }
-    },
-    created() {
-        // this.fetchLoginApi()
     }
 }
 </script>

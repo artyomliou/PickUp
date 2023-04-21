@@ -1,10 +1,10 @@
 <script setup>
-import Navbar from '../components/Navbar.vue'
+import NavbarComponent from '../components/NavbarComponent.vue'
 import FooterComponent from '../components/Footer.vue'
 </script>
 
 <template>
-  <Navbar />
+  <NavbarComponent />
   <section class="sec-h sec-password">
     <div class="container">
       <div class="row justify-content-center">
