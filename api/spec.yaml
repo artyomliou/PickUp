@@ -7,130 +7,183 @@ servers:
   - url: http://localhost:5000
 components:
   schemas:
-    video:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: 唯一編號
-          example: 1584093427933380608
-        title:
-          type: string
-          description: 影片標題
-          example: ぷにぷに電機×80KIDZ『Night Session』officialMV
-        thumbnail:
-          type: string
-          description: 影片縮圖的URL
-          example: https://i.ytimg.com/vi/3eKGhb7rCjI/hqdefault.jpg
-        view-count:
-          type: integer
-          description: 觀看數
-        published-at:
-          type: string
-          description: 發布時間(ISO8601，時區是 UTC)
-          example: 2022-06-30T00:00:00+0000
-    video-listing:
-      allOf:
-        - $ref: "#/components/schemas/video"
-        - type: object
-          properties:
-            channel:
-              $ref: "#/components/schemas/channel"
-    video-detail:
-      allOf:
-        - $ref: "#/components/schemas/video"
-        - type: object
-          properties:
-            introduction:
-              type: string
-              description: 影片介紹
-            like-count:
-              type: integer
-              description: 喜歡數
-            comment-count:
-              type: integer
-              description: 留言數
-            tags:
-              type: array
-              $ref: "#/components/schemas/tags"
-            status:
-              $ref: "#/components/schemas/video-status"
-            access:
-              $ref: "#/components/schemas/video-access"
-    video-status:
-      type: string
-      enum:
-        - draft
-        - uploaded
-      description: 狀態
-    video-access:
-      type: string
-      enum:
-        - private
-        - public
-        - protected
-      description: 瀏覽權限
-    channel:
+    Store:
+      description: 店家
       type: object
       properties:
         id:
           type: string
-          description: 唯一編號
-          example: UCiypeVEfK4jO9LgGmVSVmEg
-        title:
+          format: uuid
+          example: store-8eef7285-e799-5362-8e52-1900a149a12b
+        name:
           type: string
-          description: 頻道標題
-          example: punipunidenki
-        avatar-thumbnail:
+          example: "某個賣吃的店"
+        pic:
           type: string
-          description: 頻道大頭貼的縮圖
-          example: https://yt3.ggpht.com/ytc/AL5GRJWJ_eaNYNPmu7DNS57ZhTupcr6AWCdhR746OGwWGQ=s48-c-k-c0x00ffffff-no-rj-mo
-    channel-detail:
-      allOf:
-        - $ref: "#/components/schemas/channel"
-        - type: object
-          properties:
-            introduction:
-              type: string
-              description: 頻道介紹
-              example: punipunidenki's channel as example
-            avatar:
-              type: string
-              description: 頻道大頭貼
-              example: https://yt3.googleusercontent.com/ytc/AL5GRJWJ_eaNYNPmu7DNS57ZhTupcr6AWCdhR746OGwWGQ=s88-c-k-c0x00ffffff-no-rj
-    comment:
+          format: url
+          example: https://localhost/stores/121892839139839/pic.png
+        status:
+          enum:
+            - open
+            - closed
+        opened_at:
+          type: string
+          format: time
+          example: "9:00"
+        closed_at:
+          type: string
+          format: time
+          example: "18:00"
+    ProductCategory:
+      description: 商品分類
+      type: object
+      properties:
+        name:
+          description: 分類名
+          type: string
+          example: 純茶
+        items:
+          description: 分類下的商品
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+    Product:
+      description: 商品
       type: object
       properties:
         id:
-          type: integer
-          description: 唯一編號
-          example: 1584093427933380608
-        content:
           type: string
-          example: Nice song!
-        author:
-          $ref: "#/components/schemas/channel"
-    tags:
+          format: uuid
+          example: product-c696d3e9-6566-556b-b6c4-730fc65dbed8
+        name:
+          type: string
+          example: 錫蘭紅茶
+        price:
+          type: number
+          example: 30
+        description:
+          type: string
+          example: 以嶄新手法展現傳統精神，為您獻上用頂級台灣茶葉以及匠人精神，搭配絕佳的沖泡時間、溫度，釀出這杯令人難以忘懷的ooxx茶
+        selects:
+          type: array
+          items:
+            $ref: "#/components/schemas/SelectQuestion"
+        customs:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomQuestion"
+    SelectQuestion:
+      description: 客製化問題 (當使用者句選某個選項，需要回傳該選項的 ID)
+      type: object
+      properties:
+        name:
+          type: string
+          example: 加料
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/SelectOption"
+        required:
+          description: 是否必填 (若為 true，可以無視 atMost；若為 false，則需要設定及檢查 atMost 的值)
+          type: boolean
+          default: false
+        atMost:
+          description: 最多可以選幾項
+          type: number
+          example: 3
+    SelectOption:
+      description: 客製化選項
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: option-c8666764-4591-5bd3-a63a-e0a76cbef108
+        name:
+          type: string
+          example: 珍珠
+        price:
+          type: number
+          default: 0
+          example: 10
+    SelectAnswer:
+      description: 客製化問題的回答
       type: array
       items:
-        type: string
-        example:
-          - 音樂
-    pagination:
-      description: 分頁機制會額外傳的欄位
+        type: object
+        properties:
+          id:
+            type: string
+            format: uuid
+            example: option-c8666764-4591-5bd3-a63a-e0a76cbef108
+          price:
+            type: number
+            default: 0
+            example: 10
+    CustomQuestion:
+      description: 額外需求
       type: object
-      required:
-        - per-page
-        - last-item-key
       properties:
-        per-page:
-          type: number
-          example: 20
-        last-item-key:
-          type: number
-          nullable: true
-          example: null
-    error:
+        name:
+          type: string
+          example: 額外需求
+        placeholder:
+          type: string
+          example: 請告訴我們有什麼額外的需求，比如做餐點的時候不能笑之類的
+    CustomAnswer:
+      description: 額外需求的回答
+      type: object
+      properties:
+        value:
+          type: string
+          example: 請在做飲料時不要笑出來，謝謝
+    CartItem:
+      description: 購物車中的一個商品(資訊)
+      type: object
+      properties:
+        storeId:
+          type: string
+          example: store-8eef7285-e799-5362-8e52-1900a149a12b
+        productId:
+          type: string
+          example: product-c696d3e9-6566-556b-b6c4-730fc65dbed8
+        amount:
+          type: integer
+          example: 1
+        selects:
+          type: array
+          items:
+            $ref: "#/components/schemas/SelectAnswer"
+        customs:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomAnswer"
+    Order:
+      description: 訂單
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: order-c8666764-4591-5bd3-a63a-e0a76cbef108
+        price:
+          type: integer
+          example: 350
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+        status:
+          enum:
+            - created
+            - preparing
+            - ready
+            - picked
+            - finished
+            - cancelled
+    User:
+      description: 使用者
+    Error:
       description: 伺服器錯誤的回應格式
       type: object
       required:
@@ -143,59 +196,27 @@ components:
         message:
           type: string
   parameters:
-    videoId:
+    StoreId:
       in: path
-      name: videoId
-      description: 影片ID
-      required: true
-      schema:
-        type: integer
-        example: 1584093427933380600
-    channelId:
-      in: path
-      name: channelId
-      description: 頻道ID
-      required: true
+      name: storeId
+      description: 店家ID
       schema:
         type: string
-        example: UCiypeVEfK4jO9LgGmVSVmEg
-    tag:
-      in: query
-      name: tag
-      description: 影片Tag
-      required: false
+      required: true
+    ItemId:
+      in: path
+      name: itemId
+      description: 品項ID
       schema:
         type: string
-        example: 音樂
-    nextPageStartAt:
-      in: query
-      name: next_page_start_at
-      description: 分頁機制用。要抓11～20筆的時候，要把第10筆留言的id填在這。用意是告訴系統請從第10筆開始（不包含第10筆本身）、往下抓10筆
-      required: false
-      schema:
-        anyOf:
-          - type: string
-          - type: number
-  requestBodies:
-    UserSignup:
       required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - email
-              - password
-            properties:
-              email:
-                type: string
-                format: email
-              password:
-                type: string
-                format: password
-          example:
-            email: foobar@not-exist.com
-            password: P@sSw0Rd
+    OrderId:
+      in: path
+      name: orderId
+      description: 訂單ID
+      schema:
+        type: string
+      required: true
   responses:
     204NoContent:
       description: 執行成功，不需要回傳資料
@@ -204,7 +225,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/error"
+            $ref: "#/components/schemas/Error"
           example:
             status: error
             message: 必須先登入才能呼叫這個API
@@ -212,15 +233,32 @@ components:
     ApiKeyAuth:
       type: apiKey
       in: cookie
-      name: vp
+      name: auth
 paths:
-  "/api/registration":
+  /api/registration:
     post:
       tags:
         - 註冊
       description: 註冊
       requestBody:
-        $ref: "#/components/requestBodies/UserSignup"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+            example:
+              email: foobar@not-exist.com
+              password: P@sSw0Rd
       responses:
         204:
           $ref: "#/components/responses/204NoContent"
@@ -251,7 +289,7 @@ paths:
                     status: error
                     message: 此 Email 沒註冊過
                     invalid-input-names: []
-  "/api/registration/email-verification":
+  /api/registration/email-verification:
     post:
       tags:
         - 註冊
@@ -283,7 +321,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
               examples:
                 wrong-email:
                   value:
@@ -320,7 +358,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
               example:
                 status: error
                 message: 此 Email 沒註冊過
@@ -355,7 +393,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
               examples:
                 wrong-code:
                   value:
@@ -382,7 +420,7 @@ paths:
                 properties:
                   status:
                     default: success
-                  is-logged-in:
+                  isLoggedIn:
                     type: boolean
                     example: false
   /api/login:
@@ -391,7 +429,24 @@ paths:
         - 登入
       description: 登入，成功的話會取得 cookie
       requestBody:
-        $ref: "#/components/requestBodies/UserSignup"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+            example:
+              email: foobar@not-exist.com
+              password: P@sSw0Rd
       responses:
         204:
           description: OK
@@ -406,7 +461,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
               example:
                 status: error
                 message: 帳號或密碼錯誤
@@ -428,13 +483,11 @@ paths:
                 example: "vp=; Max-Age=0; SameSite=Lax; HttpOnly"
         401:
           $ref: "#/components/responses/401UnAuthorized"
-  /api/videos:
+  /api/stores:
     get:
       tags:
         - 首頁
-      description: 取得影片清單
-      parameters:
-        - $ref: "#/components/parameters/tag"
+      description: 店家清單
       responses:
         200:
           description: OK
@@ -443,19 +496,17 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    default: success
-                  videos:
+                  stores:
                     type: array
                     items:
-                      $ref: "#/components/schemas/video-listing"
-  /api/videos/{videoId}:
+                      $ref: "#/components/schemas/Store"
+  /api/stores/{storeId}:
     get:
       tags:
-        - 影片播放頁
-      description: 取得指定影片的資訊
+        - 店家頁
+      description: 取得指定店家的資訊
       parameters:
-        - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/ItemId"
       responses:
         200:
           description: OK
@@ -464,99 +515,115 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    default: success
-                  video:
-                    $ref: "#/components/schemas/video"
-                  channel:
-                    $ref: "#/components/schemas/channel"
+                  store:
+                    $ref: "#/components/schemas/Store"
+                  itemCategories:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProductCategory"
         404:
-          description: 指定影片不存在
+          description: 指定店家不存在
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
               example:
                 status: error
-                message: 指定影片不存在
-  /api/videos/{videoId}/recommends:
+                message: 指定店家不存在
+  /api/cart/items:
     get:
       tags:
-        - 影片播放頁
-      description: 取得與指定影片類似、推薦的影片清單
-      parameters:
-        - $ref: "#/components/parameters/videoId"
+        - 購物車
+      description: 取得購物車中的所有商品
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    default: success
-                  videos:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/video-listing"
-  /api/videos/{videoId}/comments:
-    get:
-      tags:
-        - 影片播放頁
-      description: 取得指定影片的留言，有分頁機制，每次最多抓10筆
-      parameters:
-        - $ref: "#/components/parameters/videoId"
-        - $ref: "#/components/parameters/nextPageStartAt"
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    default: success
-                  comments:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/comment"
-                  pagination:
-                    $ref: "#/components/schemas/pagination"
+                type: array
+                items:
+                  $ref: "#/components/schemas/CartItem"
     post:
       tags:
-        - 影片播放頁
-      description: 新增一筆留言
-      security:
-        - ApiKeyAuth: []
+        - 購物車
+      description: 將商品加入購物車
+      requestBody:
+        description: 要加入購物車的商品及數量
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartItem"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              example:
+                cartItemId: "item-0129830192830912"
+  /api/cart/items/{itemId}:
+    get:
+      tags:
+        - 購物車
+      description: 「取得」購物車的品項
       parameters:
-        - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/ItemId"
+      responses:
+        204:
+          description: OK
+          $ref: "#/components/responses/204NoContent"
+    put:
+      tags:
+        - 購物車
+      description: 「更新」購物車中的一個品項
+      parameters:
+        - $ref: "#/components/parameters/ItemId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartItem"
+      responses:
+        204:
+          description: OK
+          $ref: "#/components/responses/204NoContent"
+    delete:
+      tags:
+        - 購物車
+      description: 從購物車「移除」一個品項
+      parameters:
+        - $ref: "#/components/parameters/ItemId"
+      responses:
+        204:
+          description: OK
+          $ref: "#/components/responses/204NoContent"
+  /api/orders:
+    post:
+      description: 下訂單
+      tags:
+        - 購物車
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - content
-              properties:
-                content:
-                  type: string
-            example:
-              content: 這首歌真好聽
       responses:
-        204:
-          $ref: "#/components/responses/204NoContent"
-        401:
-          $ref: "#/components/responses/401UnAuthorized"
-  /api/videos/{videoId}/is-liked:
+        200:
+          description: OK
+          content:
+            application/json:
+              example:
+                orderId: "order-0129830192830912"
+  /api/orders/{orderId}/status:
     get:
+      description: 取得即時訂單狀態
       tags:
-        - 影片播放頁
-      description: 取得是否有對這影片點「喜歡」過。如果沒登入，一律回傳 false；如果有登入，才回傳真的資料
+        - 訂單追蹤頁
       parameters:
-        - $ref: "#/components/parameters/videoId"
+        - $ref: "#/components/parameters/OrderId"
       responses:
         200:
           description: OK
@@ -566,49 +633,21 @@ paths:
                 type: object
                 properties:
                   status:
-                    default: success
-                  liked:
-                    type: boolean
-                    example: true
-                  disliked:
-                    type: boolean
-                    example: false
-  /api/videos/{videoId}/like:
-    post:
-      tags:
-        - 影片播放頁
-      description: 喜歡/取消喜歡影片
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - $ref: "#/components/parameters/videoId"
-      responses:
-        204:
-          $ref: "#/components/responses/204NoContent"
-        401:
-          $ref: "#/components/responses/401UnAuthorized"
-  /api/videos/{videoId}/dislike:
-    post:
-      tags:
-        - 影片播放頁
-      description: 不喜歡/取消不喜歡影片
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - $ref: "#/components/parameters/videoId"
-      responses:
-        204:
-          $ref: "#/components/responses/204NoContent"
-        401:
-          $ref: "#/components/responses/401UnAuthorized"
-  /api/channel/{channelId}/is-subscribed:
+                    enum:
+                      - created
+                      - preparing
+                      - ready
+                      - picked
+                      - finished
+                      - cancelled
+                    default: created
+  /api/orders/{orderId}:
     get:
+      description: 取得指定訂單的購物清單
       tags:
-        - 影片播放頁
-        - 頻道主頁
-      description: 取得是否有「訂閱」頻道過。如果沒登入，一律回傳 false；如果有登入，才回傳真的資料
+        - 訂單管理
       parameters:
-        - $ref: "#/components/parameters/channelId"
+        - $ref: "#/components/parameters/OrderId"
       responses:
         200:
           description: OK
@@ -617,184 +656,5 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    default: success
-                  subscribed:
-                    type: boolean
-                    example: true
-  /api/channel/{channelId}/subscribe:
-    post:
-      tags:
-        - 影片播放頁
-        - 頻道主頁
-      description: 訂閱/取消訂閱頻道
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - $ref: "#/components/parameters/channelId"
-      responses:
-        204:
-          $ref: "#/components/responses/204NoContent"
-        401:
-          $ref: "#/components/responses/401UnAuthorized"
-  /api/channel/{channelId}:
-    get:
-      tags:
-        - 頻道主頁
-      description: 取得頻道主頁的大部分資訊
-      parameters:
-        - $ref: "#/components/parameters/channelId"
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    default: success
-                  channel:
-                    $ref: "#/components/schemas/channel-detail"
-  /api/channel/{channelId}/videos:
-    get:
-      tags:
-        - 頻道主頁
-      description: 取得指定頻道上傳的影片，有分頁機制
-      parameters:
-        - $ref: "#/components/parameters/channelId"
-        - $ref: "#/components/parameters/nextPageStartAt"
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    default: success
-                  videos:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/video"
-                  pagination:
-                    $ref: "#/components/schemas/pagination"
-  /api/admin/channel/profile:
-    put:
-      tags:
-        - 頻道編輯（後台）
-      description: 更新頻道資訊
-      security:
-        - ApiKeyAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                introduction:
-                  type: string
-                avatar:
-                  type: string
-                  format: binary
-                  description: 頻道大頭貼(最多2MB)
-      responses:
-        204:
-          $ref: "#/components/responses/204NoContent"
-  /api/admin/videos:
-    get:
-      tags:
-        - 影片管理（後台）
-      description: 列出自己上傳的影片，有分頁機制
-      security:
-        - ApiKeyAuth: []
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    default: success
-                  videos:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/video"
-                  pagination:
-                    $ref: "#/components/schemas/pagination"
-    post:
-      tags:
-        - 影片管理（後台）
-      description: 建立新影片草稿（後續使用put編輯）
-      security:
-        - ApiKeyAuth: []
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    default: success
-                  video:
-                    $ref: "#/components/schemas/video"
-  /api/admin/videos/{videoId}/status:
-    get:
-      tags:
-        - 影片建立頁/編輯頁（後台）
-      description: 更新影片資訊
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - $ref: "#/components/parameters/videoId"
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    default: success
-                  video-status:
-                    $ref: "#/components/schemas/video-status"
-  /api/admin/videos/{videoId}:
-    put:
-      tags:
-        - 影片建立頁/編輯頁（後台）
-      description: 更新影片資訊
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - $ref: "#/components/parameters/videoId"
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: 影片標題
-                introduction:
-                  type: string
-                  example: 影片介紹
-                tags:
-                  type: array
-                  $ref: "#/components/schemas/tags"
-                video-file:
-                  type: string
-                  format: binary
-      responses:
-        204:
-          $ref: "#/components/responses/204NoContent"
+                  order:
+                    $ref: "#/components/schemas/Order"
