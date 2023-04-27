@@ -1,5 +1,4 @@
 <template>
-    <NavbarComponent />
     <section class="sec-h sec-login">
         <div class="container">
             <div class="row justify-content-center">
@@ -8,7 +7,7 @@
                     <p class="sec-sub">歡迎回來！</p>
                 </div>
                 <div class="col-12 col-lg-5">
-                    <form @submit.prevent="login" class="form">
+                    <form class="form">
                         <div class="form-group">
                             <label class="label">
                                 <span class="input-head">帳號 (E-mail)</span>
@@ -21,19 +20,18 @@
                                 <input type="password" class="form-control" v-model="userLogin.password" requored />
                             </label>
                         </div>
-                        <button @click="loginSubmit()" type="submit" class="btn btn-md mx-auto btn-sumit">
+                        <button @click.prevent="localLoginAction" type="submit" class="btn btn-md mx-auto btn-sumit">
                             送出
                         </button>
                     </form>
                     <div class="text-center">
-                        <a href="" class="btn btn-inline">忘記密碼？</a>
+                        <button @click="countPlus" class="btn btn-default">{{ click }}忘記密碼？</button>
                         <a href="" class="btn btn-inline">還沒註冊？</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <FooterComponent />
 
     <!--  -->
     <div ref="modalAlert" class="modal fade" tabindex="-1">
@@ -49,53 +47,45 @@
     </div>
 </template>
 <script>
+// import { reactive } from 'vue';
+// import { loginAction } from '../api/index';
 // bootstrap modal
 // https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
-import Modal from 'bootstrap/js/dist/modal'
-
 export default {
-    inject: ['isLogined'],
+    inject: ['isLoginedStatusId', 'loginAction'],
+    // inject: reactive([isLoginedStatusId)],
     data() {
         return {
             userLogin: {
                 email: '',
-                password: ''
+                password: '',
             },
+            isLoginStatus: false,
+            countSet: 0
         }
     },
     methods: {
-        async loginSubmit() {
-            try {
-                const response = await fetch('http://localhost:5000/api/login', {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: this.userLogin.email,
-                        password: this.userLogin.password
-                    })
-                })
-                // 拿到狀態 console.log(response, response.status)
-
-                const modalAlert = new Modal(this.$refs.modalAlert)
-                if (response.ok) {
-                    this.fetchLoginApi()
-                    this.$refs.modalAlert.querySelector('h5').innerText = "你已成功登入";
-                    // this.alertTxt = '你已成功登入'
-                    modalAlert.show()
-                    this.$router.push('/')
-                } else {
-                    // const resData = await response.json()
-                    // this.alertTxt = '登入錯誤，請重新確認！'
-                    this.$refs.modalAlert.querySelector('h5').innerText = "登入錯誤，請重新確認！";
-                    modalAlert.show()
-                }
-            } catch (error) {
-                console.log(error)
-            }
+        async localLoginAction() {
+            this.loginAction(this.userLogin.email, this.userLogin.password);
+            // const response = await this.loginAction(this.userLogin.email, this.userLogin.password);
+            // if (response.ok) {
+            //     // await nextTick();
+            //     this.isLoginStatus = await isLoginStatus();
+            //     // new Modal().show(this.$refs.modalAlert("你已成功登入"))
+            //     await this.$router.push('/');
+            //     return response.blob(); // TODO change
+            // }
+            // new Error('Network response was not okk');
+            // Modal(this.$refs.modalAlert("登入錯誤，請重新確認！")).show()
+            // new Modal().show(this.$refs.modalAlert("登入錯誤，請重新確認！"))
+            // return console.log('Cannot to be ok');
+        },
+        countPlus() {
+            console.count(this.countSet)
         }
-    }
+    },
+    // mounted() {
+    //     this.localLoginAction();
+    // }
 }
 </script>
