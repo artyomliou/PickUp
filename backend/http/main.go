@@ -14,7 +14,7 @@ func SetupRouter() (router *gin.Engine) {
 	// Cors
 	config := cors.DefaultConfig()
 	config.AllowOriginFunc = func(origin string) bool {
-		return strings.HasPrefix(origin, "http://localhost")
+		return strings.HasPrefix(origin, "http://localhost") || strings.HasPrefix(origin, "http://127.0.0.1")
 	}
 	config.AllowCredentials = true
 	config.MaxAge = 12 * time.Hour
