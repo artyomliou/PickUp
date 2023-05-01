@@ -61,10 +61,10 @@ fi
 fill_val $BACKEND MYSQL_HOST "$(get_val $DOCKER MYSQL_HOST)"
 fill_val $BACKEND MYSQL_PORT "$(get_val $DOCKER MYSQL_PORT)"
 fill_val $BACKEND MYSQL_DATABASE "$(get_val $DOCKER MYSQL_DATABASE)"
-fill_val $BACKEND MYSQL_USER "$(get_val $DOCKER MYSQL_USER)"
-fill_val $BACKEND MYSQL_PASSWORD "$(get_val $DOCKER MYSQL_PASSWORD)"
+fill_val $BACKEND MYSQL_USER "root"
+fill_val $BACKEND MYSQL_PASSWORD "$(get_val $DOCKER MYSQL_ROOT_PASSWORD)"
 if ! filled $BACKEND DB_DRIVER; then
-    fill_val $BACKEND DB_DRIVER "sqlite"
+    fill_val $BACKEND DB_DRIVER "mysql"
 fi
 if ! filled $BACKEND APP_KEY; then
     fill_val $BACKEND APP_KEY "$(gen_app_key)"

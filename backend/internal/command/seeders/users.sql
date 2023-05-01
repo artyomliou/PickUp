@@ -1,0 +1,1 @@
+REPLACE INTO `users` (`id`, `email`, `email_verified_at`, `password`, `created_at`, `updated_at`) VALUES (1, "artyomliou@gmail.com", NULL, "$2a$14$0G9XIxViyAc8b4n9UxEr0.d2YZtUY.5Q0p8bouymKRfs5VXz9Fwpi", "2023-05-01 18:44:16.656", "2023-05-01 18:44:16.656"); 

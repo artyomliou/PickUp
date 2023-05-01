@@ -1,18 +1,14 @@
-package middlewares
+package cookie
 
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
-
-const CookieName = "auth"
 
 func CreateToken(userId uint, expiredAt time.Time) (ss string) {
 	claims := jwt.RegisteredClaims{
@@ -41,29 +37,4 @@ func ParseToken(tokenStr string) *jwt.Token {
 		log.Panic(err)
 	}
 	return token
-}
-
-func Auth() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		defer func() {
-			if r := recover(); r != nil {
-				log.Print("Recovered. Error:", r)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-					"status":  "error",
-					"message": "必須先登入才能呼叫這個API",
-				})
-			}
-		}()
-
-		cookie, err := c.Cookie(CookieName)
-		if cookie == "" || err != nil {
-			panic("Cookie is empty")
-		}
-		token := ParseToken(cookie)
-		if !token.Valid {
-			panic("Token is not valid.")
-		}
-		c.Set("verified-token", token)
-		c.Next()
-	}
 }

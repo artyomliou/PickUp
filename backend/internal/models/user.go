@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"log"
+	"the-video-project/backend/internal/db"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -23,13 +24,14 @@ func (u *User) Create(email string, password string) {
 	passwordHash, _ := HashPassword(password)
 	u.Email = email
 	u.Password = passwordHash
-	if result := DB().Create(u); result.Error != nil {
+
+	if result := db.Conn().Create(u); result.Error != nil {
 		log.Panic(result.Error)
 	}
 }
 
 func (u *User) GetByEmail(email string) {
-	DB().Where("email = ?", email).First(u)
+	db.Conn().Where("email = ?", email).First(u)
 }
 
 func (u *User) IsPasswordMatched(password string) bool {

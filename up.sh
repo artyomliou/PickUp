@@ -2,4 +2,6 @@
 
 sh ./setup.sh
 
-cd backend && go run .
+docker compose up -d
+
+cd backend && go run . -command server

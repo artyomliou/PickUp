@@ -3,31 +3,34 @@ package http
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
-	"the-video-project/backend/http/middlewares"
-	"the-video-project/backend/models"
+	_ "the-video-project/backend/configs"
+	"the-video-project/backend/internal/command"
+	"the-video-project/backend/internal/cookie"
+	"the-video-project/backend/internal/httpapi"
+	"the-video-project/backend/internal/models"
 
 	"github.com/goccy/go-json"
 	"github.com/google/uuid"
-	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 )
 
 func init() {
-	if err := godotenv.Load("../.env"); err != nil {
-		log.Panic("Error loading .env file")
+	commands := []command.Command{
+		command.MigrateCommand{},
+		command.SeedCommand{},
 	}
-
-	os.Setenv("DB_DRIVER", "sqlite")
-	models.DB().AutoMigrate(&models.User{})
+	for _, cmd := range commands {
+		if err := cmd.Run(); err != nil {
+			panic(err)
+		}
+	}
 }
 
 func TestApiIsLoggedIn(t *testing.T) {
-	router := SetupRouter()
+	router := httpapi.SetupRouter()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/api/is-logged-in", nil)
@@ -38,7 +41,7 @@ func TestApiIsLoggedIn(t *testing.T) {
 }
 
 func TestApiLogin(t *testing.T) {
-	router := SetupRouter()
+	router := httpapi.SetupRouter()
 
 	email := fmt.Sprintf("%s@not-exist.com", uuid.New())
 	password := "ultra_secret"
@@ -53,7 +56,7 @@ func TestApiLogin(t *testing.T) {
 
 	assert.Equal(t, w.Code, 204)
 	for _, k := range w.Result().Cookies() {
-		if k.Name == middlewares.CookieName {
+		if k.Name == cookie.CookieName {
 			assert.NotEmpty(t, k.MaxAge)
 			assert.NotEmpty(t, k.Value)
 		}
@@ -66,7 +69,7 @@ func jsonBody(jsonMap map[string]any) *bytes.Buffer {
 }
 
 func TestApiLogout(t *testing.T) {
-	router := SetupRouter()
+	router := httpapi.SetupRouter()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/api/logout", nil)
@@ -74,7 +77,7 @@ func TestApiLogout(t *testing.T) {
 
 	assert.Equal(t, w.Code, 204)
 	for _, k := range w.Result().Cookies() {
-		if k.Name == middlewares.CookieName {
+		if k.Name == cookie.CookieName {
 			assert.Equal(t, k.MaxAge, -1)
 			assert.Equal(t, k.Value, "")
 		}
