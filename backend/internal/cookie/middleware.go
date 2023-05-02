@@ -1,33 +1,47 @@
 package cookie
 
 import (
-	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Auth() gin.HandlerFunc {
+func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		defer func() {
-			if r := recover(); r != nil {
-				log.Print("Recovered. Error:", r)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-					"status":  "error",
-					"message": "必須先登入才能呼叫這個API",
-				})
-			}
-		}()
-
 		cookie, err := c.Cookie(CookieName)
 		if cookie == "" || err != nil {
-			panic("Cookie is empty")
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"message": "必須先登入才能呼叫這個API",
+			})
+			return
 		}
+
 		token := ParseToken(cookie)
 		if !token.Valid {
-			panic("Token is not valid.")
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"message": "Token 不正確 #1",
+			})
+			return
 		}
-		c.Set("verified-token", token)
+
+		sub, err := token.Claims.GetSubject()
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"message": "Token 不正確 #2",
+			})
+			return
+		}
+
+		uid, err := strconv.Atoi(sub)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"message": "Token 不正確 #3",
+			})
+			return
+		}
+
+		c.Set("uid", uid)
 		c.Next()
 	}
 }
