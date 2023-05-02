@@ -1,12 +1,13 @@
 package db
 
 import (
+	"log"
+
 	"gorm.io/gorm"
 )
 
 var conn *gorm.DB
 
-// TODO return error
 func Conn() *gorm.DB {
 	if conn != nil {
 		return conn
@@ -16,6 +17,9 @@ func Conn() *gorm.DB {
 	// 	c, _ := SqliteConn()
 	// 	return c
 	// }
-	c, _ := MysqlConn()
+	c, err := MysqlConn()
+	if err != nil {
+		log.Panic(err)
+	}
 	return c
 }
