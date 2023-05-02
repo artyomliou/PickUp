@@ -12,9 +12,8 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          example: store-8eef7285-e799-5362-8e52-1900a149a12b
+          type: integer
+          example: 12345678
         name:
           type: string
           example: "某個賣吃的店"
@@ -29,7 +28,7 @@ components:
         opened_at:
           type: string
           format: time
-          example: "9:00"
+          example: "09:00"
         closed_at:
           type: string
           format: time
@@ -52,9 +51,8 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          example: product-c696d3e9-6566-556b-b6c4-730fc65dbed8
+          type: integer
+          example: 12345678
         name:
           type: string
           example: 錫蘭紅茶
@@ -96,9 +94,8 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          example: option-c8666764-4591-5bd3-a63a-e0a76cbef108
+          type: integer
+          example: 12345678
         name:
           type: string
           example: 珍珠
@@ -113,9 +110,8 @@ components:
         type: object
         properties:
           id:
-            type: string
-            format: uuid
-            example: option-c8666764-4591-5bd3-a63a-e0a76cbef108
+            type: integer
+            example: 12345678
           price:
             type: number
             default: 0
@@ -142,11 +138,11 @@ components:
       type: object
       properties:
         storeId:
-          type: string
-          example: store-8eef7285-e799-5362-8e52-1900a149a12b
+          type: integer
+          example: 12345678
         productId:
-          type: string
-          example: product-c696d3e9-6566-556b-b6c4-730fc65dbed8
+          type: integer
+          example: 12345678
         amount:
           type: integer
           example: 1
@@ -163,9 +159,8 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          example: order-c8666764-4591-5bd3-a63a-e0a76cbef108
+          type: integer
+          example: 12345678
         price:
           type: integer
           example: 350
@@ -201,21 +196,21 @@ components:
       name: storeId
       description: 店家ID
       schema:
-        type: string
+        type: integer
       required: true
     ItemId:
       in: path
       name: itemId
       description: 品項ID
       schema:
-        type: string
+        type: integer
       required: true
     OrderId:
       in: path
       name: orderId
       description: 訂單ID
       schema:
-        type: string
+        type: integer
       required: true
   responses:
     204NoContent:
@@ -530,20 +525,25 @@ paths:
               example:
                 status: error
                 message: 指定店家不存在
-  /api/cart/items:
+  /api/carts/{storeId}/items:
     get:
       tags:
         - 購物車
       description: 取得購物車中的所有商品
+      parameters:
+        - $ref: "#/components/parameters/StoreId"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CartItem"
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CartItem"
     post:
       tags:
         - 購物車
@@ -562,12 +562,13 @@ paths:
             application/json:
               example:
                 cartItemId: "item-0129830192830912"
-  /api/cart/items/{itemId}:
+  /api/carts/{storeId}/items/{itemId}:
     get:
       tags:
         - 購物車
       description: 「取得」購物車的品項
       parameters:
+        - $ref: "#/components/parameters/StoreId"
         - $ref: "#/components/parameters/ItemId"
       responses:
         204:
