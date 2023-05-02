@@ -11,6 +11,7 @@ import (
 )
 
 type User struct {
+	gorm.Model
 	ID              uint   `gorm:"primaryKey"`
 	Email           string `gorm:"index"`
 	EmailVerifiedAt sql.NullTime
@@ -18,6 +19,8 @@ type User struct {
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 	DeletedAt       gorm.DeletedAt
+	Carts           []Cart
+	Orders          []Order
 }
 
 func (u *User) Create(email string, password string) {
