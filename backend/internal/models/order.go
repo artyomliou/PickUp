@@ -14,6 +14,7 @@ type Order struct {
 	User      User
 	ID        uint `gorm:"primaryKey"`
 	Items     string
+	Status    uint
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt
