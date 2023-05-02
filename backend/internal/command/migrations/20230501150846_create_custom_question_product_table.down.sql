@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `custom_question_product`;
