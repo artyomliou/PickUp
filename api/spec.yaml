@@ -105,17 +105,17 @@ components:
           example: 10
     SelectAnswer:
       description: 客製化問題的回答
-      type: array
-      items:
-        type: object
-        properties:
-          id:
+      type: object
+      properties:
+        qid:
+          type: integer
+          example: 12345678
+        options:
+          type: array
+          items:
             type: integer
-            example: 12345678
-          price:
-            type: number
-            default: 0
-            example: 10
+          default: [1]
+          example: [1]
     CustomQuestion:
       description: 額外需求
       type: object
@@ -130,7 +130,10 @@ components:
       description: 額外需求的回答
       type: object
       properties:
-        value:
+        qid:
+          type: integer
+          example: 12345678
+        text:
           type: string
           example: 請在做飲料時不要笑出來，謝謝
     CartItem:
