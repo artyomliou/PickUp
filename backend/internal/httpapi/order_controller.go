@@ -17,25 +17,25 @@ func (ctl OrderController) GetOrderStatus(c *gin.Context) {
 	order := &models.Order{}
 	tx := db.Conn().Find(&order, c.Param("orderId"))
 	if tx.Error != nil {
-		c.JSON(404, gin.H{
+		c.AbortWithStatusJSON(404, gin.H{
 			"message": "指定店家不存在",
 		})
-	} else {
-		c.JSON(200, gin.H{
-			"status": order.Status,
-		})
 	}
+
+	c.AbortWithStatusJSON(200, gin.H{
+		"status": order.Status,
+	})
 }
 func (ctl OrderController) GetOrder(c *gin.Context) {
 	order := &models.Order{}
 	tx := db.Conn().Find(&order, c.Param("orderId"))
 	if tx.Error != nil {
-		c.JSON(404, gin.H{
+		c.AbortWithStatusJSON(404, gin.H{
 			"message": "指定店家不存在",
 		})
-	} else {
-		c.JSON(200, gin.H{
-			"order": order,
-		})
 	}
+
+	c.AbortWithStatusJSON(200, gin.H{
+		"order": order,
+	})
 }
