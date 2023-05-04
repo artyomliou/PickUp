@@ -1,6 +1,7 @@
 package models
 
 import (
+	"the-video-project/backend/internal/db"
 	"time"
 
 	"gorm.io/gorm"
@@ -8,11 +9,37 @@ import (
 
 type Cart struct {
 	gorm.Model
-	StoreId   uint `gorm:"primaryKey"`
+	StoreId   uint
 	Store     Store
-	UserId    uint `gorm:"primaryKey"`
+	UserId    uint
 	User      User
-	Items     string
+	ID        uint `gorm:"primaryKey"`
+	Items     CartItems
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+func GetCart(userId uint, storeId uint) (*Cart, error) {
+	cart := Cart{}
+	tx := db.Conn().Where(Cart{
+		UserId:  userId,
+		StoreId: storeId,
+	}).FirstOrCreate(&cart)
+	if tx.Error != nil {
+		return nil, tx.Error
+	} else {
+		return &cart, nil
+	}
+}
+
+func GetCartItem(itemId uint) (*CartItem, error) {
+	item := CartItem{}
+	tx := db.Conn().Where(CartItem{
+		ID: itemId,
+	}).FirstOrCreate(&item)
+	if tx.Error != nil {
+		return nil, tx.Error
+	} else {
+		return &item, nil
+	}
 }

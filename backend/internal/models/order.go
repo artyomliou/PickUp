@@ -13,7 +13,8 @@ type Order struct {
 	UserId    uint
 	User      User
 	ID        uint `gorm:"primaryKey"`
-	Items     string
+	Price     uint
+	Items     CartItems
 	Status    uint
 	CreatedAt time.Time
 	UpdatedAt time.Time
