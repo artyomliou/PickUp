@@ -136,14 +136,27 @@ components:
         text:
           type: string
           example: 請在做飲料時不要笑出來，謝謝
+    Cart:
+      description: 購物車中的一個商品(資訊)
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 12345678
+        storeId:
+          type: integer
+          example: 12345678
     CartItem:
       description: 購物車中的一個商品(資訊)
       type: object
       properties:
-        storeId:
+        cartId:
           type: integer
           example: 12345678
         productId:
+          type: integer
+          example: 12345678
+        id:
           type: integer
           example: 12345678
         amount:
@@ -551,6 +564,8 @@ paths:
       tags:
         - 購物車
       description: 將商品加入購物車
+      parameters:
+        - $ref: "#/components/parameters/StoreId"
       requestBody:
         description: 要加入購物車的商品及數量
         required: true
@@ -574,14 +589,21 @@ paths:
         - $ref: "#/components/parameters/StoreId"
         - $ref: "#/components/parameters/ItemId"
       responses:
-        204:
+        200:
           description: OK
-          $ref: "#/components/responses/204NoContent"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    $ref: "#/components/schemas/CartItem"
     put:
       tags:
         - 購物車
       description: 「更新」購物車中的一個品項
       parameters:
+        - $ref: "#/components/parameters/StoreId"
         - $ref: "#/components/parameters/ItemId"
       requestBody:
         required: true
@@ -598,6 +620,7 @@ paths:
         - 購物車
       description: 從購物車「移除」一個品項
       parameters:
+        - $ref: "#/components/parameters/StoreId"
         - $ref: "#/components/parameters/ItemId"
       responses:
         204:
@@ -613,14 +636,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: "#/components/schemas/Cart"
       responses:
         200:
           description: OK
           content:
             application/json:
-              example:
-                orderId: "order-0129830192830912"
+              schema:
+                $ref: "#/components/schemas/Order"
   /api/orders/{orderId}/status:
     get:
       description: 取得即時訂單狀態
