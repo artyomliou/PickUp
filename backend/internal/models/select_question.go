@@ -7,14 +7,14 @@ import (
 )
 
 type SelectQuestion struct {
-	gorm.Model
-	StoreId   uint
-	Store     Store
-	ID        uint `gorm:"primaryKey"`
-	Name      string
-	AtMost    uint
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt
-	Products  []Product `gorm:"many2many:select_question_product"`
+	ID         uint `gorm:"primaryKey"`
+	StoreId    uint
+	Store      Store
+	Products   []*Product `gorm:"many2many:select_question_product"`
+	Name       string     `gorm:"not null"`
+	IsRequired bool       `gorm:"not null;default=false"`
+	AtMost     uint       `gorm:"not null;default=0"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	DeletedAt  gorm.DeletedAt
 }

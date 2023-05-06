@@ -8,15 +8,23 @@ import (
 )
 
 type Cart struct {
-	gorm.Model
+	ID        uint `gorm:"primaryKey"`
 	StoreId   uint
 	Store     Store
 	UserId    uint
 	User      User
-	ID        uint `gorm:"primaryKey"`
-	Items     CartItems
+	Items     []CartItem
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt
+}
+
+func (cart *Cart) CalculateTotalPrice() uint {
+	total := 0
+	for _, item := range cart.Items {
+		total += int(item.Amount) * int(item.Product.Price)
+	}
+	return uint(total)
 }
 
 func GetCart(userId uint, storeId uint) (*Cart, error) {

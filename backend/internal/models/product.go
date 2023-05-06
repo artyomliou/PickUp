@@ -7,13 +7,13 @@ import (
 )
 
 type Product struct {
-	gorm.Model
-	StoreId   uint
-	Store     Store
-	ID        uint `gorm:"primaryKey"`
-	Name      string
-	Price     uint
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt
+	ID         uint `gorm:"primaryKey"`
+	StoreId    uint
+	Store      Store
+	Categories []*Category `gorm:"many2many:category_product"`
+	Name       string      `gorm:"not null"`
+	Price      uint        `gorm:"not null"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	DeletedAt  gorm.DeletedAt
 }

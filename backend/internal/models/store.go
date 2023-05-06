@@ -7,13 +7,12 @@ import (
 )
 
 type Store struct {
-	gorm.Model
-	ID        uint `gorm:"primaryKey"`
-	Name      string
-	Pic       string
-	Status    uint
-	OpenedAt  string
-	ClosedAt  string
+	ID        uint   `gorm:"primaryKey"`
+	Name      string `gorm:"not null"`
+	Pic       string `gorm:"not null"`
+	Status    uint   `gorm:"not null"`
+	OpenedAt  string `gorm:"size:5"`
+	ClosedAt  string `gorm:"size:5"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt

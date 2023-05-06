@@ -2,6 +2,7 @@ package db
 
 import (
 	"log"
+	"os"
 
 	"gorm.io/gorm"
 )
@@ -12,14 +13,21 @@ func Conn() *gorm.DB {
 	if conn != nil {
 		return conn
 	}
-	// driver := os.Getenv("DB_DRIVER")
-	// if driver == "sqlite" {
-	// 	c, _ := SqliteConn()
-	// 	return c
-	// }
-	c, err := MysqlConn()
+
+	var err error
+	var c *gorm.DB
+
+	driver := os.Getenv("DB_DRIVER")
+	switch driver {
+	case "sqlite":
+		c, err = SqliteConn()
+
+	default:
+		c, err = MysqlConn()
+	}
 	if err != nil {
 		log.Panic(err)
 	}
-	return c
+	conn = c
+	return conn
 }

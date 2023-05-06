@@ -7,14 +7,13 @@ import (
 )
 
 type CustomQuestion struct {
-	gorm.Model
+	ID          uint `gorm:"primaryKey"`
 	StoreId     uint
 	Store       Store
-	ID          uint `gorm:"primaryKey"`
-	Name        string
-	Placeholder string
+	Products    []*Product `gorm:"many2many:custom_question_product"`
+	Name        string     `gorm:"not null"`
+	Placeholder string     `gorm:"not null"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   gorm.DeletedAt
-	Products    []Product `gorm:"many2many:custom_question_product"`
 }

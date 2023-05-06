@@ -7,15 +7,15 @@ import (
 )
 
 type Order struct {
-	gorm.Model
+	ID        uint `gorm:"primaryKey"`
 	StoreId   uint
 	Store     Store
 	UserId    uint
-	User      User
-	ID        uint `gorm:"primaryKey"`
-	Price     uint
-	Items     CartItems
-	Status    uint
+	User      User `gorm:"constraint:OnDelete:CASCADE;"`
+	CartId    uint
+	Cart      Cart
+	Price     uint `gorm:"not null"`
+	Status    uint `gorm:"not null"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt

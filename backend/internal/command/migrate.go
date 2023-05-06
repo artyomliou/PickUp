@@ -1,15 +1,10 @@
 package command
 
 import (
-	"database/sql"
-	"fmt"
-	"path/filepath"
-	"runtime"
 	_ "the-video-project/backend/configs"
 	"the-video-project/backend/internal/db"
+	"the-video-project/backend/internal/models"
 
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
@@ -19,37 +14,50 @@ type MigrateCommand struct {
 
 func (cmd MigrateCommand) Run() error {
 
-	conn, err := sql.Open("mysql", db.MysqlDsn())
-	if err != nil {
-		return err
-	}
+	migrator := db.Conn().Migrator()
 
-	driver, err := mysql.WithInstance(conn, &mysql.Config{})
-	if err != nil {
-		return err
+	list := []interface{}{
+		models.User{},
+		models.Store{},
+		models.Product{},
+		models.Category{},
+		models.SelectQuestion{},
+		models.SelectOption{},
+		models.CustomQuestion{},
+		models.Cart{},
+		models.CartItem{},
+		models.Order{},
 	}
-	m, err := migrate.NewWithDatabaseInstance(migrationsFolder(), "mysql", driver)
-	if err != nil {
-		return err
+	for _, m := range list {
+		if !migrator.HasTable(m) {
+			migrator.CreateTable(m)
+		}
 	}
 
 	switch cmd.Subcommand {
 	case "down":
-		err := m.Down()
-		if err != nil && err.Error() != "no change" {
-			return err
+		for i := range list {
+			m := list[len(list)-1-i]
+			if migrator.HasTable(m) {
+				if err := migrator.DropTable(m); err != nil {
+					return err
+				}
+			}
 		}
 	default:
-		err := m.Up()
-		if err != nil && err.Error() != "no change" {
-			return err
+		for _, m := range list {
+			if !migrator.HasTable(m) {
+				if err := migrator.CreateTable(m); err != nil {
+					return err
+				}
+			}
 		}
 	}
 	return nil
 }
 
-func migrationsFolder() string {
-	_, b, _, _ := runtime.Caller(0)
-	path := filepath.Join(filepath.Dir(b), "migrations")
-	return fmt.Sprintf("file://%s", path)
-}
+// func migrationsFolder() string {
+// 	_, b, _, _ := runtime.Caller(0)
+// 	path := filepath.Join(filepath.Dir(b), "migrations")
+// 	return fmt.Sprintf("file://%s", path)
+// }

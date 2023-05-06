@@ -11,16 +11,15 @@ import (
 )
 
 type User struct {
-	gorm.Model
 	ID              uint   `gorm:"primaryKey"`
-	Email           string `gorm:"index"`
+	Email           string `gorm:"size:100;not null;index"`
 	EmailVerifiedAt sql.NullTime
-	Password        string
+	Password        string `gorm:"size:256"`
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 	DeletedAt       gorm.DeletedAt
-	Carts           []Cart
-	Orders          []Order
+	Carts           []*Cart
+	Orders          []*Order
 }
 
 func (u *User) Create(email string, password string) {

@@ -40,8 +40,7 @@ func (ctl OrderController) CreateOrder(c *gin.Context) {
 		StoreId: cart.StoreId,
 		UserId:  cart.UserId,
 		ID:      snowflake.Generate(),
-		Price:   cart.Items.CalculateTotalPrice(),
-		Items:   cart.Items,
+		Price:   cart.CalculateTotalPrice(),
 		Status:  0,
 	}
 	if tx := db.Conn().Save(&order); tx.Error != nil {

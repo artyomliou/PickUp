@@ -7,12 +7,11 @@ import (
 )
 
 type SelectOption struct {
-	gorm.Model
+	ID               uint `gorm:"primaryKey"`
 	SelectQuestionId uint
 	SelectQuestion   SelectQuestion
-	ID               uint `gorm:"primaryKey"`
-	Name             string
-	Price            uint
+	Name             string `gorm:"not null"`
+	Price            uint   `gorm:"not null"`
 	CreatedAt        time.Time
 	UpdatedAt        time.Time
 	DeletedAt        gorm.DeletedAt
