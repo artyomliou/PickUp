@@ -11,7 +11,7 @@ import (
 )
 
 type User struct {
-	ID              uint   `gorm:"primaryKey"`
+	ID              uint   `gorm:"primaryKey;autoIncrement"`
 	Email           string `gorm:"size:100;not null;index"`
 	EmailVerifiedAt sql.NullTime
 	Password        string `gorm:"size:256"`

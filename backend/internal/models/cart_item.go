@@ -7,7 +7,7 @@ import (
 )
 
 type CartItem struct {
-	ID        uint `gorm:"primaryKey" form:"id"`
+	ID        uint `gorm:"primaryKey;autoIncrement" form:"id"`
 	CartId    uint
 	Cart      Cart
 	ProductId uint

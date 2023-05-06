@@ -7,7 +7,7 @@ import (
 )
 
 type Product struct {
-	ID         uint `gorm:"primaryKey"`
+	ID         uint `gorm:"primaryKey;autoIncrement"`
 	StoreId    uint
 	Store      Store
 	Categories []*Category `gorm:"many2many:category_product"`

@@ -7,7 +7,7 @@ import (
 )
 
 type SelectOption struct {
-	ID               uint `gorm:"primaryKey"`
+	ID               uint `gorm:"primaryKey;autoIncrement"`
 	SelectQuestionId uint
 	SelectQuestion   SelectQuestion
 	Name             string `gorm:"not null"`

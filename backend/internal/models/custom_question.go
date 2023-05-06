@@ -7,7 +7,7 @@ import (
 )
 
 type CustomQuestion struct {
-	ID          uint `gorm:"primaryKey"`
+	ID          uint `gorm:"primaryKey;autoIncrement"`
 	StoreId     uint
 	Store       Store
 	Products    []*Product `gorm:"many2many:custom_question_product"`
