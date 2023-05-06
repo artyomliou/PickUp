@@ -2,15 +2,13 @@ package cookie
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
-func CreateToken(userId uint, expiredAt time.Time) (ss string) {
+func CreateToken(userId uint, expiredAt time.Time) (string, error) {
 	claims := jwt.RegisteredClaims{
 		ExpiresAt: jwt.NewNumericDate(expiredAt),
 		IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -18,23 +16,23 @@ func CreateToken(userId uint, expiredAt time.Time) (ss string) {
 		ID:        uuid.NewString(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	var err error
-	if ss, err = token.SignedString([]byte(os.Getenv("APP_KEY"))); err != nil {
-		log.Panic(err)
+	if ss, err := token.SignedString(appKeyBytes); err != nil {
+		return "", err
+	} else {
+		return ss, nil
 	}
-	return ss
 }
 
-func ParseToken(tokenStr string) *jwt.Token {
+func ParseToken(tokenStr string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return []byte(os.Getenv("APP_KEY")), nil
+		return appKeyBytes, nil
 	})
 	if err != nil {
-		log.Panic(err)
+		return nil, err
 	}
-	return token
+	return token, nil
 }
