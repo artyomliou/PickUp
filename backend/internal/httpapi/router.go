@@ -1,6 +1,7 @@
 package httpapi
 
 import (
+	"flag"
 	"the-video-project/backend/internal/cookie"
 
 	"github.com/gin-gonic/gin"
@@ -10,12 +11,17 @@ func SetupRouter() (router *gin.Engine) {
 	router = gin.Default()
 	router.Use(corsMiddleware())
 
-	// Public endpoint
 	api := router.Group("/api")
+
+	// Testing endpoint
+	if flag.Lookup("test.v") != nil {
+		testingRoutes(api)
+	}
+
+	// Public endpoint
 	{
 		loginRoutes(api)
 		storeRoutes(api)
-
 	}
 
 	// Protected endpoint
@@ -27,6 +33,14 @@ func SetupRouter() (router *gin.Engine) {
 	}
 
 	return
+}
+
+func testingRoutes(rg *gin.RouterGroup) {
+	rg.GET("/helloworld", func(ctx *gin.Context) {
+		ctx.AbortWithStatusJSON(200, gin.H{
+			"message": "hello world",
+		})
+	})
 }
 
 func loginRoutes(rg *gin.RouterGroup) {
