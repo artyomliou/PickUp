@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	cmdPkg "the-video-project/backend/internal/command"
+	"the-video-project/backend/internal/httpapi"
 )
 
 var cmd string
@@ -19,20 +20,29 @@ func main() {
 	flag.Parse()
 	var cmdResolved cmdPkg.Command
 	switch cmd {
-	case "server":
-		cmdResolved = cmdPkg.ServerCommand{Port: 5000}
 	case "migrate":
 		cmdResolved = cmdPkg.MigrateCommand{Subcommand: subcmd}
 	case "seed":
 		cmdResolved = cmdPkg.SeedCommand{}
 	}
+
+	var err error
 	if cmdResolved != nil {
-		err := cmdResolved.Run()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		} else {
-			os.Exit(0)
-		}
+		err = cmdResolved.Run()
+	} else {
+		err = startHttpApi(5000)
 	}
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
+	}
+}
+
+// This function cannot be a command, otherwise cause import cycle
+func startHttpApi(port uint) error {
+	router := httpapi.SetupRouter()
+	return router.Run(fmt.Sprintf(":%d", port))
 }

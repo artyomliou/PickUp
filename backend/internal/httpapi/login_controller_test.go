@@ -1,4 +1,4 @@
-package http
+package httpapi
 
 import (
 	"bytes"
@@ -9,7 +9,6 @@ import (
 	_ "the-video-project/backend/configs"
 	"the-video-project/backend/internal/command"
 	"the-video-project/backend/internal/cookie"
-	"the-video-project/backend/internal/httpapi"
 	"the-video-project/backend/internal/models"
 
 	"github.com/goccy/go-json"
@@ -30,7 +29,7 @@ func init() {
 }
 
 func TestApiIsLoggedIn(t *testing.T) {
-	router := httpapi.SetupRouter()
+	router := SetupRouter()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/api/is-logged-in", nil)
@@ -41,7 +40,7 @@ func TestApiIsLoggedIn(t *testing.T) {
 }
 
 func TestApiLogin(t *testing.T) {
-	router := httpapi.SetupRouter()
+	router := SetupRouter()
 
 	email := fmt.Sprintf("%s@not-exist.com", uuid.New())
 	password := "ultra_secret"
@@ -69,7 +68,7 @@ func jsonBody(jsonMap map[string]any) *bytes.Buffer {
 }
 
 func TestApiLogout(t *testing.T) {
-	router := httpapi.SetupRouter()
+	router := SetupRouter()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/api/logout", nil)
