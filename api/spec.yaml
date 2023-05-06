@@ -198,12 +198,8 @@ components:
       description: 伺服器錯誤的回應格式
       type: object
       required:
-        - status
         - message
       properties:
-        status:
-          type: string
-          default: error
         message:
           type: string
   parameters:
@@ -238,7 +234,6 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
           example:
-            status: error
             message: 必須先登入才能呼叫這個API
   securitySchemes:
     ApiKeyAuth:
@@ -280,8 +275,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    default: error
                   message:
                     type: string
                   invalid-input-names:
@@ -291,13 +284,11 @@ paths:
               examples:
                 invalid-format:
                   value:
-                    status: error
                     message: 資料格式驗證發現有誤
                     invalid-input-names:
                       - email
                 wrong-email:
                   value:
-                    status: error
                     message: 此 Email 沒註冊過
                     invalid-input-names: []
   /api/registration/email-verification:
@@ -336,11 +327,9 @@ paths:
               examples:
                 wrong-email:
                   value:
-                    status: error
                     message: 還沒有人用這個 email 註冊過
                 wrong-code:
                   value:
-                    status: error
                     message: 驗證碼不對
   /api/forget-password:
     post:
@@ -371,7 +360,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               example:
-                status: error
                 message: 此 Email 沒註冊過
   /api/forget-password/reset-password:
     post:
@@ -408,11 +396,9 @@ paths:
               examples:
                 wrong-code:
                   value:
-                    status: error
                     message: 驗證碼錯誤
                 invalid-password-format:
                   value:
-                    status: error
                     message: 密碼不符合指定格式
   /api/is-logged-in:
     get:
@@ -429,8 +415,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    default: success
                   isLoggedIn:
                     type: boolean
                     example: false
@@ -474,7 +458,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               example:
-                status: error
                 message: 帳號或密碼錯誤
   /api/logout:
     get:
@@ -539,7 +522,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               example:
-                status: error
                 message: 指定店家不存在
   /api/carts/{storeId}/items:
     get:
