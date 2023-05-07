@@ -28,11 +28,6 @@ func (cmd MigrateCommand) Run() error {
 		models.CartItem{},
 		models.Order{},
 	}
-	for _, m := range list {
-		if !migrator.HasTable(m) {
-			migrator.CreateTable(m)
-		}
-	}
 
 	switch cmd.Subcommand {
 	case "down":
@@ -47,7 +42,7 @@ func (cmd MigrateCommand) Run() error {
 	default:
 		for _, m := range list {
 			if !migrator.HasTable(m) {
-				if err := migrator.CreateTable(m); err != nil {
+				if err := migrator.AutoMigrate(m); err != nil {
 					return err
 				}
 			}
