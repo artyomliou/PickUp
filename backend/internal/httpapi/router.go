@@ -53,7 +53,7 @@ func loginRoutes(rg *gin.RouterGroup) {
 func storeRoutes(rg *gin.RouterGroup) {
 	ctl := new(StoreController)
 	rg.GET("/stores", ctl.ListStore)
-	rg.GET("/stores/{storeId}", ctl.GetStore)
+	rg.GET("/stores/:id", ctl.GetStore)
 }
 
 func cartRoutes(rg *gin.RouterGroup) {
