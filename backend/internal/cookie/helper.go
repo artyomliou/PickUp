@@ -8,6 +8,10 @@ import (
 	"github.com/google/uuid"
 )
 
+func MakeCookieString(token string) string {
+	return fmt.Sprintf("%s=%s", CookieName, token)
+}
+
 func CreateToken(userId uint, expiredAt time.Time) (string, error) {
 	claims := jwt.RegisteredClaims{
 		ExpiresAt: jwt.NewNumericDate(expiredAt),
