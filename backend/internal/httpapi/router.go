@@ -28,8 +28,8 @@ func SetupRouter() (router *gin.Engine) {
 	authorized := api.Group("/")
 	authorized.Use(cookie.AuthRequired())
 	{
-		cartRoutes(api)
-		orderRoutes(api)
+		cartRoutes(authorized)
+		orderRoutes(authorized)
 	}
 
 	return
@@ -58,11 +58,11 @@ func storeRoutes(rg *gin.RouterGroup) {
 
 func cartRoutes(rg *gin.RouterGroup) {
 	ctl := new(CartController)
-	rg.GET("/carts/{storeId}/items", ctl.ListItem)
-	rg.POST("/carts/{storeId}/items", ctl.NewItem)
-	rg.GET("/carts/{storeId}/items/{itemId}", ctl.GetItem)
-	rg.PUT("/carts/{storeId}/items/{itemId}", ctl.UpdateItem)
-	rg.DELETE("/carts/{storeId}/items/{itemId}", ctl.RemoveItem)
+	rg.GET("/cart/:storeId/items", ctl.ListItem)
+	rg.POST("/cart/:storeId/items", ctl.NewItem)
+	rg.GET("/cart/:storeId/items/:itemId", ctl.GetItem)
+	rg.PUT("/cart/:storeId/items/:itemId", ctl.UpdateItem)
+	rg.DELETE("/cart/:storeId/items/:itemId", ctl.RemoveItem)
 }
 
 func orderRoutes(rg *gin.RouterGroup) {

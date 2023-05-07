@@ -23,8 +23,10 @@ components:
           example: https://localhost/stores/121892839139839/pic.png
         Status:
           enum:
-            - open
-            - closed
+            - Created
+            - Opened
+            - Closed
+            - Temporarily closed
         OpenedAt:
           type: string
           format: time
@@ -37,11 +39,11 @@ components:
       description: 商品分類
       type: object
       properties:
-        name:
+        Name:
           description: 分類名
           type: string
           example: 純茶
-        items:
+        Items:
           description: 分類下的商品
           type: array
           items:
@@ -50,23 +52,23 @@ components:
       description: 商品
       type: object
       properties:
-        id:
+        ID:
           type: integer
           example: 12345678
-        name:
+        Name:
           type: string
           example: 錫蘭紅茶
-        price:
+        Price:
           type: number
           example: 30
-        description:
+        Description:
           type: string
           example: 以嶄新手法展現傳統精神，為您獻上用頂級台灣茶葉以及匠人精神，搭配絕佳的沖泡時間、溫度，釀出這杯令人難以忘懷的ooxx茶
-        selects:
+        Selects:
           type: array
           items:
             $ref: "#/components/schemas/SelectQuestion"
-        customs:
+        Customs:
           type: array
           items:
             $ref: "#/components/schemas/CustomQuestion"
@@ -74,18 +76,18 @@ components:
       description: 客製化問題 (當使用者句選某個選項，需要回傳該選項的 ID)
       type: object
       properties:
-        name:
+        Name:
           type: string
           example: 加料
-        options:
+        Options:
           type: array
           items:
             $ref: "#/components/schemas/SelectOption"
-        required:
+        IsRequired:
           description: 是否必填 (若為 true，可以無視 atMost；若為 false，則需要設定及檢查 atMost 的值)
           type: boolean
           default: false
-        atMost:
+        AtMost:
           description: 最多可以選幾項
           type: number
           example: 3
@@ -93,13 +95,13 @@ components:
       description: 客製化選項
       type: object
       properties:
-        id:
+        ID:
           type: integer
           example: 12345678
-        name:
+        Name:
           type: string
           example: 珍珠
-        price:
+        Price:
           type: number
           default: 0
           example: 10
@@ -107,10 +109,10 @@ components:
       description: 客製化問題的回答
       type: object
       properties:
-        qid:
+        SelectQuestionId:
           type: integer
           example: 12345678
-        options:
+        Options:
           type: array
           items:
             type: integer
@@ -120,53 +122,53 @@ components:
       description: 額外需求
       type: object
       properties:
-        name:
+        Name:
           type: string
           example: 額外需求
-        placeholder:
+        Placeholder:
           type: string
           example: 請告訴我們有什麼額外的需求，比如做餐點的時候不能笑之類的
     CustomAnswer:
       description: 額外需求的回答
       type: object
       properties:
-        qid:
+        CustomQuestionId:
           type: integer
           example: 12345678
-        text:
+        Text:
           type: string
           example: 請在做飲料時不要笑出來，謝謝
     Cart:
       description: 購物車中的一個商品(資訊)
       type: object
       properties:
-        userId:
+        UserId:
           type: integer
           example: 12345678
-        storeId:
+        StoreId:
           type: integer
           example: 12345678
     CartItem:
       description: 購物車中的一個商品(資訊)
       type: object
       properties:
-        cartId:
+        CartId:
           type: integer
           example: 12345678
-        productId:
+        ProductId:
           type: integer
           example: 12345678
-        id:
+        ID:
           type: integer
           example: 12345678
-        amount:
+        Amount:
           type: integer
           example: 1
-        selects:
+        Selects:
           type: array
           items:
             $ref: "#/components/schemas/SelectAnswer"
-        customs:
+        Customs:
           type: array
           items:
             $ref: "#/components/schemas/CustomAnswer"
@@ -174,17 +176,17 @@ components:
       description: 訂單
       type: object
       properties:
-        id:
+        ID:
           type: integer
           example: 12345678
-        price:
+        Price:
           type: integer
           example: 350
-        items:
+        Items:
           type: array
           items:
             $ref: "#/components/schemas/CartItem"
-        status:
+        Status:
           enum:
             - created
             - preparing
@@ -523,7 +525,7 @@ paths:
                 $ref: "#/components/schemas/Error"
               example:
                 message: 指定店家不存在
-  /api/carts/{storeId}/items:
+  /api/cart/{storeId}/items:
     get:
       tags:
         - 購物車
@@ -562,7 +564,7 @@ paths:
             application/json:
               example:
                 cartItemId: "item-0129830192830912"
-  /api/carts/{storeId}/items/{itemId}:
+  /api/cart/{storeId}/items/{itemId}:
     get:
       tags:
         - 購物車
