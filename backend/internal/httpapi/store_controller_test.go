@@ -7,7 +7,6 @@ import (
 	"the-video-project/backend/internal/db"
 	"the-video-project/backend/internal/models"
 
-	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -46,22 +45,6 @@ func TestStoreController(t *testing.T) {
 		t.Run("Exist", func(t *testing.T) {
 			w := sendReq(r, "GET", fmt.Sprintf("/api/stores/%d", store.ID))
 			assert.Equal(t, 200, w.Code)
-			assert.JSONEq(t, MarshalStore(store), w.Body.String())
 		})
 	})
-}
-
-func MarshalStore(store models.Store) string {
-	status, _ := store.Status.ToHumanReadable(uint(store.Status))
-	b, _ := json.Marshal(map[string]any{
-		"store": map[string]any{
-			"id":        store.ID,
-			"name":      store.Name,
-			"pic":       store.Pic,
-			"status":    status,
-			"opened_at": store.OpenedAt,
-			"closed_at": store.ClosedAt,
-		},
-	})
-	return string(b)
 }

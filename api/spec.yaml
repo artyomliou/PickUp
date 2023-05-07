@@ -11,25 +11,25 @@ components:
       description: 店家
       type: object
       properties:
-        id:
+        ID:
           type: integer
           example: 12345678
-        name:
+        Name:
           type: string
           example: "某個賣吃的店"
-        pic:
+        Pic:
           type: string
           format: url
           example: https://localhost/stores/121892839139839/pic.png
-        status:
+        Status:
           enum:
             - open
             - closed
-        opened_at:
+        OpenedAt:
           type: string
           format: time
           example: "09:00"
-        closed_at:
+        ClosedAt:
           type: string
           format: time
           example: "18:00"

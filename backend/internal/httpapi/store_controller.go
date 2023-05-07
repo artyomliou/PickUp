@@ -46,4 +46,5 @@ func (ctl StoreController) GetStore(c *gin.Context) {
 			"store": store,
 		})
 	}
+	// TODO categories
 }

@@ -11,12 +11,12 @@ import (
 )
 
 type Store struct {
-	ID        uint           `gorm:"primaryKey" json:"id"`
-	Name      string         `gorm:"not null" json:"name"`
-	Pic       string         `gorm:"not null" json:"pic"`
-	Status    StoreStatus    `gorm:"type:uint;not null" json:"status"`
-	OpenedAt  string         `gorm:"size:5" json:"opened_at"`
-	ClosedAt  string         `gorm:"size:5" json:"closed_at"`
+	ID        uint           `gorm:"primaryKey"`
+	Name      string         `gorm:"not null"`
+	Pic       string         `gorm:"not null"`
+	Status    StoreStatus    `gorm:"type:uint;not null"`
+	OpenedAt  string         `gorm:"size:5"`
+	ClosedAt  string         `gorm:"size:5"`
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-"`
