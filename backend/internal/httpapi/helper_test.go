@@ -145,3 +145,26 @@ func SetupCustomQuestion(storeId uint) (*models.CustomQuestion, error) {
 func AssociateProductWithCustomQuestion(product *models.Product, question *models.CustomQuestion) error {
 	return db.Conn().Model(&product).Association("CustomQuestions").Append(question)
 }
+
+func SetupCart(userId uint, storeId uint, productId uint) (*models.Cart, error) {
+	cart := models.Cart{
+		StoreId: storeId,
+		UserId:  userId,
+	}
+	if err := db.Conn().Create(&cart).Error; err != nil {
+		return nil, err
+	}
+
+	item := models.CartItem{
+		CartId:    cart.ID,
+		ProductId: productId,
+		Amount:    5,
+		Selects:   models.SelectAnswers{},
+		Customs:   models.CustomAnswers{},
+	}
+	if err := db.Conn().Create(&item).Error; err != nil {
+		return nil, err
+	}
+
+	return &cart, nil
+}

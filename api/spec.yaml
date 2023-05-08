@@ -188,12 +188,12 @@ components:
             $ref: "#/components/schemas/CartItem"
         Status:
           enum:
-            - created
-            - preparing
-            - ready
-            - picked
-            - finished
-            - cancelled
+            - Created
+            - Preparing
+            - Ready
+            - Picked
+            - Finished
+            - Cancelled
     User:
       description: 使用者
     Error:

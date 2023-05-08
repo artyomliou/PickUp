@@ -68,6 +68,6 @@ func cartRoutes(rg *gin.RouterGroup) {
 func orderRoutes(rg *gin.RouterGroup) {
 	ctl := new(OrderController)
 	rg.POST("/orders", ctl.CreateOrder)
-	rg.GET("/orders/{orderId}/status", ctl.GetOrderStatus)
-	rg.GET("/orders/{orderId}", ctl.GetOrder)
+	rg.GET("/orders/:orderId/status", ctl.GetOrderStatus)
+	rg.GET("/orders/:orderId", ctl.GetOrder)
 }
