@@ -1,9 +1,9 @@
 package command
 
 import (
-	_ "the-video-project/backend/configs"
-	"the-video-project/backend/internal/db"
-	"the-video-project/backend/internal/models"
+	_ "pick-up/backend/configs"
+	"pick-up/backend/internal/db"
+	"pick-up/backend/internal/models"
 
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )

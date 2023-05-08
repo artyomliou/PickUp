@@ -2,7 +2,7 @@ package cookie
 
 import (
 	"os"
-	_ "the-video-project/backend/configs"
+	_ "pick-up/backend/configs"
 )
 
 var appKey string

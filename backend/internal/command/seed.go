@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	_ "pick-up/backend/configs"
+	"pick-up/backend/internal/db"
 	"runtime"
-	_ "the-video-project/backend/configs"
-	"the-video-project/backend/internal/db"
 
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )

@@ -3,11 +3,11 @@ package httpapi_test
 import (
 	"net/http"
 	"net/http/httptest"
+	_ "pick-up/backend/configs"
+	"pick-up/backend/internal/command"
+	"pick-up/backend/internal/cookie"
+	"pick-up/backend/internal/httpapi"
 	"testing"
-	_ "the-video-project/backend/configs"
-	"the-video-project/backend/internal/command"
-	"the-video-project/backend/internal/cookie"
-	"the-video-project/backend/internal/httpapi"
 	"time"
 
 	"github.com/stretchr/testify/assert"

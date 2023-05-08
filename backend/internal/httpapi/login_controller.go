@@ -3,8 +3,8 @@ package httpapi
 import (
 	"log"
 	"net/http"
-	"the-video-project/backend/internal/cookie"
-	"the-video-project/backend/internal/models"
+	"pick-up/backend/internal/cookie"
+	"pick-up/backend/internal/models"
 	"time"
 
 	"github.com/gin-gonic/gin"

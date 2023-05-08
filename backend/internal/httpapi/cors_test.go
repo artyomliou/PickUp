@@ -1,8 +1,8 @@
 package httpapi_test
 
 import (
+	"pick-up/backend/internal/httpapi"
 	"testing"
-	"the-video-project/backend/internal/httpapi"
 
 	"github.com/stretchr/testify/assert"
 )

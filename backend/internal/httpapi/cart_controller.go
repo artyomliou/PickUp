@@ -2,9 +2,9 @@ package httpapi
 
 import (
 	"log"
-	"the-video-project/backend/internal/db"
-	"the-video-project/backend/internal/httpapi/resp"
-	"the-video-project/backend/internal/models"
+	"pick-up/backend/internal/db"
+	"pick-up/backend/internal/httpapi/resp"
+	"pick-up/backend/internal/models"
 
 	"github.com/gin-gonic/gin"
 )

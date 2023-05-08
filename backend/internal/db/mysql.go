@@ -3,7 +3,7 @@ package db
 import (
 	"fmt"
 	"os"
-	_ "the-video-project/backend/configs"
+	_ "pick-up/backend/configs"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	cmdPkg "the-video-project/backend/internal/command"
-	"the-video-project/backend/internal/httpapi"
+	cmdPkg "pick-up/backend/internal/command"
+	"pick-up/backend/internal/httpapi"
 )
 
 var cmd string

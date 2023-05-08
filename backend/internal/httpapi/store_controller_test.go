@@ -2,9 +2,9 @@ package httpapi_test
 
 import (
 	"fmt"
+	"pick-up/backend/internal/command"
+	"pick-up/backend/internal/httpapi"
 	"testing"
-	"the-video-project/backend/internal/command"
-	"the-video-project/backend/internal/httpapi"
 
 	"github.com/stretchr/testify/assert"
 )

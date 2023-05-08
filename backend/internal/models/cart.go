@@ -1,7 +1,7 @@
 package models
 
 import (
-	"the-video-project/backend/internal/db"
+	"pick-up/backend/internal/db"
 	"time"
 
 	"gorm.io/gorm"

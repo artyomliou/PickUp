@@ -2,7 +2,7 @@ package httpapi
 
 import (
 	"flag"
-	"the-video-project/backend/internal/cookie"
+	"pick-up/backend/internal/cookie"
 
 	"github.com/gin-gonic/gin"
 )

@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"the-video-project/backend/internal/db"
-	"the-video-project/backend/internal/models"
+	"pick-up/backend/internal/db"
+	"pick-up/backend/internal/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"

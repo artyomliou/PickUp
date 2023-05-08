@@ -3,7 +3,7 @@ package models
 import (
 	"database/sql"
 	"log"
-	"the-video-project/backend/internal/db"
+	"pick-up/backend/internal/db"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
