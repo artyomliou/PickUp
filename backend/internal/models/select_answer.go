@@ -1,8 +1,8 @@
 package models
 
 type SelectAnswer struct {
-	Qid     uint   `binding:"required"`
-	Options []uint `binding:"required"`
+	SelectQuestionId uint   `json:"selectQuestionId" binding:"required"`
+	Options          []uint `json:"options" binding:"required"`
 }
 
 type SelectAnswers []SelectAnswer

@@ -13,6 +13,12 @@ type (
 	GetStoreInput   struct {
 		Id uint `uri:"id" binding:"required" valid:"number"`
 	}
+	ListStoreResponse struct {
+		Stores []models.Store `json:"stores"`
+	}
+	GetStoreResponse struct {
+		Store models.Store `json:"store"`
+	}
 )
 
 func (ctl StoreController) ListStore(c *gin.Context) {
@@ -20,10 +26,11 @@ func (ctl StoreController) ListStore(c *gin.Context) {
 	db.Conn().Find(&stores, models.Store{
 		Status: models.StoreStatus(models.StoreStatusOpened), // Get opened store
 	})
-	c.AbortWithStatusJSON(200, gin.H{
-		"stores": stores,
+	c.AbortWithStatusJSON(200, ListStoreResponse{
+		Stores: stores,
 	})
 }
+
 func (ctl StoreController) GetStore(c *gin.Context) {
 	// input validation
 	input := GetStoreInput{}
@@ -42,8 +49,8 @@ func (ctl StoreController) GetStore(c *gin.Context) {
 			"message": "指定店家不存在",
 		})
 	} else {
-		c.AbortWithStatusJSON(200, gin.H{
-			"store": store,
+		c.AbortWithStatusJSON(200, GetStoreResponse{
+			Store: store,
 		})
 	}
 	// TODO categories

@@ -156,11 +156,11 @@ func SetupCart(userId uint, storeId uint, productId uint) (*models.Cart, error) 
 	}
 
 	item := models.CartItem{
-		CartId:    cart.ID,
-		ProductId: productId,
-		Amount:    5,
-		Selects:   models.SelectAnswers{},
-		Customs:   models.CustomAnswers{},
+		CartId:        cart.ID,
+		ProductId:     productId,
+		Amount:        5,
+		SelectAnswers: models.SelectAnswers{},
+		CustomAnswers: models.CustomAnswers{},
 	}
 	if err := db.Conn().Create(&item).Error; err != nil {
 		return nil, err

@@ -24,13 +24,20 @@ type (
 		Selects   models.SelectAnswers
 		Customs   models.CustomAnswers
 	}
-	NewItemResponse struct {
-		CartItemId uint `binding:"required" valid:"int"`
-	}
+
 	UpdateItemInput struct {
-		Amount  uint `binding:"required" valid:"int"`
-		Selects models.SelectAnswers
-		Customs models.CustomAnswers
+		Amount        uint                 `json:"amount" binding:"required" valid:"int"`
+		SelectAnswers models.SelectAnswers `json:"selectAnswers" binding:"required"`
+		CustomAnswers models.CustomAnswers `json:"customAnswers" binding:"required"`
+	}
+	ListItemResponse struct {
+		Items []*models.CartItem `json:"items"`
+	}
+	NewItemResponse struct {
+		CartItemId uint `json:"cartItemId"`
+	}
+	GetItemResponse struct {
+		Item models.CartItem `json:"item"`
 	}
 )
 
@@ -51,8 +58,8 @@ func (ctl CartController) ListItem(c *gin.Context) {
 		return
 	}
 
-	c.AbortWithStatusJSON(200, gin.H{
-		"items": cart.Items,
+	c.AbortWithStatusJSON(200, ListItemResponse{
+		Items: cart.Items,
 	})
 }
 func (ctl CartController) NewItem(c *gin.Context) {
@@ -80,11 +87,11 @@ func (ctl CartController) NewItem(c *gin.Context) {
 	}
 
 	item := models.CartItem{
-		CartId:    cart.ID,
-		ProductId: input.ProductId,
-		Amount:    input.Amount,
-		Selects:   input.Selects,
-		Customs:   input.Customs,
+		CartId:        cart.ID,
+		ProductId:     input.ProductId,
+		Amount:        input.Amount,
+		SelectAnswers: input.Selects,
+		CustomAnswers: input.Customs,
 	}
 	if tx := db.Conn().Save(&item); tx.Error != nil {
 		log.Println(tx.Error)
@@ -113,8 +120,8 @@ func (ctl CartController) GetItem(c *gin.Context) {
 		return
 	}
 
-	c.AbortWithStatusJSON(200, gin.H{
-		"item": item,
+	c.AbortWithStatusJSON(200, GetItemResponse{
+		Item: *item,
 	})
 }
 func (ctl CartController) UpdateItem(c *gin.Context) {
@@ -142,8 +149,8 @@ func (ctl CartController) UpdateItem(c *gin.Context) {
 	}
 
 	oldItem.Amount = newItem.Amount
-	oldItem.Selects = newItem.Selects
-	oldItem.Customs = newItem.Customs
+	oldItem.SelectAnswers = newItem.SelectAnswers
+	oldItem.CustomAnswers = newItem.CustomAnswers
 	if tx := db.Conn().Save(&oldItem); tx.Error != nil {
 		log.Println(tx.Error)
 		c.AbortWithStatusJSON(500, resp.DbWriteErrorResp)

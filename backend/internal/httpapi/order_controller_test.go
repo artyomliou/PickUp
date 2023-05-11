@@ -113,7 +113,7 @@ func TestOrderController(t *testing.T) {
 		if err != nil {
 			t.Fatal(err, w.Body.String())
 		}
-		orderId := resp.OrderId
+		orderId := resp.Order.ID
 
 		// GetOrderStatus
 		{

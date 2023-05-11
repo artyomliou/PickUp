@@ -7,14 +7,14 @@ import (
 )
 
 type SelectQuestion struct {
-	ID         uint `gorm:"primaryKey;autoIncrement"`
-	StoreId    uint
-	Store      Store
-	Products   []*Product `gorm:"many2many:select_question_product"`
-	Name       string     `gorm:"not null"`
-	IsRequired bool       `gorm:"not null;default=false"`
-	AtMost     uint       `gorm:"not null;default=0"`
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	DeletedAt  gorm.DeletedAt
+	ID         uint           `json:"id" gorm:"primaryKey;autoIncrement"`
+	StoreId    uint           `json:"-"`
+	Store      Store          `json:"-"`
+	Products   []*Product     `json:"-" gorm:"many2many:select_question_product"`
+	Name       string         `json:"name" gorm:"not null"`
+	IsRequired bool           `json:"isRequired" gorm:"not null;default=false"`
+	AtMost     uint           `json:"atMost" gorm:"not null;default=0"`
+	CreatedAt  time.Time      `json:"-"`
+	UpdatedAt  time.Time      `json:"-"`
+	DeletedAt  gorm.DeletedAt `json:"-"`
 }

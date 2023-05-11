@@ -7,12 +7,12 @@ import (
 )
 
 type SelectOption struct {
-	ID               uint `gorm:"primaryKey;autoIncrement"`
-	SelectQuestionId uint
-	SelectQuestion   SelectQuestion
-	Name             string `gorm:"not null"`
-	Price            uint   `gorm:"not null"`
-	CreatedAt        time.Time
-	UpdatedAt        time.Time
-	DeletedAt        gorm.DeletedAt
+	ID               uint           `json:"id" gorm:"primaryKey;autoIncrement"`
+	SelectQuestionId uint           `json:"selectQuestionId"`
+	SelectQuestion   SelectQuestion `json:"-"`
+	Name             string         `json:"name" gorm:"not null"`
+	Price            uint           `json:"price" gorm:"not null"`
+	CreatedAt        time.Time      `json:"-"`
+	UpdatedAt        time.Time      `json:"-"`
+	DeletedAt        gorm.DeletedAt `json:"-"`
 }

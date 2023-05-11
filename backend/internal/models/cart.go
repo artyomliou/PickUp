@@ -8,15 +8,15 @@ import (
 )
 
 type Cart struct {
-	ID        uint `gorm:"primaryKey;autoIncrement"`
-	StoreId   uint
-	Store     Store
-	UserId    uint
-	User      User
-	Items     []CartItem
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt
+	ID        uint           `json:"id" gorm:"primaryKey;autoIncrement"`
+	StoreId   uint           `json:"-"`
+	Store     Store          `json:"-"`
+	UserId    uint           `json:"-"`
+	User      User           `json:"-"`
+	Items     []*CartItem    `json:"items"`
+	CreatedAt time.Time      `json:"-"`
+	UpdatedAt time.Time      `json:"-"`
+	DeletedAt gorm.DeletedAt `json:"-"`
 }
 
 func (cart *Cart) CalculateTotalPrice() uint {

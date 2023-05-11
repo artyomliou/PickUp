@@ -10,18 +10,18 @@ import (
 )
 
 type Order struct {
-	ID        uint `gorm:"primaryKey"`
-	StoreId   uint
-	Store     Store
-	UserId    uint
-	User      User `gorm:"constraint:OnDelete:CASCADE;"`
-	CartId    uint
-	Cart      Cart
-	Price     uint        `gorm:"not null"`
-	Status    OrderStatus `gorm:"type:uint;not null"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt
+	ID        uint           `json:"id" gorm:"primaryKey"`
+	StoreId   uint           `json:"storeId"`
+	Store     Store          `json:"store,omitempty"`
+	UserId    uint           `json:"userId"`
+	User      User           `json:"user,omitempty" gorm:"constraint:OnDelete:CASCADE;"`
+	CartId    uint           `json:"cartId"`
+	Cart      Cart           `json:"cart,omitempty"`
+	Price     uint           `json:"price" gorm:"not null"`
+	Status    OrderStatus    `json:"status" gorm:"type:uint;not null"`
+	CreatedAt time.Time      `json:"createdAt"`
+	UpdatedAt time.Time      `json:"updatedAt"`
+	DeletedAt gorm.DeletedAt `json:"deletedAt"`
 }
 
 type OrderStatus string

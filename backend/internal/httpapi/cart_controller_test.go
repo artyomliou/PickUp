@@ -116,14 +116,14 @@ func TestCartController(t *testing.T) {
 				Amount:    1,
 				Selects: models.SelectAnswers{
 					{
-						Qid:     selectQuestion.ID,
-						Options: []uint{options[0]},
+						SelectQuestionId: selectQuestion.ID,
+						Options:          []uint{options[0]},
 					},
 				},
 				Customs: models.CustomAnswers{
 					{
-						Qid:  customQuestion.ID,
-						Text: "沒有拉",
+						CustomQuestionId: customQuestion.ID,
+						Text:             "沒有拉",
 					},
 				},
 			})
@@ -164,16 +164,16 @@ func TestCartController(t *testing.T) {
 			method := "PUT"
 			body := JsonBody(httpapi.UpdateItemInput{
 				Amount: 2,
-				Selects: models.SelectAnswers{
+				SelectAnswers: models.SelectAnswers{
 					{
-						Qid:     selectQuestion.ID,
-						Options: []uint{options[0]},
+						SelectQuestionId: selectQuestion.ID,
+						Options:          []uint{options[0]},
 					},
 				},
-				Customs: models.CustomAnswers{
+				CustomAnswers: models.CustomAnswers{
 					{
-						Qid:  customQuestion.ID,
-						Text: "真的沒有拉",
+						CustomQuestionId: customQuestion.ID,
+						Text:             "真的沒有拉",
 					},
 				},
 			})

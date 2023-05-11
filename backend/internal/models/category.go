@@ -7,12 +7,12 @@ import (
 )
 
 type Category struct {
-	ID        uint `gorm:"primaryKey;autoIncrement"`
-	StoreId   uint
-	Store     Store
-	Products  []*Product `gorm:"many2many:category_product"`
-	Name      string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt
+	ID        uint           `json:"id" gorm:"primaryKey;autoIncrement"`
+	StoreId   uint           `json:"-"`
+	Store     Store          `json:"-"`
+	Products  []*Product     `json:"products" gorm:"many2many:category_product"`
+	Name      string         `json:"name"`
+	CreatedAt time.Time      `json:"-"`
+	UpdatedAt time.Time      `json:"-"`
+	DeletedAt gorm.DeletedAt `json:"-"`
 }

@@ -11,15 +11,15 @@ import (
 )
 
 type User struct {
-	ID              uint   `gorm:"primaryKey;autoIncrement"`
-	Email           string `gorm:"size:100;not null;index"`
-	EmailVerifiedAt sql.NullTime
-	Password        string `gorm:"size:256"`
-	CreatedAt       time.Time
-	UpdatedAt       time.Time
-	DeletedAt       gorm.DeletedAt
-	Carts           []*Cart
-	Orders          []*Order
+	ID              uint           `json:"id" gorm:"primaryKey;autoIncrement"`
+	Email           string         `json:"email" gorm:"size:100;not null;index"`
+	EmailVerifiedAt sql.NullTime   `json:"-"`
+	Password        string         `json:"-" gorm:"size:256"`
+	CreatedAt       time.Time      `json:"-"`
+	UpdatedAt       time.Time      `json:"-"`
+	DeletedAt       gorm.DeletedAt `json:"-"`
+	Carts           []*Cart        `json:"carts,omitempty"`
+	Orders          []*Order       `json:"orders,omitempty"`
 }
 
 func (u *User) Create(email string, password string) {

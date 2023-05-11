@@ -11,39 +11,42 @@ components:
       description: 店家
       type: object
       properties:
-        ID:
+        id:
           type: integer
           example: 12345678
-        Name:
+        name:
           type: string
           example: "某個賣吃的店"
-        Pic:
+        pic:
           type: string
           format: url
           example: https://localhost/stores/121892839139839/pic.png
-        Status:
+        status:
           enum:
             - Created
             - Opened
             - Closed
             - Temporarily closed
-        OpenedAt:
+        openedAt:
           type: string
           format: time
           example: "09:00"
-        ClosedAt:
+        closedAt:
           type: string
           format: time
           example: "18:00"
-    ProductCategory:
+    Category:
       description: 商品分類
       type: object
       properties:
-        Name:
+        id:
+          type: integer
+          example: 12345678
+        name:
           description: 分類名
           type: string
           example: 純茶
-        Items:
+        products:
           description: 分類下的商品
           type: array
           items:
@@ -52,23 +55,23 @@ components:
       description: 商品
       type: object
       properties:
-        ID:
+        id:
           type: integer
           example: 12345678
-        Name:
+        name:
           type: string
           example: 錫蘭紅茶
-        Price:
+        price:
           type: number
           example: 30
-        Description:
+        description:
           type: string
           example: 以嶄新手法展現傳統精神，為您獻上用頂級台灣茶葉以及匠人精神，搭配絕佳的沖泡時間、溫度，釀出這杯令人難以忘懷的ooxx茶
-        Selects:
+        selectQuestions:
           type: array
           items:
             $ref: "#/components/schemas/SelectQuestion"
-        Customs:
+        customQuestions:
           type: array
           items:
             $ref: "#/components/schemas/CustomQuestion"
@@ -76,18 +79,21 @@ components:
       description: 客製化問題 (當使用者句選某個選項，需要回傳該選項的 ID)
       type: object
       properties:
-        Name:
+        id:
+          type: integer
+          example: 12345678
+        name:
           type: string
           example: 加料
-        Options:
+        options:
           type: array
           items:
             $ref: "#/components/schemas/SelectOption"
-        IsRequired:
+        isRequired:
           description: 是否必填 (若為 true，可以無視 atMost；若為 false，則需要設定及檢查 atMost 的值)
           type: boolean
           default: false
-        AtMost:
+        atMost:
           description: 最多可以選幾項
           type: number
           example: 3
@@ -95,13 +101,13 @@ components:
       description: 客製化選項
       type: object
       properties:
-        ID:
+        id:
           type: integer
           example: 12345678
-        Name:
+        name:
           type: string
           example: 珍珠
-        Price:
+        price:
           type: number
           default: 0
           example: 10
@@ -109,10 +115,10 @@ components:
       description: 客製化問題的回答
       type: object
       properties:
-        SelectQuestionId:
+        selectQuestionId:
           type: integer
           example: 12345678
-        Options:
+        options:
           type: array
           items:
             type: integer
@@ -122,53 +128,56 @@ components:
       description: 額外需求
       type: object
       properties:
-        Name:
+        id:
+          type: integer
+          example: 12345678
+        name:
           type: string
           example: 額外需求
-        Placeholder:
+        placeholder:
           type: string
           example: 請告訴我們有什麼額外的需求，比如做餐點的時候不能笑之類的
     CustomAnswer:
       description: 額外需求的回答
       type: object
       properties:
-        CustomQuestionId:
+        customQuestionId:
           type: integer
           example: 12345678
-        Text:
+        text:
           type: string
           example: 請在做飲料時不要笑出來，謝謝
     Cart:
       description: 購物車中的一個商品(資訊)
       type: object
       properties:
-        UserId:
+        userId:
           type: integer
           example: 12345678
-        StoreId:
+        storeId:
           type: integer
           example: 12345678
     CartItem:
       description: 購物車中的一個商品(資訊)
       type: object
       properties:
-        CartId:
+        cartId:
           type: integer
           example: 12345678
-        ProductId:
+        productId:
           type: integer
           example: 12345678
-        ID:
+        id:
           type: integer
           example: 12345678
-        Amount:
+        amount:
           type: integer
           example: 1
-        Selects:
+        selectAnswers:
           type: array
           items:
             $ref: "#/components/schemas/SelectAnswer"
-        Customs:
+        customAnswers:
           type: array
           items:
             $ref: "#/components/schemas/CustomAnswer"
@@ -176,17 +185,17 @@ components:
       description: 訂單
       type: object
       properties:
-        ID:
+        id:
           type: integer
           example: 12345678
-        Price:
+        price:
           type: integer
           example: 350
-        Items:
+        items:
           type: array
           items:
             $ref: "#/components/schemas/CartItem"
-        Status:
+        status:
           enum:
             - Created
             - Preparing
@@ -243,165 +252,165 @@ components:
       in: cookie
       name: auth
 paths:
-  /api/registration:
-    post:
-      tags:
-        - 註冊
-      description: 註冊
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - email
-                - password
-              properties:
-                email:
-                  type: string
-                  format: email
-                password:
-                  type: string
-                  format: password
-            example:
-              email: foobar@not-exist.com
-              password: P@sSw0Rd
-      responses:
-        204:
-          $ref: "#/components/responses/204NoContent"
-        400:
-          description: 無法註冊
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  invalid-input-names:
-                    type: array
-                    items:
-                      type: string
-              examples:
-                invalid-format:
-                  value:
-                    message: 資料格式驗證發現有誤
-                    invalid-input-names:
-                      - email
-                wrong-email:
-                  value:
-                    message: 此 Email 沒註冊過
-                    invalid-input-names: []
-  /api/registration/email-verification:
-    post:
-      tags:
-        - 註冊
-      description: 註冊第二步驟：填入信箱驗證碼
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - email
-                - code
-              properties:
-                email:
-                  type: string
-                  format: email
-                code:
-                  type: string
-                  description: 驗證碼
-            example:
-              email: foobar@not-exist.com
-              code: a9s7sd
-      responses:
-        204:
-          $ref: "#/components/responses/204NoContent"
-        400:
-          description: 驗證信箱時發生錯誤
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-              examples:
-                wrong-email:
-                  value:
-                    message: 還沒有人用這個 email 註冊過
-                wrong-code:
-                  value:
-                    message: 驗證碼不對
-  /api/forget-password:
-    post:
-      tags:
-        - 忘記密碼
-      description: 忘記密碼
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - email
-              properties:
-                email:
-                  type: string
-                  format: email
-            example:
-              email: foobar@not-exist.com
-      responses:
-        204:
-          description: OK (會寄一封驗證信到信箱，信中帶有連結，連結中有一組 code 會在下一支 API 用到)
-        400:
-          description: 此 Email 沒註冊過
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-              example:
-                message: 此 Email 沒註冊過
-  /api/forget-password/reset-password:
-    post:
-      tags:
-        - 忘記密碼
-      description: 設定新密碼
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - code
-                - new-password
-              properties:
-                code:
-                  type: string
-                new-password:
-                  type: string
-                  format: password
-            example:
-              code: 1ksS92
-              new-password: P@sSw0Rd
-      responses:
-        204:
-          $ref: "#/components/responses/204NoContent"
-        400:
-          description: 無法重設密碼
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-              examples:
-                wrong-code:
-                  value:
-                    message: 驗證碼錯誤
-                invalid-password-format:
-                  value:
-                    message: 密碼不符合指定格式
+  # /api/registration:
+  #   post:
+  #     tags:
+  #       - 註冊
+  #     description: 註冊
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             required:
+  #               - email
+  #               - password
+  #             properties:
+  #               email:
+  #                 type: string
+  #                 format: email
+  #               password:
+  #                 type: string
+  #                 format: password
+  #           example:
+  #             email: foobar@not-exist.com
+  #             password: P@sSw0Rd
+  #     responses:
+  #       204:
+  #         $ref: "#/components/responses/204NoContent"
+  #       400:
+  #         description: 無法註冊
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
+  #                 invalid-input-names:
+  #                   type: array
+  #                   items:
+  #                     type: string
+  #             examples:
+  #               invalid-format:
+  #                 value:
+  #                   message: 資料格式驗證發現有誤
+  #                   invalid-input-names:
+  #                     - email
+  #               wrong-email:
+  #                 value:
+  #                   message: 此 Email 沒註冊過
+  #                   invalid-input-names: []
+  # /api/registration/email-verification:
+  #   post:
+  #     tags:
+  #       - 註冊
+  #     description: 註冊第二步驟：填入信箱驗證碼
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             required:
+  #               - email
+  #               - code
+  #             properties:
+  #               email:
+  #                 type: string
+  #                 format: email
+  #               code:
+  #                 type: string
+  #                 description: 驗證碼
+  #           example:
+  #             email: foobar@not-exist.com
+  #             code: a9s7sd
+  #     responses:
+  #       204:
+  #         $ref: "#/components/responses/204NoContent"
+  #       400:
+  #         description: 驗證信箱時發生錯誤
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/Error"
+  #             examples:
+  #               wrong-email:
+  #                 value:
+  #                   message: 還沒有人用這個 email 註冊過
+  #               wrong-code:
+  #                 value:
+  #                   message: 驗證碼不對
+  # /api/forget-password:
+  #   post:
+  #     tags:
+  #       - 忘記密碼
+  #     description: 忘記密碼
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             required:
+  #               - email
+  #             properties:
+  #               email:
+  #                 type: string
+  #                 format: email
+  #           example:
+  #             email: foobar@not-exist.com
+  #     responses:
+  #       204:
+  #         description: OK (會寄一封驗證信到信箱，信中帶有連結，連結中有一組 code 會在下一支 API 用到)
+  #       400:
+  #         description: 此 Email 沒註冊過
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/Error"
+  #             example:
+  #               message: 此 Email 沒註冊過
+  # /api/forget-password/reset-password:
+  #   post:
+  #     tags:
+  #       - 忘記密碼
+  #     description: 設定新密碼
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             required:
+  #               - code
+  #               - new-password
+  #             properties:
+  #               code:
+  #                 type: string
+  #               new-password:
+  #                 type: string
+  #                 format: password
+  #           example:
+  #             code: 1ksS92
+  #             new-password: P@sSw0Rd
+  #     responses:
+  #       204:
+  #         $ref: "#/components/responses/204NoContent"
+  #       400:
+  #         description: 無法重設密碼
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/Error"
+  #             examples:
+  #               wrong-code:
+  #                 value:
+  #                   message: 驗證碼錯誤
+  #               invalid-password-format:
+  #                 value:
+  #                   message: 密碼不符合指定格式
   /api/is-logged-in:
     get:
       tags:
@@ -513,10 +522,10 @@ paths:
                 properties:
                   store:
                     $ref: "#/components/schemas/Store"
-                  itemCategories:
+                  categories:
                     type: array
                     items:
-                      $ref: "#/components/schemas/ProductCategory"
+                      $ref: "#/components/schemas/Category"
         404:
           description: 指定店家不存在
           content:
@@ -645,13 +654,13 @@ paths:
                 properties:
                   status:
                     enum:
-                      - created
-                      - preparing
-                      - ready
-                      - picked
-                      - finished
-                      - cancelled
-                    default: created
+                      - Created
+                      - Preparing
+                      - Ready
+                      - Picked
+                      - Finished
+                      - Cancelled
+                    default: Created
   /api/orders/{orderId}:
     get:
       description: 取得指定訂單的購物清單

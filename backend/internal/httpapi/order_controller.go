@@ -20,10 +20,13 @@ type (
 		StoreId uint `form:"store_id" binding:"required" valid:"int"`
 	}
 	CreateOrderResponse struct {
-		OrderId uint `binding:"required"`
+		Order models.Order `json:"order"`
 	}
 	GetOrderStatusResponse struct {
-		Status models.OrderStatus `binding:"required"`
+		Status models.OrderStatus `json:"status"`
+	}
+	GetOrderResponse struct {
+		Order models.Order `json:"order"`
 	}
 )
 
@@ -81,7 +84,7 @@ func (ctl OrderController) CreateOrder(c *gin.Context) {
 	}
 
 	c.AbortWithStatusJSON(200, CreateOrderResponse{
-		OrderId: order.ID,
+		Order: order,
 	})
 }
 
@@ -124,7 +127,7 @@ func (ctl OrderController) GetOrder(c *gin.Context) {
 		return
 	}
 
-	c.AbortWithStatusJSON(200, gin.H{
-		"Order": order,
+	c.AbortWithStatusJSON(200, GetOrderResponse{
+		Order: order,
 	})
 }

@@ -1,8 +1,8 @@
 package models
 
 type CustomAnswer struct {
-	Qid  uint   `binding:"required"`
-	Text string `binding:"required"`
+	CustomQuestionId uint   `json:"customQuestionId" binding:"required"`
+	Text             string `json:"text" binding:"required"`
 }
 
 type CustomAnswers []CustomAnswer
