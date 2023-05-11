@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql/driver"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -22,12 +21,12 @@ type Store struct {
 	DeletedAt gorm.DeletedAt `json:"-"`
 }
 
-type StoreStatus uint
+type StoreStatus string
 
-const StoreStatusCreated uint = 1
-const StoreStatusOpened uint = 2
-const StoreStatusClosed uint = 3
-const StoreStatusTemporarilyClosed uint = 4
+const StoreStatusCreated string = "Created"
+const StoreStatusOpened string = "Opened"
+const StoreStatusClosed string = "Closed"
+const StoreStatusTemporarilyClosed string = "Temporarily closed"
 
 // https://gorm.io/docs/data_types.html
 func (s *StoreStatus) Scan(value interface{}) error {
@@ -36,61 +35,35 @@ func (s *StoreStatus) Scan(value interface{}) error {
 		return errors.New(fmt.Sprint("Failed to assert value was int:", value))
 	}
 
-	*s = StoreStatus(uint(intval))
-	return nil
+	switch uint(intval) {
+	case 1:
+		*s = StoreStatus(StoreStatusCreated)
+		return nil
+	case 2:
+		*s = StoreStatus(StoreStatusOpened)
+		return nil
+	case 3:
+		*s = StoreStatus(StoreStatusClosed)
+		return nil
+	case 4:
+		*s = StoreStatus(StoreStatusTemporarilyClosed)
+		return nil
+	default:
+		return errors.New(fmt.Sprint("Unknown StoreStatus integer value:", intval))
+	}
 }
 
 func (s StoreStatus) Value() (driver.Value, error) {
-	return int64(s), nil
-}
-
-// https://pkg.go.dev/encoding/json
-func (s StoreStatus) MarshalJSON() ([]byte, error) {
-	strval, err := s.ToHumanReadable(uint(s))
-	if err != nil {
-		return nil, err
-	}
-	return json.Marshal(strval)
-}
-
-func (s *StoreStatus) UnmarshalJSON(b []byte) error {
-	var strval string
-	if err := json.Unmarshal(b, &strval); err != nil {
-		return err
-	}
-
-	intval, err := s.FromHumanReadable(strval)
-	if err != nil {
-		return err
-	}
-	*s = StoreStatus(intval)
-	return nil
-}
-
-func (StoreStatus) ToHumanReadable(intval uint) (string, error) {
-	switch intval {
+	switch string(s) {
 	case StoreStatusCreated:
-		return "Created", nil
+		return int64(1), nil
 	case StoreStatusOpened:
-		return "Opened", nil
+		return int64(2), nil
 	case StoreStatusClosed:
-		return "Closed", nil
+		return int64(3), nil
 	case StoreStatusTemporarilyClosed:
-		return "Temporarily closed", nil
+		return int64(4), nil
+	default:
+		return nil, errors.New(fmt.Sprint("Unknown StoreStatus string value:", string(s)))
 	}
-	return "", errors.New(fmt.Sprint("Unknown StoreStatus integer value:", intval))
-}
-
-func (StoreStatus) FromHumanReadable(strval string) (uint, error) {
-	switch strval {
-	case "Created":
-		return StoreStatusCreated, nil
-	case "Opened":
-		return StoreStatusOpened, nil
-	case "Closed":
-		return StoreStatusClosed, nil
-	case "Temporarily closed":
-		return StoreStatusTemporarilyClosed, nil
-	}
-	return 0, errors.New(fmt.Sprint("Unknown StoreStatus string value:", strval))
 }

@@ -133,7 +133,6 @@ func TestOrderController(t *testing.T) {
 			r.ServeHTTP(w, req)
 
 			assert.Equal(t, 200, w.Code)
-			// TODO response body seems strange
 		}
 	})
 }
