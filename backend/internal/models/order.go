@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql/driver"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -25,14 +24,14 @@ type Order struct {
 	DeletedAt gorm.DeletedAt
 }
 
-type OrderStatus uint
+type OrderStatus string
 
-const OrderStatusCreated uint = 1
-const OrderStatusPreparing uint = 2
-const OrderStatusReady uint = 3
-const OrderStatusPicked uint = 4
-const OrderStatusFinished uint = 5
-const OrderStatusCancelled uint = 6
+const OrderStatusCreated string = "Created"
+const OrderStatusPreparing string = "Preparing"
+const OrderStatusReady string = "Ready"
+const OrderStatusPicked string = "Picked"
+const OrderStatusFinished string = "Finished"
+const OrderStatusCancelled string = "Cancelled"
 
 // https://gorm.io/docs/data_types.html
 func (s *OrderStatus) Scan(value interface{}) error {
@@ -41,69 +40,45 @@ func (s *OrderStatus) Scan(value interface{}) error {
 		return errors.New(fmt.Sprint("Failed to assert value was int:", value))
 	}
 
-	*s = OrderStatus(uint(intval))
-	return nil
+	switch uint(intval) {
+	case 1:
+		*s = OrderStatus(OrderStatusCreated)
+		return nil
+	case 2:
+		*s = OrderStatus(OrderStatusPreparing)
+		return nil
+	case 3:
+		*s = OrderStatus(OrderStatusReady)
+		return nil
+	case 4:
+		*s = OrderStatus(OrderStatusPicked)
+		return nil
+	case 5:
+		*s = OrderStatus(OrderStatusFinished)
+		return nil
+	case 6:
+		*s = OrderStatus(OrderStatusCancelled)
+		return nil
+	default:
+		return errors.New(fmt.Sprint("Unknown OrderStatus integer value:", intval))
+	}
 }
 
 func (s OrderStatus) Value() (driver.Value, error) {
-	return int64(s), nil
-}
-
-// https://pkg.go.dev/encoding/json
-func (s OrderStatus) MarshalJSON() ([]byte, error) {
-	strval, err := s.ToHumanReadable(uint(s))
-	if err != nil {
-		return nil, err
-	}
-	return json.Marshal(strval)
-}
-
-func (s *OrderStatus) UnmarshalJSON(b []byte) error {
-	var strval string
-	if err := json.Unmarshal(b, &strval); err != nil {
-		return err
-	}
-
-	intval, err := s.FromHumanReadable(strval)
-	if err != nil {
-		return err
-	}
-	*s = OrderStatus(intval)
-	return nil
-}
-
-func (OrderStatus) ToHumanReadable(intval uint) (string, error) {
-	switch intval {
+	switch string(s) {
 	case OrderStatusCreated:
-		return "Created", nil
+		return int64(1), nil
 	case OrderStatusPreparing:
-		return "Preparing", nil
+		return int64(2), nil
 	case OrderStatusReady:
-		return "Ready", nil
+		return int64(3), nil
 	case OrderStatusPicked:
-		return "Picked", nil
+		return int64(4), nil
 	case OrderStatusFinished:
-		return "Finished", nil
+		return int64(5), nil
 	case OrderStatusCancelled:
-		return "Cancelled", nil
+		return int64(6), nil
+	default:
+		return nil, errors.New(fmt.Sprint("Unknown OrderStatus string value:", string(s)))
 	}
-	return "", errors.New(fmt.Sprint("Unknown OrderStatus integer value:", intval))
-}
-
-func (OrderStatus) FromHumanReadable(strval string) (uint, error) {
-	switch strval {
-	case "Created":
-		return OrderStatusCreated, nil
-	case "Preparing":
-		return OrderStatusPreparing, nil
-	case "Ready":
-		return OrderStatusReady, nil
-	case "Picked":
-		return OrderStatusPicked, nil
-	case "Finished":
-		return OrderStatusFinished, nil
-	case "Cancelled":
-		return OrderStatusCancelled, nil
-	}
-	return 0, errors.New(fmt.Sprint("Unknown OrderStatus string value:", strval))
 }
