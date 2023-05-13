@@ -42,13 +42,14 @@ func (ctl LoginController) IsLoggedIn(c *gin.Context) {
 
 func (ctl LoginController) Login(c *gin.Context) {
 	body := LoginBody{}
-	user := models.User{}
 	if err := c.Bind(&body); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": "資料格式不符",
 		})
 	}
-	if user.GetByEmail(body.Email); user.ID == 0 {
+
+	user, err := models.GetUserByEmail(body.Email)
+	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": "帳號或密碼錯誤",
 		})

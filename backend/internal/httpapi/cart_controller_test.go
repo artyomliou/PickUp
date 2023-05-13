@@ -24,7 +24,7 @@ func TestCartController(t *testing.T) {
 	r := httpapi.SetupRouter()
 
 	// Setup a user
-	user, _, _, err := SetupUser()
+	user, err := models.SeedUser()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -37,28 +37,28 @@ func TestCartController(t *testing.T) {
 	cookie := cookie.MakeCookieString(token)
 
 	// Setup a store
-	store, err := SetupStore()
+	store, err := models.SeedStore()
 	if err != nil {
 		t.Fatal(err)
 	}
-	selectQuestion, options, err := SetupSelectQuestion(store.ID)
+	selectQuestion, options, err := models.SeedSelectQuestion(store.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	customQuestion, err := SetupCustomQuestion(store.ID)
+	customQuestion, err := models.SeedCustomQuestion(store.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// Setup a product
-	product, err := SetupProduct(store.ID)
+	product, err := models.NewProduct(store.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if AssociateProductWithSelectQuestion(product, selectQuestion); err != nil {
+	if models.AssociateProductWithSelectQuestion(product, selectQuestion); err != nil {
 		t.Fatal(err)
 	}
-	if AssociateProductWithCustomQuestion(product, customQuestion); err != nil {
+	if models.AssociateProductWithCustomQuestion(product, customQuestion); err != nil {
 		t.Fatal(err)
 	}
 

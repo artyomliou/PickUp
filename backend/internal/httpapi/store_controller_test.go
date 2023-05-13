@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"pick-up/backend/internal/command"
 	"pick-up/backend/internal/httpapi"
+	"pick-up/backend/internal/models"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,7 +19,7 @@ func TestStoreController(t *testing.T) {
 	r := httpapi.SetupRouter()
 
 	// Setup a store
-	store, err := SetupStore()
+	store, err := models.SeedStore()
 	if err != nil {
 		t.Fatal(err)
 	}

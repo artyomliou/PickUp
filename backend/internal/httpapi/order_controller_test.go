@@ -8,6 +8,7 @@ import (
 	"pick-up/backend/internal/command"
 	"pick-up/backend/internal/cookie"
 	"pick-up/backend/internal/httpapi"
+	"pick-up/backend/internal/models"
 	"testing"
 	"time"
 
@@ -23,7 +24,7 @@ func TestOrderController(t *testing.T) {
 	r := httpapi.SetupRouter()
 
 	// Setup a user
-	user, _, _, err := SetupUser()
+	user, err := models.SeedUser()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,23 +37,23 @@ func TestOrderController(t *testing.T) {
 	cookie := cookie.MakeCookieString(token)
 
 	// Setup a store
-	dummyStore, err := SetupStore()
+	dummyStore, err := models.SeedStore()
 	if err != nil {
 		t.Fatal(err)
 	}
-	store, err := SetupStore()
+	store, err := models.SeedStore()
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// Setup a product
-	product, err := SetupProduct(store.ID)
+	product, err := models.NewProduct(store.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// Setup a cart with a item(product)
-	_, err = SetupCart(user.ID, store.ID, product.ID)
+	_, err = models.NewCart(user.ID, store.ID, product.ID)
 	if err != nil {
 		t.Fatal(err)
 	}

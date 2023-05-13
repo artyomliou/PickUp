@@ -1,15 +1,18 @@
 package httpapi_test
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	_ "pick-up/backend/configs"
 	"pick-up/backend/internal/command"
 	"pick-up/backend/internal/cookie"
 	"pick-up/backend/internal/httpapi"
+	"pick-up/backend/internal/models"
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,7 +25,9 @@ func TestLoginController(t *testing.T) {
 	r := httpapi.SetupRouter()
 
 	// Setup a user
-	user, email, password, err := SetupUser()
+	email := fmt.Sprintf("%s@not-exist.com", uuid.New())
+	password := "ultra_secret"
+	user, err := models.NewUser(email, password)
 	if err != nil {
 		t.Fatal(err)
 	}

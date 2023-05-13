@@ -1,6 +1,7 @@
 package models
 
 import (
+	"pick-up/backend/internal/db"
 	"time"
 
 	"gorm.io/gorm"
@@ -18,4 +19,17 @@ type Product struct {
 	CreatedAt       time.Time         `json:"-"`
 	UpdatedAt       time.Time         `json:"-"`
 	DeletedAt       gorm.DeletedAt    `json:"-"`
+}
+
+func NewProduct(storeId uint) (*Product, error) {
+	product := Product{
+		StoreId: storeId,
+		Name:    "烏龍茶",
+		Price:   30,
+	}
+	tx := db.Conn().Save(&product)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return &product, nil
 }

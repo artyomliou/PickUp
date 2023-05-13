@@ -1,6 +1,7 @@
 package models
 
 import (
+	"pick-up/backend/internal/db"
 	"time"
 
 	"gorm.io/gorm"
@@ -15,4 +16,14 @@ type Category struct {
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-"`
+}
+
+func NewCategory(storeId uint, categoryName string) (*Category, error) {
+	c := Category{}
+	c.Name = categoryName
+	c.StoreId = storeId
+	if err := db.Conn().Create(&c).Error; err != nil {
+		return nil, err
+	}
+	return &c, nil
 }

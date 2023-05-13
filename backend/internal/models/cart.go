@@ -51,3 +51,26 @@ func GetCartItem(itemId uint) (*CartItem, error) {
 		return &item, nil
 	}
 }
+
+func NewCart(userId uint, storeId uint, productId uint) (*Cart, error) {
+	cart := Cart{
+		StoreId: storeId,
+		UserId:  userId,
+	}
+	if err := db.Conn().Create(&cart).Error; err != nil {
+		return nil, err
+	}
+
+	item := CartItem{
+		CartId:        cart.ID,
+		ProductId:     productId,
+		Amount:        5,
+		SelectAnswers: SelectAnswers{},
+		CustomAnswers: CustomAnswers{},
+	}
+	if err := db.Conn().Create(&item).Error; err != nil {
+		return nil, err
+	}
+
+	return &cart, nil
+}

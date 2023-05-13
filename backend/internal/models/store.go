@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"errors"
 	"fmt"
+	"pick-up/backend/internal/db"
 	"time"
 
 	"gorm.io/gorm"
@@ -66,4 +67,22 @@ func (s StoreStatus) Value() (driver.Value, error) {
 	default:
 		return nil, errors.New(fmt.Sprint("Unknown StoreStatus string value:", string(s)))
 	}
+}
+
+func SeedStore() (*Store, error) {
+	return NewStore(&Store{
+		Name:     "Default store name",
+		Pic:      "http://localhost:8080/static/store.jpg",
+		Status:   StoreStatus(StoreStatusOpened),
+		OpenedAt: "09:00",
+		ClosedAt: "18:00",
+	})
+}
+
+func NewStore(s *Store) (*Store, error) {
+	tx := db.Conn().Save(s)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return s, nil
 }
