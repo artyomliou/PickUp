@@ -20,8 +20,8 @@
         <li>
             <form action="/api/login" method="post">
                 <label>login</label>
-                <input type="text" name="email" value="artyomliou@gmail.com">
-                <input type="password" name="password" placeholder="password">
+                <input type="text" name="email" value="test@pickup.dev">
+                <input type="password" name="password" placeholder="password" value="12345678">
                 <button is="json-submit-button" type="submit">Submit</button>
             </form>
         </li>
@@ -49,6 +49,9 @@
                     body: this.form.method.toUpperCase() !== "GET"
                         ? JSON.stringify(Object.fromEntries(new FormData(this.form)))
                         : null,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     mode: "cors"
                 })
 

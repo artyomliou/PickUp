@@ -2,11 +2,9 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
 	"pick-up/backend/internal/db"
 	"time"
 
-	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -33,7 +31,7 @@ func HashPassword(password string) (string, error) {
 }
 
 func SeedUser() (*User, error) {
-	return NewUser(fmt.Sprintf("%s@not-exist.com", uuid.New()), "ultra_secret")
+	return NewUser("test@pickup.dev", "12345678")
 }
 
 func NewUser(email string, password string) (*User, error) {

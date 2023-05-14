@@ -43,9 +43,11 @@ func (ctl LoginController) IsLoggedIn(c *gin.Context) {
 func (ctl LoginController) Login(c *gin.Context) {
 	body := LoginBody{}
 	if err := c.Bind(&body); err != nil {
+		log.Println(err)
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": "資料格式不符",
 		})
+		return
 	}
 
 	user, err := models.GetUserByEmail(body.Email)
@@ -53,11 +55,13 @@ func (ctl LoginController) Login(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": "帳號或密碼錯誤",
 		})
+		return
 	}
 	if !user.IsPasswordMatched(body.Password) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": "帳號或密碼錯誤",
 		})
+		return
 	}
 
 	expiredAt := time.Now().AddDate(0, 0, 2)
@@ -67,10 +71,11 @@ func (ctl LoginController) Login(c *gin.Context) {
 		c.AbortWithStatusJSON(500, gin.H{
 			"message": "伺服器錯誤",
 		})
+		return
 	}
+
 	c.SetCookie(cookie.CookieName, token, int(expiredAt.Unix()-time.Now().Unix()), "/", "", false, true) // todo
 	c.AbortWithStatusJSON(http.StatusNoContent, nil)
-
 }
 
 func (ctl LoginController) Logout(c *gin.Context) {
