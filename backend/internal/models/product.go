@@ -21,15 +21,18 @@ type Product struct {
 	DeletedAt       gorm.DeletedAt    `json:"-"`
 }
 
-func NewProduct(storeId uint) (*Product, error) {
-	product := Product{
+func SeedProduct(storeId uint) (*Product, error) {
+	return NewProduct(&Product{
 		StoreId: storeId,
 		Name:    "烏龍茶",
 		Price:   30,
-	}
+	})
+}
+
+func NewProduct(product *Product) (*Product, error) {
 	tx := db.Conn().Save(&product)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
-	return &product, nil
+	return product, nil
 }

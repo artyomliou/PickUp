@@ -51,7 +51,7 @@ func TestCartController(t *testing.T) {
 	}
 
 	// Setup a product
-	product, err := models.NewProduct(store.ID)
+	product, err := models.SeedProduct(store.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
