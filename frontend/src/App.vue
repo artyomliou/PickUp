@@ -1,23 +1,57 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-// import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router';
 </script>
 
+
 <template>
-  <!-- <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <NavbarComponent />
+  <div class="post">
+    <div v-if="loading" class="loading">Loading...</div>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <div v-else-if="error" class="error">{{ error }}</div>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+    <div v-else-if="post" class="content">
+      <h2>{{ post.title }}</h2>
     </div>
-  </header> -->
-
+  </div>
   <RouterView />
+  <FooterComponent />
 </template>
 
-<style scoped></style>
+<script>
+import { computed } from 'vue';
+import { isLoginStatus, loginAction, logoutAction } from './api/index';
+import FooterComponent from './components/FooterComponent.vue';
+import NavbarComponent from './components/NavbarComponent.vue';
+export default {
+  components: { NavbarComponent, FooterComponent },
+  data() {
+    return {
+      loading: false,
+      post: null,
+      error: null,
+      isLoginedStatus: "isLoginStatus had error?",
+      isLogined: false,
+    }
+  },
+  async created() {
+    this.isLogined = await isLoginStatus()
+  },
+  provide() {
+    return {
+      isLoginedStatusId: computed(() => this.isLogined),
+      loginAction: async (email, password) => {
+        if (await loginAction(email, password)) {
+          this.isLogined = true
+          this.$router.push('/')
+        }
+      },
+      logoutAction: async () => {
+        if (await logoutAction()) {
+          this.isLogined = false
+        }
+      }
+    }
+  },
+}
+</script>
