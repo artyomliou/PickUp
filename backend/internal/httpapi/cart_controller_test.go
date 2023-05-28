@@ -67,23 +67,23 @@ func TestCartController(t *testing.T) {
 		routes := [](map[string]string){
 			{
 				"method": "GET",
-				"uri":    fmt.Sprintf("/api/cart/%d/items", store.ID),
+				"uri":    fmt.Sprintf("/api/store/%d/cart/items", store.ID),
 			},
 			{
 				"method": "POST",
-				"uri":    fmt.Sprintf("/api/cart/%d/items", store.ID),
+				"uri":    fmt.Sprintf("/api/store/%d/cart/items", store.ID),
 			},
 			{
 				"method": "GET",
-				"uri":    fmt.Sprintf("/api/cart/%d/items/%d", store.ID, 1234),
+				"uri":    fmt.Sprintf("/api/store/%d/cart/items/%d", store.ID, 1234),
 			},
 			{
 				"method": "PUT",
-				"uri":    fmt.Sprintf("/api/cart/%d/items/%d", store.ID, 1234),
+				"uri":    fmt.Sprintf("/api/store/%d/cart/items/%d", store.ID, 1234),
 			},
 			{
 				"method": "DELETE",
-				"uri":    fmt.Sprintf("/api/cart/%d/items/%d", store.ID, 1234),
+				"uri":    fmt.Sprintf("/api/store/%d/cart/items/%d", store.ID, 1234),
 			},
 		}
 		for _, route := range routes {
@@ -97,7 +97,7 @@ func TestCartController(t *testing.T) {
 
 	t.Run("ListItem", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", fmt.Sprintf("/api/cart/%d/items", store.ID), nil)
+		req, _ := http.NewRequest("GET", fmt.Sprintf("/api/store/%d/cart/items", store.ID), nil)
 		req.Header.Set("Cookie", cookie)
 		r.ServeHTTP(w, req)
 
@@ -110,17 +110,17 @@ func TestCartController(t *testing.T) {
 		// NewItem
 		{
 			method := "POST"
-			uri := fmt.Sprintf("/api/cart/%d/items", store.ID)
+			uri := fmt.Sprintf("/api/store/%d/cart/items", store.ID)
 			body := JsonBody(httpapi.NewItemInput{
 				ProductId: product.ID,
 				Amount:    1,
-				Selects: models.SelectAnswers{
+				SelectAnswers: models.SelectAnswers{
 					{
 						SelectQuestionId: selectQuestion.ID,
 						Options:          []uint{options[0]},
 					},
 				},
-				Customs: models.CustomAnswers{
+				CustomAnswers: models.CustomAnswers{
 					{
 						CustomQuestionId: customQuestion.ID,
 						Text:             "沒有拉",
@@ -145,7 +145,7 @@ func TestCartController(t *testing.T) {
 			cartItemId = resp.CartItemId
 		}
 
-		uri := fmt.Sprintf("/api/cart/%d/items/%d", store.ID, cartItemId)
+		uri := fmt.Sprintf("/api/store/%d/cart/items/%d", store.ID, cartItemId)
 
 		// GetItem
 		{

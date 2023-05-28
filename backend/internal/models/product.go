@@ -9,13 +9,14 @@ import (
 
 type Product struct {
 	ID              uint              `json:"id" gorm:"primaryKey;autoIncrement"`
-	StoreId         uint              `json:"-"`
+	StoreId         uint              `json:"storeId,omitempty"`
 	Store           Store             `json:"-"`
 	Categories      []*Category       `json:"-" gorm:"many2many:category_product"`
 	SelectQuestions []*SelectQuestion `json:"selectQuestions,omitempty" gorm:"many2many:select_question_product"`
 	CustomQuestions []*CustomQuestion `json:"customQuestions,omitempty" gorm:"many2many:custom_question_product"`
 	Name            string            `json:"name" gorm:"not null"`
 	Price           uint              `json:"price" gorm:"not null"`
+	Intro           string            `json:"intro" gorm:"not null"`
 	CreatedAt       time.Time         `json:"-"`
 	UpdatedAt       time.Time         `json:"-"`
 	DeletedAt       gorm.DeletedAt    `json:"-"`
@@ -26,6 +27,7 @@ func SeedProduct(storeId uint) (*Product, error) {
 		StoreId: storeId,
 		Name:    "烏龍茶",
 		Price:   30,
+		Intro:   "金色茶湯、醇香烏龍",
 	})
 }
 

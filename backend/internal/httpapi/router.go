@@ -54,15 +54,16 @@ func storeRoutes(rg *gin.RouterGroup) {
 	ctl := new(StoreController)
 	rg.GET("/stores", ctl.ListStore)
 	rg.GET("/stores/:id", ctl.GetStore)
+	rg.GET("/stores/:id/product/:pid", ctl.GetProduct)
 }
 
 func cartRoutes(rg *gin.RouterGroup) {
 	ctl := new(CartController)
-	rg.GET("/cart/:storeId/items", ctl.ListItem)
-	rg.POST("/cart/:storeId/items", ctl.NewItem)
-	rg.GET("/cart/:storeId/items/:itemId", ctl.GetItem)
-	rg.PUT("/cart/:storeId/items/:itemId", ctl.UpdateItem)
-	rg.DELETE("/cart/:storeId/items/:itemId", ctl.RemoveItem)
+	rg.GET("/store/:storeId/cart/items", ctl.ListItem)
+	rg.POST("/store/:storeId/cart/items", ctl.NewItem)
+	rg.GET("/store/:storeId/cart/items/:itemId", ctl.GetItem)
+	rg.PUT("/store/:storeId/cart/items/:itemId", ctl.UpdateItem)
+	rg.DELETE("/store/:storeId/cart/items/:itemId", ctl.RemoveItem)
 }
 
 func orderRoutes(rg *gin.RouterGroup) {

@@ -11,15 +11,16 @@ import (
 )
 
 type Store struct {
-	ID        uint           `json:"id" gorm:"primaryKey"`
-	Name      string         `json:"name" gorm:"not null"`
-	Pic       string         `json:"pic" gorm:"not null"`
-	Status    StoreStatus    `json:"status" gorm:"type:uint;not null"`
-	OpenedAt  string         `json:"openedAt" gorm:"size:5"`
-	ClosedAt  string         `json:"closedAt" gorm:"size:5"`
-	CreatedAt time.Time      `json:"-"`
-	UpdatedAt time.Time      `json:"-"`
-	DeletedAt gorm.DeletedAt `json:"-"`
+	ID         uint           `json:"id" gorm:"primaryKey"`
+	Categories []*Category    `json:"categories"`
+	Name       string         `json:"name" gorm:"not null"`
+	Pic        string         `json:"pic" gorm:"not null"`
+	Status     StoreStatus    `json:"status" gorm:"type:uint;not null"`
+	OpenedAt   string         `json:"openedAt" gorm:"size:5"`
+	ClosedAt   string         `json:"closedAt" gorm:"size:5"`
+	CreatedAt  time.Time      `json:"-"`
+	UpdatedAt  time.Time      `json:"-"`
+	DeletedAt  gorm.DeletedAt `json:"-"`
 }
 
 type StoreStatus string

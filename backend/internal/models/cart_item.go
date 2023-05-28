@@ -10,11 +10,11 @@ type CartItem struct {
 	ID            uint           `json:"id" gorm:"primaryKey;autoIncrement" form:"id"`
 	CartId        uint           `json:"cartId"`
 	Cart          Cart           `json:"-"`
-	ProductId     uint           `json:"productId"`
-	Product       Product        `json:"-"`
+	ProductId     uint           `json:"-"`
+	Product       Product        `json:"product"`
 	Amount        uint           `json:"amount" form:"amount" binding:"required"`
-	SelectAnswers SelectAnswers  `json:"selectAnswers" gorm:"type:json;not null;serializer:json"`
-	CustomAnswers CustomAnswers  `json:"customAnswers" gorm:"type:json;not null;serializer:json"`
+	SelectAnswers SelectAnswers  `json:"selectAnswers" gorm:"serializer:json"`
+	CustomAnswers CustomAnswers  `json:"customAnswers" gorm:"serializer:json"`
 	CreatedAt     time.Time      `json:"-"`
 	UpdatedAt     time.Time      `json:"-"`
 	DeletedAt     gorm.DeletedAt `json:"-"`

@@ -221,6 +221,13 @@ components:
       schema:
         type: integer
       required: true
+    ProductId:
+      in: path
+      name: productId
+      description: 店家ID
+      schema:
+        type: integer
+      required: true
     ItemId:
       in: path
       name: itemId
@@ -534,7 +541,33 @@ paths:
                 $ref: "#/components/schemas/Error"
               example:
                 message: 指定店家不存在
-  /api/cart/{storeId}/items:
+  /api/stores/{storeId}/product/{productId}:
+    get:
+      tags:
+        - 店家頁
+      description: 取得指定商品的資訊
+      parameters:
+        - $ref: "#/components/parameters/StoreId"
+        - $ref: "#/components/parameters/ProductId"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: "#/components/schemas/Product"
+        404:
+          description: 指定店家不存在
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: 指定店家不存在
+  /api/store/{storeId}/cart/items:
     get:
       tags:
         - 購物車
@@ -566,6 +599,16 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/CartItem"
+            example:
+              productId: 12345678
+              amount: 1
+              selectAnswers:
+                selectQuestionId: 12345678
+                options:
+                  - 12345678
+              customAnswers:
+                customQuestionId: 12345678
+                text: "HIHIHI"
       responses:
         200:
           description: OK
@@ -573,7 +616,7 @@ paths:
             application/json:
               example:
                 cartItemId: "item-0129830192830912"
-  /api/cart/{storeId}/items/{itemId}:
+  /api/store/{storeId}/cart/items/{itemId}:
     get:
       tags:
         - 購物車

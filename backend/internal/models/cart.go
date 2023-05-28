@@ -29,7 +29,7 @@ func (cart *Cart) CalculateTotalPrice() uint {
 
 func GetCart(userId uint, storeId uint) (*Cart, error) {
 	cart := Cart{}
-	tx := db.Conn().Where(Cart{
+	tx := db.Conn().Preload("Items.Product").Where(Cart{
 		UserId:  userId,
 		StoreId: storeId,
 	}).FirstOrCreate(&cart)

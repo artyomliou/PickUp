@@ -89,6 +89,7 @@ func (cmd SeedCommand) Run() error {
 		StoreId: store.ID,
 		Name:    "金色烏龍",
 		Price:   30,
+		Intro:   "金色茶湯、醇香烏龍",
 	}
 	if _, err := models.NewProduct(t1); err != nil {
 		return err
@@ -107,6 +108,7 @@ func (cmd SeedCommand) Run() error {
 		StoreId: store.ID,
 		Name:    "金色烏龍鮮奶茶",
 		Price:   60,
+		Intro:   "金色茶湯、醇香烏龍、頂級牛奶",
 	}
 	if _, err := models.NewProduct(t2); err != nil {
 		return err
@@ -125,6 +127,7 @@ func (cmd SeedCommand) Run() error {
 		StoreId: store.ID,
 		Name:    "水果烏龍茶",
 		Price:   60,
+		Intro:   "金色茶湯、醇香烏龍、台灣水果",
 	}
 	if _, err := models.NewProduct(t3); err != nil {
 		return err

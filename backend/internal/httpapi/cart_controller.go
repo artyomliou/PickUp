@@ -19,10 +19,10 @@ type (
 		ItemId  uint `uri:"itemId" binding:"required" valid:"int"`
 	}
 	NewItemInput struct {
-		ProductId uint `binding:"required" valid:"int"`
-		Amount    uint `binding:"required" valid:"int"`
-		Selects   models.SelectAnswers
-		Customs   models.CustomAnswers
+		ProductId     uint                 `binding:"required" valid:"int"`
+		Amount        uint                 `binding:"required" valid:"int"`
+		SelectAnswers models.SelectAnswers `json:"selectAnswers" binding:"required"`
+		CustomAnswers models.CustomAnswers `json:"customAnswers" binding:"required"`
 	}
 
 	UpdateItemInput struct {
@@ -90,8 +90,8 @@ func (ctl CartController) NewItem(c *gin.Context) {
 		CartId:        cart.ID,
 		ProductId:     input.ProductId,
 		Amount:        input.Amount,
-		SelectAnswers: input.Selects,
-		CustomAnswers: input.Customs,
+		SelectAnswers: input.SelectAnswers,
+		CustomAnswers: input.CustomAnswers,
 	}
 	if tx := db.Conn().Save(&item); tx.Error != nil {
 		log.Println(tx.Error)
