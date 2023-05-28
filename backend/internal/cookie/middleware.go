@@ -15,6 +15,7 @@ func AuthRequired() gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"message": "必須先登入才能呼叫這個API",
 			})
+			return
 		}
 
 		uid, err := ParseTokenForUid(cookie)
@@ -22,6 +23,7 @@ func AuthRequired() gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"message": "資料異常，請重新登入",
 			})
+			return
 		}
 
 		c.Set("uid", uid)
