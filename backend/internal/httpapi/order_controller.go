@@ -5,7 +5,7 @@ import (
 	"pick-up/backend/internal/db"
 	"pick-up/backend/internal/httpapi/resp"
 	"pick-up/backend/internal/models"
-	"pick-up/backend/internal/snowflake"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -17,7 +17,7 @@ type (
 		ID uint `uri:"orderId" binding:"required" valid:"int"`
 	}
 	CreateOrderInput struct {
-		StoreId uint `form:"store_id" binding:"required" valid:"int"`
+		StoreId uint `form:"storeId" binding:"required" valid:"int"`
 	}
 	CreateOrderResponse struct {
 		Order models.Order `json:"order"`
@@ -57,7 +57,6 @@ func (ctl OrderController) CreateOrder(c *gin.Context) {
 
 	// create order
 	order := models.Order{
-		ID:      snowflake.Generate(),
 		StoreId: cart.StoreId,
 		UserId:  cart.UserId,
 		CartId:  cart.ID,
@@ -70,7 +69,10 @@ func (ctl OrderController) CreateOrder(c *gin.Context) {
 		}
 
 		// This cart will be soft-deleted and archived for this order
-		cart.DeletedAt = gorm.DeletedAt{}
+		cart.DeletedAt = gorm.DeletedAt{
+			Time:  time.Now(),
+			Valid: true,
+		}
 		if err := tx.Save(cart).Error; err != nil {
 			return err
 		}
@@ -120,9 +122,9 @@ func (ctl OrderController) GetOrder(c *gin.Context) {
 
 	// db operation
 	order := models.Order{}
-	if err := db.Conn().Preload("Store").Preload("Cart").Find(&order, uri.ID).Error; err != nil {
+	if err := db.Conn().Preload("Store").Preload("Cart").First(&order, uri.ID).Error; err != nil {
 		c.AbortWithStatusJSON(404, gin.H{
-			"message": "指定店家不存在",
+			"message": "指定訂單不存在",
 		})
 		return
 	}

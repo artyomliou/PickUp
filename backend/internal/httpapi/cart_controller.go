@@ -51,7 +51,7 @@ func (ctl CartController) ListItem(c *gin.Context) {
 	}
 
 	// db operation
-	cart, err := models.GetCart(c.GetUint("uid"), uri.StoreId)
+	cart, err := models.GetCartWithRelations(c.GetUint("uid"), uri.StoreId)
 	if err != nil {
 		log.Println(err)
 		c.AbortWithStatusJSON(500, resp.StdErrorResp)

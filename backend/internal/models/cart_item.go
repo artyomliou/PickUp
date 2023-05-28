@@ -11,7 +11,7 @@ type CartItem struct {
 	CartId        uint           `json:"cartId"`
 	Cart          Cart           `json:"-"`
 	ProductId     uint           `json:"-"`
-	Product       Product        `json:"product"`
+	Product       *Product       `json:"product"`
 	Amount        uint           `json:"amount" form:"amount" binding:"required"`
 	SelectAnswers SelectAnswers  `json:"selectAnswers" gorm:"serializer:json"`
 	CustomAnswers CustomAnswers  `json:"customAnswers" gorm:"serializer:json"`
