@@ -2,13 +2,19 @@
 
 .main-nav {
   position: relative;
-  background-color: var(--bg_md);
+  background-color: #ffffff;
   color: var(--txt);
-  display: -ms-flexbox;
-  display: flex;
-  /* justify-content: space-between; */
-  align-items: center;
-  /* padding: 0 15px; */
+  min-height: 80px;
+  padding-left: 15px;
+  padding-right: 15px;
+  line-height: 1;
+}
+
+.navbar-hamburger {
+  background-color: #ffffff;
+}
+.navbar-hamburger svg {
+  width: 25px;
 }
 
 .brand-link {
@@ -23,44 +29,9 @@
   max-width: 90px;
 }
 
-.input-search {
-  display: -ms-flexbox;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 0;
-  max-width: 300px;
-  margin-right: auto;
-}
-.input-search-label {
-  width: 70%;
-  flex: 0 0 70%;
-}
-.input-search-label .form-control {
-  width: 100%;
-  height: 35px;
-  padding: 15px;
-  border-radius: var(--radius_md) 0 0 var(--radius_md);
-  border: 0px;
-  outline: 0px;
-}
-.input-search-label .form-control::placeholder {
-  opacity: 0.3;
-}
-.input-search-btn {
-  width: 30%;
-  flex: 0 0 30%;
-  background-color: var(--theme_md);
-  color: var(--bg_theme_dark);
-  border-radius: 0 var(--radius_md) var(--radius_md) 0;
-  border-left: 2px solid var(--theme_md_dk);
-}
-@media only screen and (min-width: 992px) {
-  .input-search {
-  }
-}
 
 .nav-log {
+  position: fixed;
   justify-content: flex-end;
 }
 /* <!-- 登出中 --> */
@@ -74,7 +45,15 @@
 .nav-logining {
   position: relative;
   flex-wrap: wrap;
-  min-width: 160px;
+  width: 160px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 10%;
+  padding: 10px;
+  transform: -webkit-translateX(0px);
+  transform: translateX(0px);
+  transition: .1s ease;
 }
 .nav-logining-list {
   left: -50%;
@@ -138,9 +117,9 @@
   position: relative;
   border-width: 0px;
 }
-.dropdown-toggle::after {
+/* .dropdown-toggle::after {
   content: none;
-}
+} */
 
 /********* 
  共用
@@ -178,11 +157,9 @@ section {
  Login 
 **********/
 .sec-login {
-  background-color: var(--bg_theme_dark);
-  color: #fff;
+  background-color: #ffffff;
 }
 .sec-login a {
-  color: #fff;
 }
 
 .sec-login .form .form-group {
@@ -220,10 +197,8 @@ section {
 **********/
 .sec-password {
   background-color: var(--bg_theme_dark);
-  color: #fff;
 }
 .sec-password a {
-  color: #fff;
 }
 
 .sec-password .form .form-group {
@@ -260,8 +235,7 @@ section {
  Footer
 **********/
 footer {
-  background-color: var(--txt);
-  color: #fff;
+  background-color: var(--bg_footer);
   text-align: center;
   font-size: 1rem;
   padding: 5%;

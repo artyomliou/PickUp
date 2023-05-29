@@ -13,6 +13,7 @@
   --theme_md_dk: #da9e07;
   --bg_theme_dark: #185256;
   --bg_md: #fff1a8;
+  --bg_footer: #EDFFFE;
   --txt: #393939;
   --radius_md: 20px;
   --fontMain: 'Noto Sans TC', 'Noto Sans', 'Microsoft JhengHei', '微軟正黑體', 'Open Sans',
@@ -100,8 +101,8 @@ button,
   border: 0px;
 }
 .btn {
-  background-color: var(--theme_md);
-  box-shadow: 1px 1px 1px #00000026;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 0px 2px #00000026;
 }
 button:focus,
 button:hover,
@@ -111,7 +112,7 @@ button:active {
 .btn:focus,
 .btn:hover,
 .btn:active {
-  background-color: var(--theme_md_dk);
+  background-color: #aaaaaa;
 }
 
 .sec-h {

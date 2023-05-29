@@ -1,52 +1,61 @@
 <template>
-    <div style="border: 2px solid #aca; text-align:center;"> isLoginedStatusId:{{ isLoginedStatusId }} |
+    <!-- <div style="background #aca; text-align:center;"> isLoginedStatusId:{{ isLoginedStatusId }} |
         this.isLoginedStatusId: {{ this.isLoginedStatusId }} | {{
-            this.test }}</div>
+            this.test }}</div> -->
     <nav class="navbar navbar-expand-lg navbar-light main-nav" id="navMain">
         <div class="container-fluid">
-            <a href="/" class="navbar-brand brand-link">
-                <img src="@/assets/img/logo.png" alt="" class="brand-img" />
-            </a>
-            <div class="input-search mr-auto">
-                <label class="input-group input-search-label">
-                    <input type="search" placeholder="請輸入關鍵字" class="form-control" />
-                </label>
-                <button type="button" role="button" class="btn btn-light input-search-btn">
-                    搜尋
-                </button>
-            </div>
-            <button class="navbar-toggler" type="button" role="button" data-bs-toggle="collapse"
+            <button class="navbar-hamburger" type="button" role="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarMainToggle" aria-controls="navbarMainToggle" aria-expanded="false"
                 aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+                </svg>
             </button>
+            <a href="/" class="navbar-brand brand-link">
+                <img src="@/assets/img/logo.svg" alt="" class="brand-img" />
+            </a>
 
-            <div class="collapse navbar-collapse nav-log" id="navbarMainToggle">
+            <div class="">
+                <button type="button" class="btn btn-takeout">外帶</button>
+                <button type="button" class="btn btn-location">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                        <span class="location-txt">目前地址</span>
+                    </svg>
+                </button>
+
+                <button type="button" class="btn btn-cart ml-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
+                    </svg>
+                    <span class="cart-txt">購物車</span>
+                    <span class="cart-num">0</span>
+                </button>
+            </div>
+
+            <div class="collapse nav-log" id="navbarMainToggle">
                 <template v-if="isLoginedStatusId._value == false">
                     <!-- 登出中 -->
                     <div class="nav-logouting" id="navLogout">
-                        <!-- <a
-                            :href=""
-                            type="button"
-                        >
-                            登入
-                        </a> -->
                         <router-link to="/login" class="btn btn-light btn-login">登入</router-link>
                         <!-- <ul class="nav-item">
-                      <li class="nav-item">
-                          <a href="" class="nav-link">XXX</a>
-                      </li>
-                  </ul> -->
+                              <li class="nav-item">
+                                  <a href="" class="nav-link">XXX</a>
+                              </li>
+                          </ul> -->
                     </div>
                 </template>
                 <template v-else>
                     <!-- 登入中 -->
                     <div class="nav-logining" id="navLogin">
-                        <button class="btn-avatar dropdown-toggle" data-bs-toggle="dropdown" role="button"
-                            aria-expanded="false">
+                        <div class="btn-avatar">
                             <img src="@/assets/img/avatar.jpg" alt="avatar" class="avatar-img" />
-                        </button>
-                        <ul class="nav-item dropdown-menu nav-logining-list">
+                        </div>
+                        <ul class="nav-item nav-logining-list">
                             <li class="ropdown-item nav-item">Mue hung</li>
                             <li class="ropdown-item nav-item">@muehung92</li>
                             <li class="ropdown-item nav-item">
