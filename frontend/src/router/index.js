@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { isLoginStatus } from '../api/index'
+import { isLoginStatus } from '../js/api/index'
 import LoginView from '../views/LoginView.vue'
 import PasswordView from '../views/PasswordView.vue'
 import index from '../views/index.vue'

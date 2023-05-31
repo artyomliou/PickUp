@@ -48,7 +48,7 @@
 </template>
 <script>
 // import { reactive } from 'vue';
-// import { loginAction } from '../api/index';
+// import { loginAction } from '../js/api/index';
 // bootstrap modal
 // https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
 export default {
