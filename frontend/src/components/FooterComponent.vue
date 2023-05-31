@@ -1,5 +1,5 @@
 <template>
   <footer>
-    {{ new Date().getFullYear() }} — <strong>The Video Project</strong>
-</footer>
+    {{ new Date().getFullYear() }} — <strong>PickUp</strong>
+  </footer>
 </template>
