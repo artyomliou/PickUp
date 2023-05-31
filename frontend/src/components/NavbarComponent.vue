@@ -2,9 +2,16 @@
     <!-- <div style="background #aca; text-align:center;"> isLoginedStatusId:{{ isLoginedStatusId }} |
         this.isLoginedStatusId: {{ this.isLoginedStatusId }} | {{
             this.test }}</div> -->
+
+
+
+    <div>
+        <div :style="shadowStyle" class="shadow" @click="sidebarToggle"></div>
+    </div>
+
     <nav class="navbar navbar-expand-lg navbar-light main-nav" id="navMain">
         <div class="container-fluid">
-            <button class="navbar-hamburger" type="button" role="button" data-bs-toggle="collapse"
+            <button @click="sidebarToggle" class="navbar-hamburger" type="button" role="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarMainToggle" aria-controls="navbarMainToggle" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
@@ -16,97 +23,98 @@
                 <img src="@/assets/img/logo.svg" alt="" class="brand-img" />
             </a>
 
-            <div class="">
-                <button type="button" class="btn btn-takeout">外帶</button>
-                <button type="button" class="btn btn-location">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
-                        <span class="location-txt">目前地址</span>
-                    </svg>
-                </button>
+            <div class="btns row justify-content-between">
 
-                <button type="button" class="btn btn-cart ml-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4"
+                <span class="col-auto p-0 btns-choose">
+                    <button type="button" class="btn btn-takeout">外帶</button>
+                </span>
+                <button type="button" class="btn btn-location">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-geo-alt-fill"
                         viewBox="0 0 16 16">
+                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                    </svg>
+                    <span class="location-txt">目前地址</span>
+                </button>
+                <button type="button" class="btn btn-cart ms-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
                         <path
                             d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
                     </svg>
-                    <span class="cart-txt">購物車</span>
+                    <span class="cart-txt">購物車</span> •
                     <span class="cart-num">0</span>
                 </button>
+                <button type="button" class="btn btn-login">登入</button>
+                <button type="button" class="btn btn-register">註冊</button>
+
             </div>
 
-            <div class="collapse nav-log" id="navbarMainToggle">
-                <template v-if="isLoginedStatusId._value == false">
-                    <!-- 登出中 -->
-                    <div class="nav-logouting" id="navLogout">
-                        <router-link to="/login" class="btn btn-light btn-login">登入</router-link>
-                        <!-- <ul class="nav-item">
-                              <li class="nav-item">
-                                  <a href="" class="nav-link">XXX</a>
-                              </li>
-                          </ul> -->
-                    </div>
-                </template>
-                <template v-else>
-                    <!-- 登入中 -->
-                    <div class="nav-logining" id="navLogin">
-                        <div class="btn-avatar">
-                            <img src="@/assets/img/avatar.jpg" alt="avatar" class="avatar-img" />
-                        </div>
-                        <ul class="nav-item nav-logining-list">
-                            <li class="ropdown-item nav-item">Mue hung</li>
-                            <li class="ropdown-item nav-item">@muehung92</li>
-                            <li class="ropdown-item nav-item">
-                                <a href="" class="nav-link">頻道管理
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-                                        <path
-                                            d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z" />
-                                    </svg>
-                                </a>
-                            </li>
-
-                            <button @click="logoutAction" type="button" role="button" class="btn btn-light btn-logout">
-                                登出
-                            </button>
-                        </ul>
-                    </div>
-                </template>
-            </div>
         </div>
     </nav>
+
+    <!-- Sidebar -->
+    <!-- <div class="collapse sidebar" id="navbarMainToggle"> -->
+    <div class="collapse sidebar" :class="{ show: sidebarShow }">
+        <template v-if="isLoginedStatusId._value == false">
+            <!-- 登出中 -->
+            <div class="nav-logouting" id="navLogout">
+                <router-link to="/login" class="btn btn-light btn-login">登入</router-link>
+                <!-- <ul class="nav-item">
+                      <li class="nav-item">
+                          <a href="" class="nav-link">XXX</a>
+                      </li>
+                  </ul> -->
+            </div>
+        </template>
+        <template v-else>
+            <!-- 登入中 -->
+            <div class="nav-logining" id="navLogin">
+                <div class="btn-avatar">
+                    <img src="@/assets/img/avatar.jpg" alt="avatar" class="avatar-img" />
+                </div>
+                <ul class="nav-item nav-logining-list">
+                    <li class="ropdown-item nav-item">Mue hung</li>
+
+                    <button @click="logoutAction" type="button" role="button" class="btn btn-light btn-logout">
+                        登出
+                    </button>
+                </ul>
+            </div>
+        </template>
+    </div>
 </template>
 
 <script>
 // import { inject } from 'vue';
 // import { logoutAction } from '../api';
-// import { isLoginStatus } from '../api/index.js';
+// import { isLoginStatus } from '../js/api/index.js';
 export default {
+    data() {
+        return {
+            isLoginStatus: 'isLoginStatus had error?',
+            sidebarShow: false,
+        }
+    },
     inject: ['isLoginedStatusId', 'logoutAction'],
     watch: {
         isLoginedStatusId: {
             immediate: true,
             handler(newVal, oldVal) {
-                console.log("isLoginedStatusId (NavBar): ", newVal, oldVal)
+                // console.log("isLoginedStatusId (NavBar): ", newVal, oldVal)
             }
         },
     },
-    data() {
-        return {
-            isLoginStatus: 'isLoginStatus had error?'
+    computed: {
+        shadowStyle() {
+            // console.log(`sidebarShow: ${this.sidebarShow}`)
+            return {
+                'display': this.sidebarShow ? '' : 'none'
+            }
         }
     },
-    async created() {
-        // this.isLoginStatus = await isLoginStatus()
-        // console.log(`isLoginedStatusId: ${this.isLoginedStatusId}; this.isLoginStatus: ${this.xxx}`)
-        // console.log(`isLoginPro: ${ this.isLoginPro }`)
-    },
-    // methods: {
-    //     logoutAction: logoutAction
-    // }
-
-    // app.provide('isLogin', isLoginStatus) // provide key, value
+    methods: {
+        sidebarToggle() {
+            this.sidebarShow = !this.sidebarShow;
+        }
+    }
 }
 </script>
