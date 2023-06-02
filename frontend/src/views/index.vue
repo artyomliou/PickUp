@@ -1,10 +1,10 @@
 <template>
-    <section class="sec-h text-center">
+    <section class="sec-h sec-home">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 row p-0 cards">
-                    <div class="card m-3" style="width: 16rem;">
-                        <a href="" class="">
+                <div class="col-lg-6 row p-0 cards card-stores">
+                    <div class="card card-store m-2 p-0" style="width: 16rem;">
+                        <a href="/sotre/01" class="card-link">
                             <figure class="card-img-top">
                                 <img src="../assets/img/sotre-cover.png" alt="" class="img-fluid">
                             </figure>
@@ -13,12 +13,12 @@
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk
                                     of
                                     the card's content.</p>
-                                <span class="tag">營業中</span>
+                                <span class="tag tag-store">營業中</span>
                             </div>
                         </a>
                     </div>
-                    <div class="card m-3" style="width: 16rem;">
-                        <a href="" class="">
+                    <div class="card card-store m-2 p-0" style="width: 16rem;">
+                        <a href="/sotre/02" class="card-link">
                             <figure class="card-img-top">
                                 <img src="../assets/img/sotre-cover.png" alt="" class="img-fluid">
                             </figure>
@@ -27,7 +27,7 @@
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk
                                     of
                                     the card's content.</p>
-                                <span class="tag">營業中</span>
+                                <span class="tag tag-store">營業中</span>
                             </div>
                         </a>
                     </div>

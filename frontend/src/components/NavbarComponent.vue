@@ -43,8 +43,8 @@
                     <span class="cart-txt">購物車</span> •
                     <span class="cart-num">0</span>
                 </button>
-                <button type="button" class="btn btn-login">登入</button>
-                <button type="button" class="btn btn-register">註冊</button>
+                <a href="/login" class="btn btn-login">登入</a>
+                <a href="/register" class="btn btn-register">註冊</a>
 
             </div>
 

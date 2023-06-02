@@ -11,8 +11,8 @@
 :root {
   --btn_bg_theme: #83FFF8;
   --btn_bg: #E6E6E6;
-  --theme_md: #ffc329;
-  --theme_md_dk: #da9e07;
+  --theme_md: #2ACFC5;
+  --theme_light: #da9e07;
   --bg_theme_dark: #185256;
   --bg_md: #fff1a8;
   --bg_footer: #EDFFFE;
@@ -21,25 +21,17 @@
   --fontMain: 'Noto Sans TC', 'Noto Sans', 'Microsoft JhengHei', '微軟正黑體', 'Open Sans',
     Helvetica, system-ui, -apple-system, sans-serif;
   --fontNumber: 'Noto Sans', Helvetica, system-ui, -apple-system, sans-serif;
+
 }
 
 ::selection {
   background-color: var(--theme_md);
-  color: var(--theme_md_dk);
+  color: var(--theme_light);
 }
 
 html {
   overflow-x: hidden;
   scroll-behavior: smooth;
-  --theme_md: #ffc329;
-  --theme_md_dk: #da9e07;
-  --bg_theme_dark: #185256;
-  --bg_md: #fff1a8;
-  --txt: #393939;
-  --radius_md: 20px;
-  --fontMain: 'Noto Sans TC', 'Noto Sans', 'Microsoft JhengHei', '微軟正黑體', 'Open Sans',
-    Helvetica, system-ui, -apple-system, sans-serif;
-  --fontNumber: 'Noto Sans', Helvetica, system-ui, -apple-system, sans-serif;
 }
 
 body {

@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue'
 import PasswordView from '../views/PasswordView.vue'
 import index from '../views/index.vue'
 import notFound from '../views/notFound.vue'
+import registerView from '../views/registerView.vue'
 /**
  * 只允許「沒登入的 user」進入這頁面
  */
@@ -29,6 +30,12 @@ const router = createRouter({
             path: '/login',
             name: 'login',
             component: LoginView,
+            beforeEnter: [isGuest]
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: registerView,
             beforeEnter: [isGuest]
         },
         {

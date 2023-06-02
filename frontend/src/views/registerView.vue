@@ -3,8 +3,8 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-8 sec-titlebox">
-                    <h2 class="sec-title">登入</h2>
-                    <p class="sec-sub">歡迎回來！</p>
+                    <h2 class="sec-title">註冊</h2>
+                    <!-- <p class="sec-sub">立即註冊、收信</p> -->
                 </div>
                 <div class="col-12 col-lg-5">
                     <form class="form">
@@ -25,8 +25,8 @@
                         </button>
                     </form>
                     <div class="text-center">
-                        <button @click="countPlus" class="btn btn-default">{{ click }}忘記密碼？</button>
-                        <a href="/register" class="btn btn-inline">還沒註冊？</a>
+                        <!-- <button @click="countPlus" class="btn btn-default">{{ click }}忘記密碼？</button> -->
+                        <a href="/login" class="btn btn-inline">已註冊？</a>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,6 @@ export default {
     methods: {
         async localLoginAction() {
             this.loginAction(this.userLogin.email, this.userLogin.password);
-            console.log(this.userLogin.email, this.userLogin.password);
             // const response = await this.loginAction(this.userLogin.email, this.userLogin.password);
             // if (response.ok) {
             //     // await nextTick();
