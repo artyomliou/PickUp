@@ -85,6 +85,8 @@ func (ctl OrderController) CreateOrder(c *gin.Context) {
 		return
 	}
 
+	go simulateOrderProgress(&order)
+
 	c.AbortWithStatusJSON(200, CreateOrderResponse{
 		Order: order,
 	})
