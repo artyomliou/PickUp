@@ -12,7 +12,7 @@ export async function isLoginStatus(){
     });
     const apiStatus = await response.json();
     // console.log(`apiStatus: ${!!apiStatus['is-logged-in']}`)
-    return !!apiStatus['is-logged-in']
+    return !!apiStatus.isLoggedIn
 }
 
 
@@ -23,7 +23,10 @@ export async function loginAction(email, password){
         body: JSON.stringify({
             email: email,
             password: password
-        })
+        }),
+        headers: {
+            "content-type": "application/json",
+        }
     });
     console.log(res)
     return res
