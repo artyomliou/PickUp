@@ -95,6 +95,10 @@
   left: 0;
   right: 0;
   z-index: 998;
+  display: none;
+}
+.shadow.show {
+  display: block;
 }
 
 /* <!-- 登出中 --> */
