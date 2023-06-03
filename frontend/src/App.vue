@@ -20,9 +20,9 @@ import { RouterView } from 'vue-router';
 
 <script>
 import { computed } from 'vue';
-import { isLoginStatus, loginAction, logoutAction } from './api/index';
 import FooterComponent from './components/FooterComponent.vue';
 import NavbarComponent from './components/NavbarComponent.vue';
+import { isLoginStatus, loginAction, logoutAction } from './js/api/index';
 export default {
   components: { NavbarComponent, FooterComponent },
   data() {
@@ -39,8 +39,8 @@ export default {
   },
   provide() {
     return {
-      isLoginedStatusId: computed(() => this.isLogined),
-      loginAction: async (email, password) => {
+      isLoginedStatusCheck: computed(() => this.isLogined), //確認是否登入 boolean
+      loginAction: async (email, password) => { // 輸入帳密給登入 function
         if (await loginAction(email, password)) {
           this.isLogined = true
           this.$router.push('/')

@@ -52,8 +52,8 @@
 // bootstrap modal
 // https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
 export default {
-    inject: ['isLoginedStatusId', 'loginAction'],
-    // inject: reactive([isLoginedStatusId)],
+    inject: ['isLoginedStatusCheck', 'loginAction'],
+    // inject: reactive([isLoginedStatusCheck)],
     data() {
         return {
             userLogin: {

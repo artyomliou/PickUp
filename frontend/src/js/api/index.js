@@ -11,8 +11,8 @@ export async function isLoginStatus(){
         credentials: 'include',
     });
     const apiStatus = await response.json();
-    // console.log(`apiStatus: ${!!apiStatus['is-logged-in']}`)
-    return !!apiStatus['is-logged-in']
+    // console.log(`isLoggedIn: ${apiStatus.isLoggedIn}`)
+    return !!apiStatus.isloggedin
 }
 
 
@@ -23,7 +23,10 @@ export async function loginAction(email, password){
         body: JSON.stringify({
             email: email,
             password: password
-        })
+        }),
+        headers: {
+            "content-type": "application/json"
+        },
     });
     console.log(res)
     return res
@@ -34,6 +37,7 @@ export async function logoutAction(){
         method: 'GET',
         credentials: 'include',
     });
+    console.log(res.ok)
     return res.ok
 }
 
