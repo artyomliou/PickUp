@@ -1,11 +1,17 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
+	"os/signal"
 	cmdPkg "pick-up/backend/internal/command"
 	"pick-up/backend/internal/httpapi"
+	"syscall"
+	"time"
 )
 
 var cmd string
@@ -30,7 +36,7 @@ func main() {
 	if cmdResolved != nil {
 		err = cmdResolved.Run()
 	} else {
-		err = startHttpApi(5000)
+		err = startHttpApi()
 	}
 
 	if err != nil {
@@ -42,7 +48,39 @@ func main() {
 }
 
 // This function cannot be a command, otherwise cause import cycle
-func startHttpApi(port uint) error {
+func startHttpApi() error {
 	router := httpapi.SetupRouter()
-	return router.Run(fmt.Sprintf(":%d", port))
+	srv := &http.Server{
+		Addr:    ":5000",
+		Handler: router,
+	}
+	go func() {
+		// service connections
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("listen: %s\n", err)
+		}
+	}()
+
+	// Shutdown server if it received these signals...
+	// https://gin-gonic.com/docs/examples/graceful-restart-or-stop/
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("Shutdown Server ...")
+
+	// Shutdown in 2 seconds or less
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatal("Server Shutdown:", err)
+	}
+
+	// catching ctx.Done(). timeout of 2 seconds.
+	select {
+	case <-ctx.Done():
+		log.Println("timeout of 2 seconds.")
+	}
+	log.Println("Server exiting")
+
+	return nil
 }
