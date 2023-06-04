@@ -52,8 +52,6 @@
 // bootstrap modal
 // https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
 export default {
-    inject: ['isLoginedStatusCheck', 'loginAction'],
-    // inject: reactive([isLoginedStatusCheck)],
     data() {
         return {
             userLogin: {
@@ -67,18 +65,6 @@ export default {
     methods: {
         async localLoginAction() {
             this.loginAction(this.userLogin.email, this.userLogin.password);
-            // const response = await this.loginAction(this.userLogin.email, this.userLogin.password);
-            // if (response.ok) {
-            //     // await nextTick();
-            //     this.isLoginStatus = await isLoginStatus();
-            //     // new Modal().show(this.$refs.modalAlert("你已成功登入"))
-            //     await this.$router.push('/');
-            //     return response.blob(); // TODO change
-            // }
-            // new Error('Network response was not okk');
-            // Modal(this.$refs.modalAlert("登入錯誤，請重新確認！")).show()
-            // new Modal().show(this.$refs.modalAlert("登入錯誤，請重新確認！"))
-            // return console.log('Cannot to be ok');
         },
         countPlus() {
             console.count(this.countSet)

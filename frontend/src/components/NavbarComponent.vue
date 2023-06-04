@@ -95,23 +95,6 @@ export default {
             sidebarShow: false, //側邊欄隱藏
         }
     },
-    inject: ['isLoginedStatusCheck', 'logoutAction'],
-    watch: {
-        isLoginedStatusCheck: {
-            immediate: true,
-            handler(newStatus, oldStatus) {
-                if (newStatus == true) {
-                    console.log('status true')
-                } else {
-                    console.log('status false')
-                }
-                // console.log("isLoginedStatusCheck (NavBar): ", newVal, oldVal)
-            }
-        },
-        logoutAction: {
-            isLoginedStatusCheck() { }
-        }
-    },
     computed: {},
     methods: {
         sidebarToggle() {
