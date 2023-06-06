@@ -24,7 +24,7 @@
                             送出
                         </button>
                     </form>
-                    <div class="text-center">
+                    <div class="text-center mt-5">
                         <!-- <button @click="countPlus" class="btn btn-default">{{ click }}忘記密碼？</button> -->
                         <a href="/login" class="btn btn-inline">已註冊？</a>
                     </div>
@@ -47,10 +47,8 @@
     </div>
 </template>
 <script>
-// import { reactive } from 'vue';
-// import { loginAction } from '../js/api/index';
-// bootstrap modal
-// https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
+// import { mapActions } from 'pinia';
+// import { useLoginStatusStore } from '../stores/useLoginStatusStore';
 export default {
     data() {
         return {
@@ -62,14 +60,19 @@ export default {
             countSet: 0
         }
     },
-    methods: {
-        async localLoginAction() {
-            this.loginAction(this.userLogin.email, this.userLogin.password);
-        },
-        countPlus() {
-            console.count(this.countSet)
-        }
-    },
+    // computed: {
+    //  ...mapActions(useLoginStatusStore, ['loginStatusStatus']),
+    // ...mapActions(useLoginStore, ['loginAction']),
+    // ...mapActions(useLogoutStore, ['logoutAction']),
+    // },
+    // methods: {
+    //     async localLoginAction() {
+    //         await this.loginAction(this.userLogin.email, this.userLogin.password);
+    //     },
+    //     countPlus() {
+    //         console.count(this.countSet)
+    //     }
+    // },
     // mounted() {
     //     this.localLoginAction();
     // }

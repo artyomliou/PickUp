@@ -296,6 +296,14 @@ section {
   background-color: transparent;
 }
 
+.btn-sumit {
+  background-color: var(--theme_md);
+  color: #fff;
+}
+
+
+
+
 /********* 
  Password 
 **********/
