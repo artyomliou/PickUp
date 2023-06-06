@@ -21,7 +21,6 @@ import { RouterView } from 'vue-router';
 <script>
 import FooterComponent from './components/FooterComponent.vue';
 import NavbarComponent from './components/NavbarComponent.vue';
-import { isLoginStatus } from './js/api/index';
 export default {
   components: { NavbarComponent, FooterComponent },
   data() {
@@ -30,11 +29,9 @@ export default {
       post: null,
       error: null,
       isLoginedStatus: "isLoginStatus had error?",
-      isLogined: false,
     }
   },
-  async created() {
-    this.isLogined = await isLoginStatus()
+  methods: {
   },
 }
 </script>
