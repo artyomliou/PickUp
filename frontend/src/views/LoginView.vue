@@ -24,7 +24,7 @@
                             送出
                         </button>
                     </form>
-                    <div class="text-center">
+                    <div class="text-center mt-5">
                         <button @click="countPlus" class="btn btn-default">{{ click }}忘記密碼？</button>
                         <a href="/register" class="btn btn-inline">還沒註冊？</a>
                     </div>
@@ -47,10 +47,10 @@
     </div>
 </template>
 <script>
-// import { reactive } from 'vue';
-// import { loginAction } from '../js/api/index';
-// bootstrap modal
-// https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
+import { mapActions } from 'pinia';
+import router from '../router';
+import { useLoginStatusStore } from '../stores/useLoginStatusStore';
+import { useLoginStore } from '../stores/useLoginStore';
 export default {
     data() {
         return {
@@ -62,28 +62,39 @@ export default {
             countSet: 0
         }
     },
+    computed: {
+        ...mapActions(useLoginStatusStore, ['loginStatusStatus']),
+        ...mapActions(useLoginStore, ['loginAction']),
+
+    },
     methods: {
         async localLoginAction() {
-            this.loginAction(this.userLogin.email, this.userLogin.password);
-            console.log(this.userLogin.email, this.userLogin.password);
-            // const response = await this.loginAction(this.userLogin.email, this.userLogin.password);
-            // if (response.ok) {
-            //     // await nextTick();
-            //     this.isLoginStatus = await isLoginStatus();
-            //     // new Modal().show(this.$refs.modalAlert("你已成功登入"))
-            //     await this.$router.push('/');
-            //     return response.blob(); // TODO change
-            // }
-            // new Error('Network response was not okk');
-            // Modal(this.$refs.modalAlert("登入錯誤，請重新確認！")).show()
-            // new Modal().show(this.$refs.modalAlert("登入錯誤，請重新確認！"))
-            // return console.log('Cannot to be ok');
+            if (this.userLogin.email == '' || this.userLogin.password == '') {
+                alert('帳號密碼錯誤');
+                this.userLogin.email = '';
+                this.userLogin.password = '';
+                return
+            }
+            try {
+                await useLoginStore().loginAction(this.userLogin.email, this.userLogin.password);
+                // 開始進到新路由之前
+                // router.beforeEach(async (next) => {
+                //     console.log('login next: ' + next)
+                //     return next.path = '/'
+                // })
+                router.push('/')
+            }
+            catch (err) {
+                console.error(err)
+            }
+
         },
         countPlus() {
             console.count(this.countSet)
         }
     },
     // mounted() {
+    //     console.log('this.localLoginAction---------')
     //     this.localLoginAction();
     // }
 }

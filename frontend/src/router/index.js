@@ -1,21 +1,30 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { isLoginStatus } from '../js/api/index'
-import LoginView from '../views/LoginView.vue'
-import PasswordView from '../views/PasswordView.vue'
-import index from '../views/index.vue'
-import notFound from '../views/notFound.vue'
-import registerView from '../views/registerView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import { useLoginStatusStore } from '../stores/useLoginStatusStore';
+import LoginView from '../views/LoginView.vue';
+import PasswordView from '../views/PasswordView.vue';
+import index from '../views/indexView.vue';
+import notFound from '../views/notFound.vue';
+import registerView from '../views/registerView.vue';
+
+
+// export default defineComponent({
+//     computed: {
+//     }
+// })
+
 /**
  * 只允許「沒登入的 user」進入這頁面
  */
 async function isGuest() {
-    if (await isLoginStatus()) {
+    const store = useLoginStatusStore()
+    if (await store.isLoginStatus()) {
         return {
             path: '/'
         }
     }
     return true
 }
+
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,6 +60,7 @@ const router = createRouter({
         },
     ]
 });
+
 
 // 每一個 router 都會經過
 // router.beforeEach((to) => {

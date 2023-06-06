@@ -1,7 +1,4 @@
 <template>
-    <div style="background #aca; text-align:center;"> isLoginedStatusCheck:{{ isLoginedStatusCheck }} |
-        isLoginedStatusCheck._value:{{ isLoginedStatusCheck._value }} </div>
-
     <div>
         <div class="shadow" :class="{ show: sidebarShow }" @click="sidebarToggle"></div>
     </div>
@@ -32,7 +29,7 @@
                     </svg>
                     <span class="location-txt">目前地址</span>
                 </button>
-                <template v-if="!isLoginedStatusCheck_value">
+                <template v-if="!isLoginStatus">
                     <a href="/login" class="btn btn-login">登入</a>
                     <a href="/register" class="btn btn-register">註冊</a>
                 </template>
@@ -55,39 +52,41 @@
     <!-- Sidebar -->
     <!-- <div class="collapse sidebar" id="navbarMainToggle"> -->
     <div class="collapse sidebar" :class="{ show: sidebarShow }">
-        <template v-if="!isLoginedStatusCheck_value">
-            <!-- 登出中 -->
-            <div class="nav-logouting mt-5" id="navLogout">
-                <router-link to="/login" class="btn btn-light btn-login">登入</router-link>
-                <!-- <ul class="nav-item">
+        <!-- <template v-if="isLoginStatus"> -->
+        <!-- 登出中 -->
+        <div class="nav-logouting mt-5" id="navLogout">
+            <router-link to="/login" class="btn btn-light btn-login">登入</router-link>
+            <!-- <ul class="nav-item">
                       <li class="nav-item">
                           <a href="" class="nav-link">XXX</a>
                       </li>
                   </ul> -->
+        </div>
+        <!-- </template>
+        <template v-else> -->
+        <!-- 登入中 -->
+        <div class="nav-logining" id="navLogin">
+            <div class="btn-avatar">
+                <img src="@/assets/img/avatar.jpg" alt="avatar" class="avatar-img" />
             </div>
-        </template>
-        <template v-else>
-            <!-- 登入中 -->
-            <div class="nav-logining" id="navLogin">
-                <div class="btn-avatar">
-                    <img src="@/assets/img/avatar.jpg" alt="avatar" class="avatar-img" />
-                </div>
-                <ul class="nav-item nav-logining-list">
-                    <li class="ropdown-item nav-item">Mue hung</li>
+            <ul class="nav-item nav-logining-list">
+                <li class="ropdown-item nav-item">Mue hung</li>
 
-                    <button @click="logoutAction" type="button" role="button" class="btn btn-light btn-logout">
-                        登出
-                    </button>
-                </ul>
-            </div>
-        </template>
+                <button @click.prevent="logoutAction" type="button" role="button" class="btn btn-light btn-logout">
+                    登出
+                </button>
+            </ul>
+        </div>
+        <!-- </template> -->
     </div>
 </template>
 
 <script>
-// import { inject } from 'vue';
-// import { logoutAction } from '../api';
-// import { isLoginStatus } from '../js/api/index.js';
+import { mapActions } from 'pinia';
+import { useLoginStatusStore } from '../stores/useLoginStatusStore';
+// import { useLoginStore } from '../stores/useLoginStore';
+import router from '../router';
+import { useLogoutStore } from '../stores/useLogoutStore';
 export default {
     data() {
         return {
@@ -95,12 +94,25 @@ export default {
             sidebarShow: false, //側邊欄隱藏
         }
     },
-    computed: {},
+    computed: {
+        ...mapActions(useLoginStatusStore, ['loginStatusStatus']),
+        // ...mapActions(useLoginStore, ['loginAction']),
+        ...mapActions(useLogoutStore, ['logoutAction']),
+    },
+    async watch() {
+        this.isLoginStatus = await useLoginStatusStore().isLoginStatus();
+    },
     methods: {
         sidebarToggle() {
             this.sidebarShow = !this.sidebarShow;
         },
-
+        // loginAction() {
+        //     useLoginStore().loginAction();
+        // },
+        async logoutAction() {
+            await useLogoutStore().logoutAction();
+            router.push('/')
+        },
     }
 }
 </script>
