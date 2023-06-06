@@ -3,6 +3,7 @@ export const useLoginStatusStore = defineStore('useLoginStatusId', {
     state: () => {
         return {
             baseUrl: "http://localhost:5000/api/",
+            isLogin: false,
         }
     },
     actions: {
@@ -13,7 +14,7 @@ export const useLoginStatusStore = defineStore('useLoginStatusId', {
                 credentials: 'include',
             });
             const apiStatus = await response.json();
-            // this.isLoginStatus = !!apiStatus.isloggedin
+            this.isLogin = !!apiStatus.isloggedin
             return !!apiStatus.isloggedin
         },
     },

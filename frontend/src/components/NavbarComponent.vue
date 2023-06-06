@@ -1,4 +1,5 @@
 <template>
+    <div>{{ isLoginStatus }}</div>
     <div>
         <div class="shadow" :class="{ show: sidebarShow }" @click="sidebarToggle"></div>
     </div>
@@ -72,7 +73,7 @@
             <ul class="nav-item nav-logining-list">
                 <li class="ropdown-item nav-item">Mue hung</li>
 
-                <button @click.prevent="logoutAction" type="button" role="button" class="btn btn-light btn-logout">
+                <button @click.prevent="logoutClick" type="button" role="button" class="btn btn-light btn-logout">
                     登出
                 </button>
             </ul>
@@ -82,34 +83,50 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia';
-import { useLoginStatusStore } from '../stores/useLoginStatusStore';
-// import { useLoginStore } from '../stores/useLoginStore';
+import { mapActions, storeToRefs } from 'pinia';
 import router from '../router';
+import { useLoginStatusStore } from '../stores/useLoginStatusStore';
 import { useLogoutStore } from '../stores/useLogoutStore';
 export default {
     data() {
         return {
-            isLoginStatus: 'isLoginStatus had error?',
             sidebarShow: false, //側邊欄隱藏
         }
     },
     computed: {
         ...mapActions(useLoginStatusStore, ['loginStatusStatus']),
-        // ...mapActions(useLoginStore, ['loginAction']),
         ...mapActions(useLogoutStore, ['logoutAction']),
+        isLoginStatus: () => {
+            const statusStore = useLoginStatusStore();
+            const { isLogin } = storeToRefs(statusStore);
+            if (isLogin) {
+                console.log('isLogin = true')
+                statusStore.isLogin = true;
+                return true
+            } else {
+                statusStore.isLogin = false;
+                console.log('isLogin = false;')
+                return false
+            }
+        },
     },
-    async watch() {
-        this.isLoginStatus = await useLoginStatusStore().isLoginStatus();
-    },
+    // watch() {
+    //     const status = this.localLoginStatus()
+    //     if (status) {
+    //         console.log(status)
+    //         this.isLoginStatus = true
+    //     }
+    // },
     methods: {
         sidebarToggle() {
             this.sidebarShow = !this.sidebarShow;
         },
-        // loginAction() {
-        //     useLoginStore().loginAction();
+        // localLoginStatus() {
+        //     const store = useLoginStatusStore();
+        //     const { isLogin } = storeToRefs(store);
+        //     this.isLoginStatus = isLogin;
         // },
-        async logoutAction() {
+        async logoutClick() {
             await useLogoutStore().logoutAction();
             router.push('/')
         },

@@ -1,8 +1,4 @@
 import { defineStore } from 'pinia';
-
-// const loginStatusStore = useLoginStatusStore();
-// const baseUrl = loginStatusStore.baseUrl;
-
 export const useLogoutStore = defineStore('useLogoutId', {
     state: () => {
         return {
@@ -12,13 +8,16 @@ export const useLogoutStore = defineStore('useLogoutId', {
     },
     actions: {
         async logoutAction(){
-            const res = await fetch(this.baseUrl + 'logout', {
-                method: 'GET',
-                credentials: 'include',
-            });
-            // console.log(`logout action res:`)
-            // console.log(res)
-            return res
+            try {
+                const res = await fetch(this.baseUrl + 'logout', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                return res    
+            }
+            catch(err){
+                console.error(err)
+            }
         }
     },
 })

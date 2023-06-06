@@ -10,15 +10,15 @@ export const useLoginStore = defineStore('useLoginId', {
         }
     },
     actions: {
-        async isLoginStatus(){
-            const url = this.baseUrl + 'is-logged-in'
-            console.log(url)
-            const response = await fetch(url, {
-                credentials: 'include',
-            });
-            const apiStatus = await response.json();
-            return !!apiStatus.isloggedin
-        },
+        // async isLoginStatus(){
+        //     const url = this.baseUrl + 'is-logged-in'
+        //     console.log(url)
+        //     const response = await fetch(url, {
+        //         credentials: 'include',
+        //     });
+        //     const apiStatus = await response.json();
+        //     return !!apiStatus.isloggedin
+        // },
         async loginAction(email, password){
             try {
                 const url = this.baseUrl + 'login'
