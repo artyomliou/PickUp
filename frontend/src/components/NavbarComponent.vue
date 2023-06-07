@@ -126,8 +126,9 @@ export default {
         //     const { isLogin } = storeToRefs(store);
         //     this.isLoginStatus = isLogin;
         // },
-        async logoutClick() {
-            await useLogoutStore().logoutAction();
+        logoutClick() {
+            useLogoutStore().logoutAction;
+            console.log('logouting...')
             router.push('/')
         },
     }

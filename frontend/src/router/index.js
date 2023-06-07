@@ -17,7 +17,7 @@ import registerView from '../views/registerView.vue';
  */
 async function isGuest() {
     const store = useLoginStatusStore()
-    if (await store.isLoginStatus()) {
+    if (store.isLoginStatus) {
         return {
             path: '/'
         }

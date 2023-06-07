@@ -4,6 +4,7 @@ function withBaseUrl(url){
     return `${baseUrl}/api/${url}`
 };
 
+
 export async function isLoginStatus(){
     const url = withBaseUrl('is-logged-in')
     // console.log(url)
@@ -37,11 +38,7 @@ export async function logoutAction(){
         method: 'GET',
         credentials: 'include',
     });
+    // console.log('--logoutaction...')
+    // console.log(res)
     return res.ok
-}
-
-// Reactivity test
-export function test(){
-    const user = '';
-    console.count(`test ${user}`)
 }
