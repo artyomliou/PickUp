@@ -20,7 +20,7 @@
                                 <input type="password" class="form-control" v-model="userLogin.password" requored />
                             </label>
                         </div>
-                        <button @click.prevent="localLoginAction" type="submit" class="btn btn-md mx-auto btn-sumit">
+                        <button @click.prevent="loginSumit" type="submit" class="btn btn-md mx-auto btn-sumit">
                             送出
                         </button>
                     </form>
@@ -47,10 +47,10 @@
     </div>
 </template>
 <script>
-import { mapActions } from 'pinia';
+import { mapWritableState } from 'pinia';
+import { loginAction } from '../api/index';
 import router from '../router';
 import { useLoginStatusStore } from '../stores/useLoginStatusStore';
-import { useLoginStore } from '../stores/useLoginStore';
 export default {
     data() {
         return {
@@ -58,17 +58,15 @@ export default {
                 email: '',
                 password: '',
             },
-            isLoginStatus: false,
             countSet: 0
         }
     },
     computed: {
-        ...mapActions(useLoginStatusStore, ['loginStatusStatus']),
-        ...mapActions(useLoginStore, ['loginAction']),
+        ...mapWritableState(useLoginStatusStore, ['isLogin']),
 
     },
     methods: {
-        async localLoginAction() {
+        async loginSumit() {
             if (this.userLogin.email == '' || this.userLogin.password == '') {
                 alert('帳號密碼錯誤');
                 this.userLogin.email = '';
@@ -76,12 +74,10 @@ export default {
                 return
             }
             try {
-                await useLoginStore().loginAction(this.userLogin.email, this.userLogin.password);
-                // 開始進到新路由之前
-                // router.beforeEach(async (next) => {
-                //     console.log('login next: ' + next)
-                //     return next.path = '/'
-                // })
+                const loginStatus = await loginAction(this.userLogin.email, this.userLogin.password);
+                const store = useLoginStatusStore();
+                console.log(!!loginStatus)
+                store.isLogin = !!loginStatus
                 router.push('/')
             }
             catch (err) {
@@ -93,9 +89,10 @@ export default {
             console.count(this.countSet)
         }
     },
-    // mounted() {
-    //     console.log('this.localLoginAction---------')
-    //     this.localLoginAction();
-    // }
+    mounted() {
+        const store = useLoginStatusStore();
+        // console.log('store.isLogin----- on login view')
+        console.log(!!store.isLogin)
+    }
 }
 </script>

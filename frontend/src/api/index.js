@@ -29,7 +29,7 @@ export async function loginAction(email, password){
             "content-type": "application/json",
         }
     });
-    console.log(res)
+    console.log(!!res)
     return res
 }
 

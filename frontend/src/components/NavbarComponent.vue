@@ -1,5 +1,5 @@
 <template>
-    <div>{{ isLoginStatus }}</div>
+    <div>{{ statusStore }}</div>
     <div>
         <div class="shadow" :class="{ show: sidebarShow }" @click="sidebarToggle"></div>
     </div>
@@ -30,7 +30,7 @@
                     </svg>
                     <span class="location-txt">目前地址</span>
                 </button>
-                <template v-if="!isLoginStatus">
+                <template v-if="statusStore == false">
                     <a href="/login" class="btn btn-login">登入</a>
                     <a href="/register" class="btn btn-register">註冊</a>
                 </template>
@@ -53,40 +53,40 @@
     <!-- Sidebar -->
     <!-- <div class="collapse sidebar" id="navbarMainToggle"> -->
     <div class="collapse sidebar" :class="{ show: sidebarShow }">
-        <!-- <template v-if="isLoginStatus"> -->
-        <!-- 登出中 -->
-        <div class="nav-logouting mt-5" id="navLogout">
-            <router-link to="/login" class="btn btn-light btn-login">登入</router-link>
-            <!-- <ul class="nav-item">
+        <template v-if="!statusStore">
+            <!-- 登出中 -->
+            <div class="nav-logouting mt-5" id="navLogout">
+                <router-link to="/login" class="btn btn-light btn-login">登入</router-link>
+                <!-- <ul class="nav-item">
                       <li class="nav-item">
                           <a href="" class="nav-link">XXX</a>
                       </li>
                   </ul> -->
-        </div>
-        <!-- </template>
-        <template v-else> -->
-        <!-- 登入中 -->
-        <div class="nav-logining" id="navLogin">
-            <div class="btn-avatar">
-                <img src="@/assets/img/avatar.jpg" alt="avatar" class="avatar-img" />
             </div>
-            <ul class="nav-item nav-logining-list">
-                <li class="ropdown-item nav-item">Mue hung</li>
+        </template>
+        <template v-else>
+            <!-- 登入中 -->
+            <div class="nav-logining" id="navLogin">
+                <div class="btn-avatar">
+                    <img src="@/assets/img/avatar.jpg" alt="avatar" class="avatar-img" />
+                </div>
+                <ul class="nav-item nav-logining-list">
+                    <li class="ropdown-item nav-item">Mue hung</li>
 
-                <button @click.prevent="logoutClick" type="button" role="button" class="btn btn-light btn-logout">
-                    登出
-                </button>
-            </ul>
-        </div>
-        <!-- </template> -->
+                    <button @click.prevent="logoutClick" type="button" role="button" class="btn btn-light btn-logout">
+                        登出
+                    </button>
+                </ul>
+            </div>
+        </template>
     </div>
 </template>
 
 <script>
-import { mapActions, storeToRefs } from 'pinia';
+import { mapWritableState } from 'pinia';
+import { logoutAction } from '../api/index';
 import router from '../router';
 import { useLoginStatusStore } from '../stores/useLoginStatusStore';
-import { useLogoutStore } from '../stores/useLogoutStore';
 export default {
     data() {
         return {
@@ -94,42 +94,30 @@ export default {
         }
     },
     computed: {
-        ...mapActions(useLoginStatusStore, ['loginStatusStatus']),
-        ...mapActions(useLogoutStore, ['logoutAction']),
-        isLoginStatus: () => {
-            const statusStore = useLoginStatusStore();
-            const { isLogin } = storeToRefs(statusStore);
-            if (isLogin) {
-                console.log('isLogin = true')
-                statusStore.isLogin = true;
-                return true
-            } else {
-                statusStore.isLogin = false;
-                console.log('isLogin = false;')
-                return false
-            }
+        ...mapWritableState(useLoginStatusStore, ['isLogin']),
+        statusStore() {
+            const store = useLoginStatusStore();
+            // console.log('is value--')
+            console.log(store.isLogin)
+            return !!store.isLogin
         },
     },
-    // watch() {
-    //     const status = this.localLoginStatus()
-    //     if (status) {
-    //         console.log(status)
-    //         this.isLoginStatus = true
-    //     }
-    // },
     methods: {
         sidebarToggle() {
             this.sidebarShow = !this.sidebarShow;
         },
-        // localLoginStatus() {
-        //     const store = useLoginStatusStore();
-        //     const { isLogin } = storeToRefs(store);
-        //     this.isLoginStatus = isLogin;
-        // },
-        logoutClick() {
-            useLogoutStore().logoutAction;
-            console.log('logouting...')
-            router.push('/')
+        async logoutClick() {
+            const store = useLoginStatusStore();
+            // console.log('store.isLogin---')
+            console.log(!!store.isLogin)
+            // const { store.isLogin } = useLoginStatusStore();
+            if (store.isLogin) {
+                await logoutAction()
+                console.log('logouting...')
+                router.push('/')
+            } else {
+                console.log('It is logout')
+            }
         },
     }
 }

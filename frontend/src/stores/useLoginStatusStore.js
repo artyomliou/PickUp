@@ -1,12 +1,9 @@
 import { defineStore } from 'pinia';
-import { isLoginStatus } from '../api';
 export const useLoginStatusStore = defineStore('useLoginStatusId', {
     state: () => {
         return {
             isLogin: false,
+            check: 0,
         }
-    },
-    actions: {
-        isLoginStatus
     },
 })
