@@ -20,7 +20,7 @@
                                 <input type="password" class="form-control" v-model="userLogin.password" requored />
                             </label>
                         </div>
-                        <button @click.prevent="localLoginAction" type="submit" class="btn btn-md mx-auto btn-sumit">
+                        <button @click.prevent="login" type="submit" class="btn btn-md mx-auto btn-sumit">
                             送出
                         </button>
                     </form>
@@ -47,45 +47,31 @@
     </div>
 </template>
 <script>
-// import { reactive } from 'vue';
-// import { loginAction } from '../api/index';
-// bootstrap modal
-// https://getbootstrap.com/docs/5.0/getting-started/webpack/#importing-javascript
+import { mapActions } from 'pinia'
+import { loginApi } from '../api'
+import { useLoginStore } from '../store/login'
 export default {
-    inject: ['isLoginedStatusId', 'loginAction'],
-    // inject: reactive([isLoginedStatusId)],
     data() {
         return {
             userLogin: {
                 email: '',
                 password: '',
             },
-            isLoginStatus: false,
             countSet: 0
         }
     },
     methods: {
-        async localLoginAction() {
-            this.loginAction(this.userLogin.email, this.userLogin.password);
-            // const response = await this.loginAction(this.userLogin.email, this.userLogin.password);
-            // if (response.ok) {
-            //     // await nextTick();
-            //     this.isLoginStatus = await isLoginStatus();
-            //     // new Modal().show(this.$refs.modalAlert("你已成功登入"))
-            //     await this.$router.push('/');
-            //     return response.blob(); // TODO change
-            // }
-            // new Error('Network response was not okk');
-            // Modal(this.$refs.modalAlert("登入錯誤，請重新確認！")).show()
-            // new Modal().show(this.$refs.modalAlert("登入錯誤，請重新確認！"))
-            // return console.log('Cannot to be ok');
+        ...mapActions(useLoginStore, ['updateLoginStatus']),
+        async login() {
+            const ok = await loginApi(this.userLogin.email, this.userLogin.password)
+            if (ok) {
+                this.updateLoginStatus(true)
+                this.$router.push('/')
+            }
         },
         countPlus() {
             console.count(this.countSet)
         }
     },
-    // mounted() {
-    //     this.localLoginAction();
-    // }
 }
 </script>

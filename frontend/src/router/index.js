@@ -1,14 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { isLoginStatus } from '../api/index'
+import { useLoginStore } from '../store/login'
+import CartPage from '../views/CartPage.vue'
 import LoginView from '../views/LoginView.vue'
+import OrderPage from '../views/OrderPage.vue'
 import PasswordView from '../views/PasswordView.vue'
+import ProductCustomModal from '../views/ProductCustomModal.vue'
+import StoreListPage from '../views/StoreListPage.vue'
+import StorePage from '../views/StorePage.vue'
 import index from '../views/index.vue'
 import notFound from '../views/notFound.vue'
 /**
  * 只允許「沒登入的 user」進入這頁面
  */
 async function isGuest() {
-    if (await isLoginStatus()) {
+    const store = useLoginStore()
+    store.isLoggedIn
+    if (store.isLoggedIn == true) {
         return {
             path: '/'
         }
@@ -36,14 +43,36 @@ const router = createRouter({
             name: 'password',
             component: PasswordView
         },
-        { 
+        {
+            path: '/store',
+            component: StoreListPage
+        },
+        {
+            path: '/store/:sid',
+            component: StorePage,
+            children: [
+                {
+                    path: 'product/:pid',
+                    component: ProductCustomModal
+                }
+            ]
+        },
+        {
+            path: '/store/:sid/cart',
+            component: CartPage
+        },
+        {
+            path: '/order/:oid',
+            component: OrderPage
+        },
+        {
             // form Kuro https://book.vue.tw/CH4/4-2-route-settings.html
             path: '/:pathMatch(.*)*',
             name: 'notFound',
             component: notFound
-        },
+        }
     ]
-});
+})
 
 // 每一個 router 都會經過
 // router.beforeEach((to) => {
@@ -63,6 +92,5 @@ const router = createRouter({
 //     }
 // });
 // // note: meta https://router.vuejs.org/zh/guide/advanced/meta.html
-
 
 export default router

@@ -1,9 +1,9 @@
 // import { createPinia } from 'pinia'
+import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
 import App from './App.vue'
 import router from './router'
-
 
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -15,6 +15,7 @@ const app = createApp(App)
 //     isLoginStatus() // provide key, value
 // })
 app.use(router)
+app.use(createPinia())
 
 // app.component('NavbarComponent', NavbarComponent).component('FooterComponent', FooterComponent)
 

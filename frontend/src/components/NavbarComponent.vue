@@ -1,6 +1,6 @@
 <template>
-    <div style="border: 2px solid #aca; text-align:center;"> isLoginedStatusId:{{ isLoginedStatusId }} |
-        this.isLoginedStatusId: {{ this.isLoginedStatusId }} | {{
+    <div style="border: 2px solid #aca; text-align:center;"> isLoginedStatusId:{{ isLoggedIn }} |
+        this.isLoginedStatusId: {{ isLoggedIn }} | {{
             this.test }}</div>
     <nav class="navbar navbar-expand-lg navbar-light main-nav" id="navMain">
         <div class="container-fluid">
@@ -22,7 +22,7 @@
             </button>
 
             <div class="collapse navbar-collapse nav-log" id="navbarMainToggle">
-                <template v-if="isLoginedStatusId._value == false">
+                <template v-if="isLoggedIn == false">
                     <!-- 登出中 -->
                     <div class="nav-logouting" id="navLogout">
                         <!-- <a
@@ -59,7 +59,7 @@
                                 </a>
                             </li>
 
-                            <button @click="logoutAction" type="button" role="button" class="btn btn-light btn-logout">
+                            <button @click="logout" type="button" role="button" class="btn btn-light btn-logout">
                                 登出
                             </button>
                         </ul>
@@ -71,33 +71,21 @@
 </template>
 
 <script>
-// import { inject } from 'vue';
-// import { logoutAction } from '../api';
-// import { isLoginStatus } from '../api/index.js';
+import { mapActions, mapState } from 'pinia';
+import { logoutApi } from '../api';
+import { useLoginStore } from '../store/login';
 export default {
-    inject: ['isLoginedStatusId', 'logoutAction'],
-    watch: {
-        isLoginedStatusId: {
-            immediate: true,
-            handler(newVal, oldVal) {
-                console.log("isLoginedStatusId (NavBar): ", newVal, oldVal)
+    computed: {
+        ...mapState(useLoginStore, ['isLoggedIn'])
+    },
+    methods: {
+        ...mapActions(useLoginStore, ['updateLoginStatus']),
+        async logout() {
+            const ok = await logoutApi()
+            if (ok) {
+                this.updateLoginStatus(false)
             }
-        },
-    },
-    data() {
-        return {
-            isLoginStatus: 'isLoginStatus had error?'
         }
-    },
-    async created() {
-        // this.isLoginStatus = await isLoginStatus()
-        // console.log(`isLoginedStatusId: ${this.isLoginedStatusId}; this.isLoginStatus: ${this.xxx}`)
-        // console.log(`isLoginPro: ${ this.isLoginPro }`)
-    },
-    // methods: {
-    //     logoutAction: logoutAction
-    // }
-
-    // app.provide('isLogin', isLoginStatus) // provide key, value
+    }
 }
 </script>

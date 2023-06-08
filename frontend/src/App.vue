@@ -19,10 +19,11 @@ import { RouterView } from 'vue-router';
 </template>
 
 <script>
-import { computed } from 'vue';
-import { isLoginStatus, loginAction, logoutAction } from './api/index';
+import { mapActions } from 'pinia';
+import { isLoggedInApi } from './api';
 import FooterComponent from './components/FooterComponent.vue';
 import NavbarComponent from './components/NavbarComponent.vue';
+import { useLoginStore } from './store/login';
 export default {
   components: { NavbarComponent, FooterComponent },
   data() {
@@ -30,28 +31,13 @@ export default {
       loading: false,
       post: null,
       error: null,
-      isLoginedStatus: "isLoginStatus had error?",
-      isLogined: false,
     }
   },
-  async created() {
-    this.isLogined = await isLoginStatus()
+  methods: {
+    ...mapActions(useLoginStore, ['updateLoginStatus'])
   },
-  provide() {
-    return {
-      isLoginedStatusId: computed(() => this.isLogined),
-      loginAction: async (email, password) => {
-        if (await loginAction(email, password)) {
-          this.isLogined = true
-          this.$router.push('/')
-        }
-      },
-      logoutAction: async () => {
-        if (await logoutAction()) {
-          this.isLogined = false
-        }
-      }
-    }
-  },
+  async beforeMount() {
+    this.updateLoginStatus(await isLoggedInApi())
+  }
 }
 </script>
