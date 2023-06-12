@@ -5,7 +5,7 @@ import PasswordView from '../views/PasswordView.vue';
 import index from '../views/indexView.vue';
 import notFound from '../views/notFound.vue';
 import registerView from '../views/registerView.vue';
-import storeView from '../views/storeView.vue';
+import storeView from '../views/store/storeView.vue';
 
 
 // export default defineComponent({
@@ -16,15 +16,15 @@ import storeView from '../views/storeView.vue';
 /**
  * 只允許「沒登入的 user」進入這頁面
  */
-// async function isGuest() {
-//     const store = useLoginStatusStore()
-//     if (store.isLogin) {
-//         return {
-//             path: '/'
-//         }
-//     }
-//     return true
-// }
+async function isGuest() {
+    const store = useLoginStatusStore()
+    if (store.isLogin) {
+        return {
+            path: '/'
+        }
+    }
+    return true
+}
 
 // const store = useLoginStatusStore()
 
@@ -42,17 +42,19 @@ const router = createRouter({
             path: '/login',
             name: 'login',
             component: LoginView,
-            beforeEnter: async(to,from) => {
-                const store = useLoginStatusStore();
-                const fromPath = from.path == '/login'
-                if(store.isLogin == true || store.isLogin && fromPath) // 登入+從登入頁+去登入頁
-                to.path.replace == '/'
-            }
+            beforeEnter: [isGuest],
+            // beforeEnter: async(to,from) => {
+            //     const store = useLoginStatusStore();
+            //     const fromPath = from.path == '/login'
+            //     if(store.isLogin == true || store.isLogin && fromPath) // 登入+從登入頁+去登入頁
+            //     to.path.replace == '/'
+            // }
         },
         {
             path: '/register',
             name: 'register',
             component: registerView,
+            beforeEnter: [isGuest],
             // redirect: () => { 
             //     // const store = useLoginStatusStore()
             //     if (store.isLogin) {
