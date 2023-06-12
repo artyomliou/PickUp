@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-lg-6 row p-0 cards card-stores">
                     <div class="card card-store m-2 p-0" style="width: 16rem;">
-                        <a href="/sotre/01" class="card-link">
+                        <a href="/store/01" class="card-link">
                             <figure class="card-img-top">
                                 <img src="../assets/img/store-item.png" alt="" class="img-fluid">
                             </figure>
@@ -18,7 +18,7 @@
                         </a>
                     </div>
                     <div class="card card-store m-2 p-0" style="width: 16rem;">
-                        <a href="/sotre/02" class="card-link">
+                        <a href="/store/02" class="card-link">
                             <figure class="card-img-top">
                                 <img src="../assets/img/store-item.png" alt="" class="img-fluid">
                             </figure>
