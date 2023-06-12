@@ -1,5 +1,4 @@
 <template>
-    <div>{{ statusStore }}</div>
     <div>
         <div class="shadow" :class="{ show: sidebarShow }" @click="sidebarToggle"></div>
     </div>
@@ -18,7 +17,7 @@
                 <img src="@/assets/img/logo.svg" alt="" class="brand-img" />
             </a>
 
-            <div class="btns row justify-content-between">
+            <div class="btns row">
 
                 <span class="col-auto p-0 btns-choose">
                     <button type="button" class="btn btn-takeout">外帶</button>
@@ -31,8 +30,11 @@
                     <span class="location-txt">目前地址</span>
                 </button>
                 <template v-if="statusStore == false">
+                <div class="col-auto ms-auto">
+                    <p class="d-inline-block">您尚未登入</p>
                     <a href="/login" class="btn btn-login">登入</a>
                     <a href="/register" class="btn btn-register">註冊</a>
+                </div>
                 </template>
                 <template v-else>
                     <button type="button" class="btn btn-cart ms-auto">
