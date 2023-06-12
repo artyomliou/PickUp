@@ -6,7 +6,7 @@
                     <div class="card card-store m-2 p-0" style="width: 16rem;">
                         <a href="/sotre/01" class="card-link">
                             <figure class="card-img-top">
-                                <img src="../assets/img/sotre-cover.png" alt="" class="img-fluid">
+                                <img src="../assets/img/store-item.png" alt="" class="img-fluid">
                             </figure>
                             <div class="card-body">
                                 <h5 class="card-title">真好呵茶飲 台北車站店</h5>
@@ -20,7 +20,7 @@
                     <div class="card card-store m-2 p-0" style="width: 16rem;">
                         <a href="/sotre/02" class="card-link">
                             <figure class="card-img-top">
-                                <img src="../assets/img/sotre-cover.png" alt="" class="img-fluid">
+                                <img src="../assets/img/store-item.png" alt="" class="img-fluid">
                             </figure>
                             <div class="card-body">
                                 <h5 class="card-title">真好呵茶飲 台北車站店</h5>
