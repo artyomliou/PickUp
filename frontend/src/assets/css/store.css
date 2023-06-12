@@ -1,0 +1,78 @@
+@import './base.css';
+
+.sec-store {
+  padding: 0;
+}
+.sec-store {
+}
+.sec-store .banner {
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-attachment: fixed;
+  width: 100%;
+  min-height: 160px;
+}
+
+.store-info {}
+.store-info .store-title {}
+.store-info address {} 
+.store-info p {}
+.store-info .store-tags {}
+.store-info .store-tags .tag {
+  background-color: var(--theme_md);
+  color: #fff;
+  letter-spacing: 1px;
+}
+.store-classes {}
+.class-list {
+  display: -webkit-box;
+  display: flex;
+  flex-direction: column;
+}
+.class-list li {
+  flex: 0 0 ;
+  padding: 1rem 0;
+}
+
+.store-cards {}
+.store-cards .series-title {}
+.cards {
+  gap: 10px;
+}
+.store-card {
+  padding: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background-color: #fff;
+}
+.store-card .store-link {
+  color: var(--txt)
+}
+.store-card .store-link:hover, .store-card .store-link:focus {
+  color: var(--link);
+  /* box-shadow: 0 0 5px 10px #aaa; */
+}
+
+.store-card .card-img {
+  border-radius: 12px;
+  overflow: hidden;
+}
+.store-card .card-img img {
+  max-width: 400px;
+}
+.store-card .card-info {}
+.store-card .item-title {}
+.store-card .store-prize {}
+.store-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: transparent;
+}
+.store-btn svg {
+  width: 30px;
+}
+
+
