@@ -30,7 +30,7 @@ export async function loginAction(email, password){
         }
     });
     console.log(!!res)
-    return res
+    return res.ok
 }
 
 export async function logoutAction(){
