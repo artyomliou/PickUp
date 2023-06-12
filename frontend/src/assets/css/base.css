@@ -17,6 +17,8 @@
   --bg_md: #fff1a8;
   --bg_footer: #EDFFFE;
   --txt: #393939;
+  --link: #2ACFC5;
+  --linkHover: #185256;
   --radius_md: 20px;
   --fontMain: 'Noto Sans TC', 'Noto Sans', 'Microsoft JhengHei', '微軟正黑體', 'Open Sans',
     Helvetica, system-ui, -apple-system, sans-serif;
@@ -59,6 +61,7 @@ a {
 a:focus,
 a:hover,
 a:active {
+  color: var(--linkHover);
 }
 
 ul {
