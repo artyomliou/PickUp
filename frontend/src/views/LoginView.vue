@@ -58,12 +58,11 @@ export default {
                 email: '',
                 password: '',
             },
-            countSet: 0
+            countSet: 0,
         }
     },
     computed: {
         ...mapWritableState(useLoginStatusStore, ['isLogin']),
-
     },
     methods: {
         async loginSumit() {
@@ -89,10 +88,10 @@ export default {
             console.count(this.countSet)
         }
     },
-    mounted() {
+    async mounted() {
         const store = useLoginStatusStore();
         // console.log('store.isLogin----- on login view')
-        console.log(!!store.isLogin)
+        console.log(!!store.isLogin);
     }
 }
 </script>
