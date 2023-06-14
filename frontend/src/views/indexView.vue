@@ -3,34 +3,19 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 row p-0 cards card-stores">
-                    <div class="card card-store m-2 p-0" style="width: 16rem;">
-                        <a href="/store/01" class="card-link">
+                    <div v-for="store in storesData" :key="store.id" class="card card-store m-2 p-0" style="width: 16rem;">
+                        <a :href="`store/${store.id}`" class="card-link">
                             <figure class="card-img-top">
-                                <img src="../assets/img/store-item.png" alt="" class="img-fluid">
+                                <img :src="store.pic" alt="" class="img-fluid">
                             </figure>
                             <div class="card-body">
-                                <h5 class="card-title">真好呵茶飲 台北車站店</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                                    of
-                                    the card's content.</p>
-                                <span class="tag tag-store">營業中</span>
+                                <h5 class="card-title">{{ store.name }}</h5>
+                                <p class="card-text">{{ store.openedAt }} ~ {{ store.closedAt }}</p>
+                                <span class="tag tag-store">{{ store.status }}</span>
                             </div>
                         </a>
                     </div>
-                    <div class="card card-store m-2 p-0" style="width: 16rem;">
-                        <a href="/store/02" class="card-link">
-                            <figure class="card-img-top">
-                                <img src="../assets/img/store-item.png" alt="" class="img-fluid">
-                            </figure>
-                            <div class="card-body">
-                                <h5 class="card-title">真好呵茶飲 台北車站店</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                                    of
-                                    the card's content.</p>
-                                <span class="tag tag-store">營業中</span>
-                            </div>
-                        </a>
-                    </div>
+
                 </div>
                 <div class="col-lg-6">
                     <div id="mapSite">
@@ -46,5 +31,20 @@
     </section>
 </template>
 <script>
-export default {}
+import { storesListApi } from '../api';
+import '../api/model';
+export default {
+    data() {
+        return {
+            /** @type {Store[]} */
+            storesData: [],
+        }
+    },
+    async mounted() {
+        const storeList = await storesListApi()
+        console.log(storeList)
+        this.storesData = storeList
+        console.log(JSON.stringify(this.storesData))
+    }
+}
 </script>

@@ -1,3 +1,5 @@
+import './model';
+
 const baseUrl = "http://localhost:5000";
 
 function withBaseUrl(url){
@@ -42,3 +44,17 @@ export async function logoutAction(){
     // console.log(res)
     return res.ok
 }
+
+/**
+ * @returns {Store[]}
+ */
+export async function storesListApi(){
+    const res = await fetch(withBaseUrl('stores'), {
+        method: 'GET',
+        credentials: 'include',
+    });
+    const data = await res.json();
+    // console.log(data.stores)
+    return data.stores
+}
+
