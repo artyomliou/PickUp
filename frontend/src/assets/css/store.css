@@ -18,8 +18,7 @@
 .store-info .store-title {}
 .store-info address {} 
 .store-info p {}
-.store-info .store-tags {}
-.store-info .store-tags .tag {
+.store-info .tag-store {
   background-color: var(--theme_md);
   color: #fff;
   letter-spacing: 1px;

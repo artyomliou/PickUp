@@ -58,3 +58,16 @@ export async function storesListApi(){
     return data.stores
 }
 
+
+/**
+ * @returns {Store[]}
+ */
+export async function storeDataApi(storeId){
+    const res = await fetch(withBaseUrl(`stores/${storeId}`), {
+        method: 'GET',
+        credentials: 'include',
+    });
+    const data = await res.json();
+    // console.log(data)
+    return data.store
+}

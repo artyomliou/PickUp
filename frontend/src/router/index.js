@@ -26,7 +26,6 @@ async function isGuest() {
     return true
 }
 
-// const store = useLoginStatusStore()
 
 
 const router = createRouter({
@@ -70,8 +69,8 @@ const router = createRouter({
             component: PasswordView
         },
         {
-            path: '/store',
-            name: 'store',
+            path: '/store/:id',
+            name: 'store/:id',
             component: storeView
         },
         { 
