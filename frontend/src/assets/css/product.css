@@ -1,0 +1,5 @@
+@import './base.css';
+
+.sec-product {
+  background-color: var(--bg_content);
+}

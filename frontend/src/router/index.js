@@ -5,6 +5,7 @@ import PasswordView from '../views/PasswordView.vue';
 import index from '../views/indexView.vue';
 import notFound from '../views/notFound.vue';
 import registerView from '../views/registerView.vue';
+import productView from '../views/store/product/productView.vue';
 import storeView from '../views/store/storeView.vue';
 
 
@@ -69,9 +70,14 @@ const router = createRouter({
             component: PasswordView
         },
         {
-            path: '/store/:id',
-            name: 'store/:id',
+            path: '/store/:storeId',
+            name: 'store/:storeId',
             component: storeView
+        },
+        {
+            path: '/store/:storeId/product/:productId',
+            name: 'store/:storeId/product/:productId',
+            component: productView
         },
         { 
             // form Kuro https://book.vue.tw/CH4/4-2-route-settings.html
