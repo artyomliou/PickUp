@@ -1,5 +1,60 @@
 @import './base.css';
 
 .sec-product {
-  background-color: var(--bg_content);
+  /* background-color: var(--bg_content); */
+}
+
+
+.nav-sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+.btn-goback {
+  color: var(--txt);
+}
+.btn-goback svg {
+  width: 28px;
+  vertical-align: top;
+}
+.btn-goback:hover, .btn-goback:focus {
+  background-color: transparent;
+  color: var(--link)
+}
+
+
+.product-picarea {
+}
+.product-picarea figure {
+  
+}
+.product-picarea figure img {}
+.product-infoarea {}
+
+.product-title {}
+.product-price {}
+.product-intro {}
+
+.form-product {}
+
+.tag-reqired {
+  display: inline-block;
+  background-color: #E6E6E6;
+  color: #4A4A4A;
+}
+
+.form-product .form-control {
+  margin: 0.5rem 0;
+}
+
+.select-item .select-name {}
+.select-item .select-info {}
+.form-product input.radio {}
+
+.form-product textarea {}
+.form-product select option {}
+
+.form-product .btn-submit {
+  background-color: var(--txt);
+  color: var(--btn_bg);
 }
