@@ -1,5 +1,8 @@
 @import './base.css';
 
+
+
+/**/
 .sec-store {
   padding: 0;
 }
@@ -12,6 +15,12 @@
   background-attachment: fixed;
   width: 100%;
   min-height: 160px;
+}
+
+.nav-sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
 }
 
 .store-info {}
@@ -28,50 +37,77 @@
   display: -webkit-box;
   display: flex;
   flex-direction: column;
+  padding-top: 1rem;
 }
-.class-list li {
+.class-list .list-item {
   flex: 0 0 ;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
+}
+.class-list .list-item.active {
+}
+.list-item-link {
+  color: var(--txt);
+  text-align: left;
+  padding: 5px 0;
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
+}
+.class-list .list-item.active .list-item-link {
+  border-color: #000000;
 }
 
-.store-cards {}
-.store-cards .series-title {}
+.store-cards {
+}
+.store-cards .series-title {
+  padding: 40px 10px 10px;
+  /* margin-top: 40px; */
+}
 .cards {
   gap: 10px;
 }
 .store-card {
   padding: 10px;
-  border-radius: 12px;
-  overflow: hidden;
+  /* border-radius: 12px;
+  overflow: hidden; */
   position: relative;
   background-color: #fff;
 }
-.store-card .store-link {
-  color: var(--txt)
+.store-link {
+  display: block;
+  color: var(--txt);
 }
-.store-card .store-link:hover, .store-card .store-link:focus {
+.store-link:hover, .store-link:focus {
   color: var(--link);
-  /* box-shadow: 0 0 5px 10px #aaa; */
+  box-shadow: 0 0 5px 5px #00000015;
 }
 
 .store-card .card-img {
-  border-radius: 12px;
-  overflow: hidden;
+  /* border-radius: 12px;
+  overflow: hidden; */
 }
 .store-card .card-img img {
   max-width: 400px;
 }
-.store-card .card-info {}
+.store-card .card-info {
+  padding: 10px;
+}
 .store-card .item-title {}
 .store-card .store-prize {}
-.store-btn {
+.store-link .store-btn {
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: transparent;
+  background-color: #000;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
+/* .store-link:hover .store-btn, .store-link:focus .store-btn, .store-link:active .store-btn {
+} */
 .store-btn svg {
   width: 30px;
+  color: #fff;
 }
-
-
+/* .store-link:hover .store-btn svg, .store-link:focus .store-btn svg, .store-link:active .store-btn svg {
+  width: 40px;
+} */
