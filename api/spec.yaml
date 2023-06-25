@@ -698,6 +698,7 @@ paths:
                   status:
                     enum:
                       - Created
+                      - Accepted
                       - Preparing
                       - Ready
                       - Picked
