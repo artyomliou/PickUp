@@ -24,6 +24,7 @@ type (
 		Store models.Store `json:"store"`
 	}
 	GetProductResponse struct {
+		Store   models.Store   `json:"store"`
 		Product models.Product `json:"product"`
 	}
 )
@@ -75,19 +76,27 @@ func (ctl StoreController) GetProduct(c *gin.Context) {
 	}
 
 	// db operation
+	store := models.Store{}
+	if tx := db.Conn().Find(&store, input.StoreId); tx.Error != nil {
+		log.Println(tx.Error)
+		c.AbortWithStatusJSON(404, gin.H{
+			"message": "指定店家不存在",
+		})
+		return
+	}
+
 	product := models.Product{}
-	conn := db.Conn()
-	conn = conn.Preload("SelectQuestions.SelectOptions")
-	conn = conn.Preload("CustomQuestions")
-	tx := conn.Where("store_id", input.StoreId).First(&product, input.ProductId)
-	if tx.Error != nil {
+	conn := db.Conn().Preload("SelectQuestions.SelectOptions").Preload("CustomQuestions")
+	if tx := conn.Where("store_id", input.StoreId).First(&product, input.ProductId); tx.Error != nil {
 		log.Println(tx.Error)
 		c.AbortWithStatusJSON(404, gin.H{
 			"message": "指定商品不存在",
 		})
-	} else {
-		c.AbortWithStatusJSON(200, GetProductResponse{
-			Product: product,
-		})
+		return
 	}
+
+	c.AbortWithStatusJSON(200, GetProductResponse{
+		Store:   store,
+		Product: product,
+	})
 }
