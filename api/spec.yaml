@@ -574,11 +574,11 @@ paths:
                 $ref: "#/components/schemas/Error"
               example:
                 message: 指定店家不存在
-  /api/store/{storeId}/cart/items:
+  /api/store/{storeId}/cart:
     get:
       tags:
         - 購物車
-      description: 取得購物車中的所有商品
+      description: 取得購物車中的資訊（商品、總金額等等）
       parameters:
         - $ref: "#/components/parameters/StoreId"
       responses:
@@ -597,6 +597,11 @@ paths:
                     type: integer
                     example: 200
                     description: 購物車總金額
+                  estimate_time:
+                    type: integer
+                    example: 20
+                    description: 預計花費時間（秒數）
+  /api/store/{storeId}/cart/items:
     post:
       tags:
         - 購物車

@@ -30,9 +30,10 @@ type (
 		SelectAnswers models.SelectAnswers `json:"selectAnswers" binding:"required"`
 		CustomAnswers models.CustomAnswers `json:"customAnswers" binding:"required"`
 	}
-	ListItemResponse struct {
-		Items     []*models.CartItem `json:"items"`
-		CartTotal int                `json:"cartTotal"`
+	GetCartInfoResponse struct {
+		Items        []*models.CartItem `json:"items"`
+		CartTotal    int                `json:"cartTotal"`
+		EstimateTime uint               `json:"estimateTime"`
 	}
 	NewItemResponse struct {
 		CartItemId uint `json:"cartItemId"`
@@ -42,7 +43,7 @@ type (
 	}
 )
 
-func (ctl CartController) ListItem(c *gin.Context) {
+func (ctl CartController) GetCartInfo(c *gin.Context) {
 	// input validation
 	uri := CartUri{}
 	if err := c.BindUri(&uri); err != nil {
@@ -65,9 +66,10 @@ func (ctl CartController) ListItem(c *gin.Context) {
 		cartTotal += item.Total
 	}
 
-	c.AbortWithStatusJSON(200, ListItemResponse{
-		Items:     cart.Items,
-		CartTotal: cartTotal,
+	c.AbortWithStatusJSON(200, GetCartInfoResponse{
+		Items:        cart.Items,
+		CartTotal:    cartTotal,
+		EstimateTime: 20, // TODO replace with real one
 	})
 }
 func (ctl CartController) NewItem(c *gin.Context) {

@@ -59,7 +59,7 @@ func storeRoutes(rg *gin.RouterGroup) {
 
 func cartRoutes(rg *gin.RouterGroup) {
 	ctl := new(CartController)
-	rg.GET("/store/:storeId/cart/items", ctl.ListItem)
+	rg.GET("/store/:storeId/cart", ctl.GetCartInfo)
 	rg.POST("/store/:storeId/cart/items", ctl.NewItem)
 	rg.GET("/store/:storeId/cart/items/:itemId", ctl.GetItem)
 	rg.PUT("/store/:storeId/cart/items/:itemId", ctl.UpdateItem)
