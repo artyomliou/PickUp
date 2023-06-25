@@ -27,6 +27,7 @@ type Order struct {
 type OrderStatus string
 
 const OrderStatusCreated string = "Created"
+const OrderStatusAccepted string = "Accepted"
 const OrderStatusPreparing string = "Preparing"
 const OrderStatusReady string = "Ready"
 const OrderStatusPicked string = "Picked"
@@ -45,18 +46,21 @@ func (s *OrderStatus) Scan(value interface{}) error {
 		*s = OrderStatus(OrderStatusCreated)
 		return nil
 	case 2:
-		*s = OrderStatus(OrderStatusPreparing)
+		*s = OrderStatus(OrderStatusAccepted)
 		return nil
 	case 3:
-		*s = OrderStatus(OrderStatusReady)
+		*s = OrderStatus(OrderStatusPreparing)
 		return nil
 	case 4:
-		*s = OrderStatus(OrderStatusPicked)
+		*s = OrderStatus(OrderStatusReady)
 		return nil
 	case 5:
-		*s = OrderStatus(OrderStatusFinished)
+		*s = OrderStatus(OrderStatusPicked)
 		return nil
 	case 6:
+		*s = OrderStatus(OrderStatusFinished)
+		return nil
+	case 7:
 		*s = OrderStatus(OrderStatusCancelled)
 		return nil
 	default:
@@ -68,16 +72,18 @@ func (s OrderStatus) Value() (driver.Value, error) {
 	switch string(s) {
 	case OrderStatusCreated:
 		return int64(1), nil
-	case OrderStatusPreparing:
+	case OrderStatusAccepted:
 		return int64(2), nil
-	case OrderStatusReady:
+	case OrderStatusPreparing:
 		return int64(3), nil
-	case OrderStatusPicked:
+	case OrderStatusReady:
 		return int64(4), nil
-	case OrderStatusFinished:
+	case OrderStatusPicked:
 		return int64(5), nil
-	case OrderStatusCancelled:
+	case OrderStatusFinished:
 		return int64(6), nil
+	case OrderStatusCancelled:
+		return int64(7), nil
 	default:
 		return nil, errors.New(fmt.Sprint("Unknown OrderStatus string value:", string(s)))
 	}

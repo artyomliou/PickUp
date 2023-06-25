@@ -17,6 +17,12 @@ components:
         name:
           type: string
           example: "某個賣吃的店"
+        address:
+          type: string
+          example: "台北市中正區公園路15號"
+        intro:
+          type: string
+          example: "一間很不錯的商店，趕快來買吧"
         pic:
           type: string
           format: url
@@ -173,6 +179,11 @@ components:
         amount:
           type: integer
           example: 1
+          description: 數量
+        total:
+          type: integer
+          example: 70
+          description: 總金額
         selectAnswers:
           type: array
           items:
@@ -557,6 +568,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  store:
+                    $ref: "#/components/schemas/Store"
                   product:
                     $ref: "#/components/schemas/Product"
         404:
@@ -567,11 +580,11 @@ paths:
                 $ref: "#/components/schemas/Error"
               example:
                 message: 指定店家不存在
-  /api/store/{storeId}/cart/items:
+  /api/store/{storeId}/cart:
     get:
       tags:
         - 購物車
-      description: 取得購物車中的所有商品
+      description: 取得購物車中的資訊（商品、總金額等等）
       parameters:
         - $ref: "#/components/parameters/StoreId"
       responses:
@@ -586,6 +599,15 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/CartItem"
+                  total:
+                    type: integer
+                    example: 200
+                    description: 購物車總金額
+                  estimate_time:
+                    type: integer
+                    example: 20
+                    description: 預計花費時間（秒數）
+  /api/store/{storeId}/cart/items:
     post:
       tags:
         - 購物車
@@ -698,6 +720,7 @@ paths:
                   status:
                     enum:
                       - Created
+                      - Accepted
                       - Preparing
                       - Ready
                       - Picked

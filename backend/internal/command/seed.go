@@ -19,6 +19,8 @@ func (cmd SeedCommand) Run() error {
 
 	store, err := models.NewStore(&models.Store{
 		Name:     "60藍",
+		Address:  "台北市中正區公園路15號",
+		Intro:    "不是你想的那間知名飲料店",
 		Pic:      "https://picsum.photos/id/292/3852/2556",
 		Status:   models.StoreStatus(models.StoreStatusOpened),
 		OpenedAt: "09:00",
@@ -30,15 +32,22 @@ func (cmd SeedCommand) Run() error {
 
 	iceQuestion, _, err := models.NewSelectQuestion(&models.SelectQuestion{
 		StoreId:    store.ID,
-		Name:       "冰量",
+		Name:       "冰量選擇 Ice Level",
 		IsRequired: true,
 		AtMost:     1,
-	}, []string{
-		"正常冰",
-		"少冰",
-		"微冰",
-		"去冰",
-		"完全去冰",
+	}, []models.SelectOption{
+		{
+			Name: "正常冰 Regular Ice",
+		},
+		{
+			Name: "少冰 Less Ice",
+		},
+		{
+			Name: "微冰 Easy Ice",
+		},
+		{
+			Name: "去冰 Ice-Free",
+		},
 	})
 	if err != nil {
 		return err
@@ -46,16 +55,52 @@ func (cmd SeedCommand) Run() error {
 
 	sugarQuestion, _, err := models.NewSelectQuestion(&models.SelectQuestion{
 		StoreId:    store.ID,
-		Name:       "糖量",
+		Name:       "甜度 Sweetness Level",
 		IsRequired: true,
 		AtMost:     1,
-	}, []string{
-		"全糖",
-		"少糖",
-		"半糖",
-		"微糖",
-		"一分糖",
-		"無糖",
+	}, []models.SelectOption{
+		{
+			Name: "正常糖 Regular Sugar",
+		},
+		{
+			Name: "少糖 Less Sugar",
+		},
+		{
+			Name: "半糖 Half Sugar",
+		},
+		{
+			Name: "微糖 Quarter Sugar",
+		},
+		{
+			Name: "無糖 Sugar-Free",
+		},
+	})
+	if err != nil {
+		return err
+	}
+
+	addOnQuestion, _, err := models.NewSelectQuestion(&models.SelectQuestion{
+		StoreId:    store.ID,
+		Name:       "加購 Add On",
+		IsRequired: false,
+		AtMost:     999,
+	}, []models.SelectOption{
+		{
+			Name:  "珍珠 Tapioca",
+			Price: 10,
+		},
+		{
+			Name:  "小芋圓 Taro Ball",
+			Price: 10,
+		},
+		{
+			Name:  "椰果 Coconut Jelly",
+			Price: 10,
+		},
+		{
+			Name:  "蘆薈 Aloe",
+			Price: 10,
+		},
 	})
 	if err != nil {
 		return err
@@ -97,7 +142,7 @@ func (cmd SeedCommand) Run() error {
 	err = AssociateProductWithCategoriesAndQuestions(
 		t1,
 		[]*models.Category{teaCategory},
-		[]*models.SelectQuestion{iceQuestion, sugarQuestion},
+		[]*models.SelectQuestion{iceQuestion, sugarQuestion, addOnQuestion},
 		[]*models.CustomQuestion{customQuestion},
 	)
 	if err != nil {
@@ -116,7 +161,7 @@ func (cmd SeedCommand) Run() error {
 	err = AssociateProductWithCategoriesAndQuestions(
 		t2,
 		[]*models.Category{milkTeaCategory},
-		[]*models.SelectQuestion{iceQuestion, sugarQuestion},
+		[]*models.SelectQuestion{iceQuestion, sugarQuestion, addOnQuestion},
 		[]*models.CustomQuestion{customQuestion},
 	)
 	if err != nil {
@@ -135,7 +180,7 @@ func (cmd SeedCommand) Run() error {
 	err = AssociateProductWithCategoriesAndQuestions(
 		t3,
 		[]*models.Category{fruitTeaCategory},
-		[]*models.SelectQuestion{iceQuestion, sugarQuestion},
+		[]*models.SelectQuestion{iceQuestion, sugarQuestion, addOnQuestion},
 		[]*models.CustomQuestion{customQuestion},
 	)
 	if err != nil {

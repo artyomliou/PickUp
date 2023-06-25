@@ -95,9 +95,9 @@ func TestCartController(t *testing.T) {
 		}
 	})
 
-	t.Run("ListItem", func(t *testing.T) {
+	t.Run("GetCartInfo", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", fmt.Sprintf("/api/store/%d/cart/items", store.ID), nil)
+		req, _ := http.NewRequest("GET", fmt.Sprintf("/api/store/%d/cart", store.ID), nil)
 		req.Header.Set("Cookie", cookie)
 		r.ServeHTTP(w, req)
 

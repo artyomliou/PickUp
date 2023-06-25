@@ -13,6 +13,7 @@ type CartItem struct {
 	ProductId     uint           `json:"-"`
 	Product       *Product       `json:"product"`
 	Amount        uint           `json:"amount" form:"amount" binding:"required"`
+	Total         int            `json:"total"`
 	SelectAnswers SelectAnswers  `json:"selectAnswers" gorm:"serializer:json"`
 	CustomAnswers CustomAnswers  `json:"customAnswers" gorm:"serializer:json"`
 	CreatedAt     time.Time      `json:"-"`

@@ -10,12 +10,14 @@ import (
 func simulateOrderProgress(order *models.Order) {
 	statusRoadmap := []models.OrderStatus{
 		models.OrderStatus(models.OrderStatusCreated),
+		models.OrderStatus(models.OrderStatusAccepted),
 		models.OrderStatus(models.OrderStatusPreparing),
 		models.OrderStatus(models.OrderStatusReady),
 		models.OrderStatus(models.OrderStatusPicked),
 		models.OrderStatus(models.OrderStatusFinished),
 	}
 	intervals := []time.Duration{
+		10 * time.Second,
 		10 * time.Second,
 		10 * time.Second,
 		10 * time.Second,
