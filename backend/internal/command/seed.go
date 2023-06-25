@@ -19,6 +19,8 @@ func (cmd SeedCommand) Run() error {
 
 	store, err := models.NewStore(&models.Store{
 		Name:     "60藍",
+		Address:  "台北市中正區公園路15號",
+		Intro:    "不是你想的那間知名飲料店",
 		Pic:      "https://picsum.photos/id/292/3852/2556",
 		Status:   models.StoreStatus(models.StoreStatusOpened),
 		OpenedAt: "09:00",

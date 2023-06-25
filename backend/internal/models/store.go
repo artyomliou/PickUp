@@ -14,6 +14,8 @@ type Store struct {
 	ID         uint           `json:"id" gorm:"primaryKey"`
 	Categories []*Category    `json:"categories"`
 	Name       string         `json:"name" gorm:"not null"`
+	Address    string         `json:"address" gorm:"not null"`
+	Intro      string         `json:"intro" gorm:"not null"`
 	Pic        string         `json:"pic" gorm:"not null"`
 	Status     StoreStatus    `json:"status" gorm:"type:uint;not null"`
 	OpenedAt   string         `json:"openedAt" gorm:"size:5"`
@@ -73,6 +75,8 @@ func (s StoreStatus) Value() (driver.Value, error) {
 func SeedStore() (*Store, error) {
 	return NewStore(&Store{
 		Name:     "Default store name",
+		Address:  "Some place",
+		Intro:    "A good store",
 		Pic:      "http://localhost:8080/static/store.jpg",
 		Status:   StoreStatus(StoreStatusOpened),
 		OpenedAt: "09:00",
