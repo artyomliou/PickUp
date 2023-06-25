@@ -173,6 +173,11 @@ components:
         amount:
           type: integer
           example: 1
+          description: 數量
+        total:
+          type: integer
+          example: 70
+          description: 總金額
         selectAnswers:
           type: array
           items:
@@ -586,6 +591,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/CartItem"
+                  total:
+                    type: integer
+                    example: 200
+                    description: 購物車總金額
     post:
       tags:
         - 購物車

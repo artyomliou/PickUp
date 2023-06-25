@@ -31,7 +31,8 @@ type (
 		CustomAnswers models.CustomAnswers `json:"customAnswers" binding:"required"`
 	}
 	ListItemResponse struct {
-		Items []*models.CartItem `json:"items"`
+		Items     []*models.CartItem `json:"items"`
+		CartTotal int                `json:"cartTotal"`
 	}
 	NewItemResponse struct {
 		CartItemId uint `json:"cartItemId"`
@@ -58,8 +59,15 @@ func (ctl CartController) ListItem(c *gin.Context) {
 		return
 	}
 
+	// Calculate total
+	cartTotal := 0
+	for _, item := range cart.Items {
+		cartTotal += item.Total
+	}
+
 	c.AbortWithStatusJSON(200, ListItemResponse{
-		Items: cart.Items,
+		Items:     cart.Items,
+		CartTotal: cartTotal,
 	})
 }
 func (ctl CartController) NewItem(c *gin.Context) {
@@ -86,10 +94,26 @@ func (ctl CartController) NewItem(c *gin.Context) {
 		return
 	}
 
+	product := &models.Product{}
+	tx := db.Conn().Find(product, input.ProductId)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+		c.AbortWithStatusJSON(500, resp.StdErrorResp)
+		return
+	}
+
+	itemTotal, err := ctl.calculateItemTotal(product.Price, input.Amount, input.SelectAnswers)
+	if err != nil {
+		log.Println(err.Error())
+		c.AbortWithStatusJSON(500, resp.StdErrorResp)
+		return
+	}
+
 	item := models.CartItem{
 		CartId:        cart.ID,
 		ProductId:     input.ProductId,
 		Amount:        input.Amount,
+		Total:         itemTotal,
 		SelectAnswers: input.SelectAnswers,
 		CustomAnswers: input.CustomAnswers,
 	}
@@ -148,9 +172,25 @@ func (ctl CartController) UpdateItem(c *gin.Context) {
 		return
 	}
 
+	product := &models.Product{}
+	tx := db.Conn().Find(product, oldItem.ProductId)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+		c.AbortWithStatusJSON(500, resp.StdErrorResp)
+		return
+	}
+
+	newItemTotal, err := ctl.calculateItemTotal(product.Price, newItem.Amount, newItem.SelectAnswers)
+	if err != nil {
+		log.Println(err.Error())
+		c.AbortWithStatusJSON(500, resp.StdErrorResp)
+		return
+	}
+
 	oldItem.Amount = newItem.Amount
 	oldItem.SelectAnswers = newItem.SelectAnswers
 	oldItem.CustomAnswers = newItem.CustomAnswers
+	oldItem.Total = newItemTotal
 	if tx := db.Conn().Save(&oldItem); tx.Error != nil {
 		log.Println(tx.Error)
 		c.AbortWithStatusJSON(500, resp.DbWriteErrorResp)
@@ -176,4 +216,28 @@ func (ctl CartController) RemoveItem(c *gin.Context) {
 	}
 
 	c.AbortWithStatus(204)
+}
+
+func (ctl CartController) calculateItemTotal(productPrice uint, amount uint, answers []models.SelectAnswer) (int, error) {
+	// Get price of selected option
+	selectQuestionIds := []uint{}
+	optionIds := []uint{}
+	for _, v := range answers {
+		selectQuestionIds = append(selectQuestionIds, v.SelectQuestionId)
+		optionIds = append(optionIds, v.Options...)
+	}
+	options := []models.SelectOption{}
+	tx := db.Conn().Table("select_options").Where("select_question_id in ?", selectQuestionIds).Where("id in ?", optionIds).Select("price").Find(&options)
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+
+	// calculate total of selected price
+	optionsTotal := 0
+	for _, v := range options {
+		optionsTotal += int(v.Price)
+	}
+
+	// sum
+	return int(productPrice*amount) + optionsTotal, nil
 }
