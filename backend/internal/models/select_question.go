@@ -28,34 +28,40 @@ func SeedSelectQuestion(storeId uint) (*SelectQuestion, []uint, error) {
 		IsRequired: true,
 		AtMost:     1,
 	}
-	return NewSelectQuestion(question, []string{
-		"正常冰",
-		"少冰",
-		"微冰",
-		"去冰",
-		"完全去冰",
+	return NewSelectQuestion(question, []SelectOption{
+		{
+			Name: "正常冰 Regular Ice",
+		},
+		{
+			Name: "少冰 Less Ice",
+		},
+		{
+			Name: "微冰 Easy Ice",
+		},
+		{
+			Name: "去冰 Ice-Free",
+		},
 	})
 }
 
-func NewSelectQuestion(question *SelectQuestion, optNames []string) (*SelectQuestion, []uint, error) {
+func NewSelectQuestion(question *SelectQuestion, options []SelectOption) (*SelectQuestion, []uint, error) {
 	if tx := db.Conn().Save(&question); tx.Error != nil {
 		return nil, nil, tx.Error
 	}
 
-	options := make([]uint, len(optNames))
-	for _, optName := range optNames {
-		optModel := SelectOption{
-			SelectQuestionId: question.ID,
-			Name:             optName,
-			Price:            0,
-		}
-		if tx := db.Conn().Save(&optModel); tx.Error != nil {
+	for _, opt := range options {
+		opt.SelectQuestionId = question.ID
+		if tx := db.Conn().Save(&opt); tx.Error != nil {
 			return nil, nil, tx.Error
 		}
-		options = append(options, optModel.ID)
 	}
 
-	return question, options, nil
+	optionIds := make([]uint, len(options))
+	for _, opt := range options {
+		optionIds = append(optionIds, opt.ID)
+	}
+
+	return question, optionIds, nil
 }
 
 func AssociateProductWithSelectQuestion(product *Product, question *SelectQuestion) error {
