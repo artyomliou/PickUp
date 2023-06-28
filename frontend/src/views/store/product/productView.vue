@@ -1,5 +1,4 @@
 <template>
-    <NavbarComponent />
     <section class="sec-h sec-product">
         <div class="container py-3">
             <div class="row">

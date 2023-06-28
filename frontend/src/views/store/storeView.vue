@@ -1,5 +1,4 @@
 <template>
-    <NavbarComponent />
     <section class="sec-h sec-store">
         <div class="banner" :style="`background-image: url('${storeItem.pic}')`">
         </div>
@@ -78,7 +77,6 @@ import { storeDataApi } from "../../api/index";
 import "../../api/model";
 import "../../assets/css/store.css";
 export default {
-
     data() {
         return {
             /** @type {Store} */
