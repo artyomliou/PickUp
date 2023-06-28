@@ -2,6 +2,8 @@
  * @typedef {Object} Store
  * @property {number} id
  * @property {string} name
+ * @property {string} address
+ * @property {string} intrp
  * @property {string} openedAt
  * @property {string} closedAt
  * @property {string} pic
@@ -69,6 +71,7 @@
  * @property {number} [cartId]
  * @property {number} [productId]
  * @property {number} amount
+ * @property {number} total
  * @property {Product} [product]
  * @property {SelectAnswer[]} selectAnswers
  * @property {CustomAnswer[]} customAnswers
