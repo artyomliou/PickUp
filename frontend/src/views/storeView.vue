@@ -73,9 +73,9 @@
 
 <script>
 // import { Transition } from "vue";
-import { storeDataApi } from "../../api/index";
-import "../../api/model";
-import "../../assets/css/store.css";
+import { storeDataApi } from "../api/index";
+import "../api/model";
+import "../assets/css/store.css";
 export default {
     data() {
         return {

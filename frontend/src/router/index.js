@@ -5,9 +5,9 @@ import LoginView from '../views/LoginView.vue';
 import PasswordView from '../views/PasswordView.vue';
 import index from '../views/indexView.vue';
 import notFound from '../views/notFound.vue';
+import productView from '../views/productView.vue';
 import registerView from '../views/registerView.vue';
-import productView from '../views/store/product/productView.vue';
-import storeView from '../views/store/storeView.vue';
+import storeView from '../views/storeView.vue';
 
 
 

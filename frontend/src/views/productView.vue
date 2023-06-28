@@ -101,9 +101,9 @@
 </template>
 
 <script>
-import { productApi } from "../../../api/index";
-import "../../../api/model";
-import "../../../assets/css/product.css";
+import { productApi } from "../api/index";
+import "../api/model";
+import "../assets/css/product.css";
 export default {
     data() {
         return {
