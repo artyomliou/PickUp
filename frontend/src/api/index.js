@@ -1,3 +1,4 @@
+import '../router';
 import './model';
 
 const baseUrl = "http://localhost:5000";
@@ -82,4 +83,41 @@ export async function productApi(storeId, productId){
     const data = await res.json();
     console.log(data)
     return data.product
+}
+
+/**
+ * @returns {Store[]}
+ */
+export async function cartItemsApi(storeId){
+    const res = await fetch(withBaseUrl(`store/${storeId}/cart`), {
+        method: 'GET',
+        credentials: 'include',
+    });
+    const data = await res.json();
+    console.log(data)
+    return data.items
+}
+
+
+export async function cartNewItemApi(storeId, 
+    // productId, amount, selectAnswers, customAnswers
+    ){
+    const res = await fetch(withBaseUrl(`store/${storeId}/cart/items`), {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(
+        //     {
+        //     "productId": productId,
+        //     "amount": amount,
+        //     "selectAnswers": selectAnswers,
+        //     "customAnswers": customAnswers
+        // }
+        ),
+        headers: {
+            "content-type": "application/json",
+        }
+    });
+    res.json();
+    console.log(res)
+    return res
 }

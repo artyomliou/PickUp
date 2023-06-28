@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useLoginStatusStore } from '../stores/useLoginStatusStore';
+import CheckoutView from '../views/CheckoutView.vue';
 import LoginView from '../views/LoginView.vue';
 import PasswordView from '../views/PasswordView.vue';
 import index from '../views/indexView.vue';
@@ -7,6 +8,7 @@ import notFound from '../views/notFound.vue';
 import registerView from '../views/registerView.vue';
 import productView from '../views/store/product/productView.vue';
 import storeView from '../views/store/storeView.vue';
+
 
 
 // export default defineComponent({
@@ -72,12 +74,25 @@ const router = createRouter({
         {
             path: '/store/:storeId',
             name: 'store/:storeId',
-            component: storeView
+            component: storeView,
+            // children: [
+            //     {
+
+            //     }
+            // ],
+            props: true,
         },
         {
             path: '/store/:storeId/product/:productId',
-            name: 'store/:storeId/product/:productId',
-            component: productView
+            name: 'product',
+            component: productView,
+        },
+        {
+            path: '/store/:storeId/checkout',
+            name: 'checkout',
+            component: CheckoutView,
+            props: true,
+            // props: (route) => route.params
         },
         { 
             // form Kuro https://book.vue.tw/CH4/4-2-route-settings.html
