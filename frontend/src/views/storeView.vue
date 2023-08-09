@@ -40,7 +40,7 @@
                                     <div class="store-card" role="tabpanel">
                                         <a :href="`${$route.params.storeId}/product/${product.id}`" class="store-link">
                                             <figure class="card-img">
-                                                <img src="../../assets/img/store-item2.jpg" alt="" class="img-fluid">
+                                                <img src="../assets/img/product/gold-olong.jpg" alt="" class="img-fluid">
                                             </figure>
                                             <div class="card-info">
                                                 <h5 class="item-title">{{ product.name }}</h5>
