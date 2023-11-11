@@ -18,10 +18,6 @@
                         <figure>
                             <img src="../assets/img/product/gold-olong.jpg" alt="" class="img-fluid">
                         </figure>
-                        <div v-for="item in product.selectQuestions" :key="item.id">
-                            <!-- <div class="card my-3">{{ item }}</div> -->
-                            <div class="card my-3">{{ item.options }}</div>
-                        </div>
                     </div>
                 </div>
                 <div class=" col-lg-6 product-infoarea mt-5">
@@ -30,61 +26,59 @@
                     <p class="product-intro">{{ product.intro }}</p>
 
                     <form @submit.prevent="submitProdunctForm" method="post" class="form form-product">
-                        <template v-for="quiz in product.selectQuestions " :key="quiz.id">
-                            <!-- quiz: {{ quiz }}>>><br> -->
-                            <h5 class="head d-flex">
-                                <span>{{ quiz.name }}</span>
-                            </h5>
-                            <template v-if="quiz.isRequired">
+                        <template v-for="selectQuestion in product.selectQuestions " :key="selectQuestion.id">
+                            <!-- <div v-for="s in selectQuestion" :key="s.id">
+                                <div v-for=" ss in s" :key="ss.id">ss name: {{ ss.name }}</div>
+                            </div> -->
+                            {{ requiredAnswer }}
+                            <template v-if="!!selectQuestion.isRequired">
+                                <h5 class="head d-flex">
+                                    <span>{{ selectQuestion.name }}</span>
+                                </h5>
                                 <span class="tag tag-reqired ms-auto">必填</span>
 
-                                <!-- 必填沒填時 顯現 -->
-                                <!-- <span class="tag tag-reqired ms-auto bg-danger text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-check" viewBox="0 0 16 16">
-                                        <path
-                                            d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                    </svg> 必填
-                                </span> -->
-                                <!-- 必填沒填時 顯現 -->
-                                {{ customAnswer }}
-                                <template v-for="option in   quiz.options" :key="option.id">
+                                <template v-for="option in selectQuestion.options" :key="option.id">
                                     <label class="form-control my-2 d-flex justify-content-between">
                                         <span>{{ option.name }}</span>
                                         <!-- selectQuestionId -->
-                                        <input type="radio" :name="quiz.id" :value="option.id"
-                                            v-model="customAnswer[quiz.id]" class="radio"> <!-- like map -->
-                                        {{ option.selectQuestionId }}
+                                        <input type="radio" :name="selectQuestion.id" :value="option.id"
+                                            v-model="requiredAnswer[selectQuestion.id]" class="radio"> <!-- like map -->
+                                        <!-- {{ option.selectQuestionId }} -->
                                     </label>
                                 </template>
-
+                                !!!!!!!!
                             </template>
 
                             <!-- 非必填 -->
                             <template v-else>
-                                <template v-for="frSelect in   quiz.options" :key="frSelect.id">
+                                <h4 class="text-danger">非必填</h4>
+                                <h5 class="head d-flex">
+                                    <span>{{ selectQuestion.name }}</span>
+                                    {{ unrequiredAnswer }}
+                                </h5>
+                                <template v-for="option in selectQuestion.options" :key="option.id">
                                     <label class="form-control my-2 d-flex justify-content-between">
-                                        <p class="select-name strong selectName">{{ frSelect.name }}</p>
-                                        <p class="select-info">{{ frSelect.info }}</p>
-                                        <p class="price">$ {{ frSelect.price }}</p>
-                                        <input v-model="product.selectQuestionId" :value="`otherAdded${frSelect.id}`"
-                                            type="checkbox" class="radio">
+                                        <p class="select-name strong selectName">{{ option.name }}</p>
+                                        <p class="select-info">{{ option.info }}</p>
+                                        <p class="price">$ {{ option.price }}</p>
+                                        <input v-model="unrequiredAnswer" :value="option.id" type="checkbox" class="radio">
                                     </label>
                                 </template>
                             </template>
                         </template>
 
-                        <template v-for="quizCustom in  product.customQuestions " :key="quizCustom.id">
+                        <template v-for="selectQuestionCustom in  product.customQuestions " :key="selectQuestionCustom.id">
                             <label for="" class="">
-                                <h5 class="head">{{ quizCustom.name }}</h5>
+                                <h5 class="head">{{ selectQuestionCustom.name }}</h5>
                                 <textarea v-model="product.notes" class="form-control form-textarea" name=""
-                                    :id="quizCustom.id" cols="30" rows="5" :placeholder="quizCustom.placeholder"></textarea>
+                                    :id="selectQuestionCustom.id" cols="30" rows="5"
+                                    :placeholder="selectQuestionCustom.placeholder"></textarea>
                             </label>
                         </template>
 
                         <label for="" class="py-3 d-flex">
                             <span class="selectName">數量</span>
-                            <select v-model="product.cups" id="" class="ms-3">
+                            <select v-model="productPiece" id="" class="ms-3">
                                 <option value="1" selected>1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -94,7 +88,7 @@
                         <div class="d-grid py-3">
                             <button type="submit" class="btn btn-submit p-3">
                                 新增
-                                <span class="totalCount">{{ product.cups }}</span> 產品
+                                <span class="totalCount">{{ productPiece }}</span> 產品
                                 • 至購物車
                             </button>
                         </div>
@@ -116,8 +110,9 @@ export default {
         return {
             /** @type {Store} */
             product: {},
-            customAnswer: {},
-
+            requiredAnswer: {},
+            unrequiredAnswer: [],
+            productPiece: 1,
         }
     },
     async created() {
